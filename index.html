@@ -126,6 +126,33 @@
             .poster-frame { padding: 20px; }
             .poster-image { margin: 10px 0; }
         }
+
+        /* 中间黑色方块的悬停菜单 */
+        .poster-image .menu-area { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; pointer-events: auto; }
+
+        .menu-trigger { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .18s ease, background .18s ease; }
+        .menu-trigger span { display: block; width: 28px; height: 2px; background: white; position: relative; }
+        .menu-trigger span::before, .menu-trigger span::after { content: ''; position: absolute; left: 0; right: 0; height: 2px; background: white; }
+        .menu-trigger span::before { top: -8px; }
+        .menu-trigger span::after { top: 8px; }
+
+        .menu-panel { position: absolute; top: calc(50% + 58px); left: 50%; transform: translateX(-50%) translateY(10px) scale(.98); background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)), rgba(28,28,30,0.98); padding: 8px; border-radius: 10px; display: flex; flex-direction: column; gap: 6px; min-width: 120px; box-shadow: 0 8px 24px rgba(0,0,0,0.45); opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .22s cubic-bezier(.2,.9,.2,1); z-index: 5; backdrop-filter: blur(6px); }
+        .menu-item { color: #fff; text-decoration: none; padding: 8px 12px; font-size: 14px; border-radius: 6px; transition: background .12s ease; }
+        .menu-item:hover { background: rgba(255,255,255,0.04); }
+
+        .menu-area:hover .menu-panel, .menu-area:focus-within .menu-panel { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
+        .menu-area:hover .menu-trigger { transform: scale(.96); }
+
+        /* 点击切换（用于手机/触摸设备） */
+        .menu-area::before { content: ''; position: absolute; inset: 0; border-radius: 6px; background: radial-gradient(circle at center, rgba(0,0,0,0.12), rgba(0,0,0,0.5)); opacity: 0; transition: opacity .25s ease; pointer-events: none; }
+        .menu-area.open::before { opacity: 1; }
+        .menu-area.open .menu-panel { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
+
+        /* 小屏幕上微调：菜单靠下显示且保持可点击 */
+        @media (max-width: 420px) {
+            .poster-image .menu-area { width: 110px; height: 110px; }
+            .menu-panel { top: calc(50% + 62px); min-width: 100px; }
+        }
     </style>
 </head>
 <body>
@@ -145,6 +172,21 @@
             </div>
 
             <div class="poster-image">
+                <div class="menu-area" aria-hidden="false">
+                    <div class="menu-trigger" tabindex="0" title="菜单">
+                        <span></span>
+                    </div>
+
+                    <div class="menu-backdrop" aria-hidden="true"></div>
+
+                    <nav class="menu-panel" role="menu" aria-label="主菜单">
+                        <a class="menu-item" href="#" role="menuitem">首页</a>
+                        <a class="menu-item" href="#" role="menuitem">归档</a>
+                        <a class="menu-item" href="#" role="menuitem">关于</a>
+                        <a class="menu-item" href="#" role="menuitem">联系</a>
+                    </nav>
+                </div>
+
                 <div style="position:absolute; bottom:15px; left:15px; color:white; font-size:24px; font-weight:100; opacity:0.3;">
                     [ 思考 / 留白 ]
                 </div>
@@ -162,9 +204,7 @@
             </div>
         </div>
 
-        <div class="layer-front" style="top: 25%; left: 10%;">
-            <div class="tag">BLOG_3.0</div>
-        </div>
+        
     </div>
 
     <script>
@@ -209,6 +249,34 @@
             requestAnimationFrame(updateTime);
         }
         updateTime();
+        
+        // 手机/触摸设备：点击切换菜单并支持点击外部关闭
+        (function(){
+            const area = document.querySelector('.menu-area');
+            const trigger = area && area.querySelector('.menu-trigger');
+            const panel = area && area.querySelector('.menu-panel');
+
+            if(!area || !trigger || !panel) return;
+
+            // 切换 open 类
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                area.classList.toggle('open');
+            });
+
+            // 点击面板内不会关闭（阻止冒泡）
+            panel.addEventListener('click', (e) => e.stopPropagation());
+
+            // 点击页面其他地方关闭（手机友好）
+            document.addEventListener('click', () => {
+                area.classList.remove('open');
+            });
+
+            // 键盘 Esc 关闭
+            window.addEventListener('keydown', (e) => {
+                if(e.key === 'Escape') area.classList.remove('open');
+            });
+        })();
     </script>
 </body>
 </html>
