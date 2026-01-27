@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>唐择镇的博客</title>
+    <title>唐择镇的个人界面</title>
     <style>
         :root {
             --paper-white: #f5f5f7;
@@ -11,272 +11,289 @@
             --accent-black: #1d1d1f;
             --accent-red: #ff3b30;
             --text-dim: #86868b;
+            --glow-color: rgba(255, 255, 255, 0.4);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            background-color: var(--paper-white);
+            background-color: #0a0b10; 
             color: var(--accent-black);
-            font-family: -apple-system, "SF Pro SC", "PingFang SC", system-ui, sans-serif;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 1000px;
+            font-family: -apple-system, "SF Pro SC", "PingFang SC", "STHeiti", sans-serif;
+            height: 100vh; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            perspective: 2000px;
         }
 
-        .grid-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: radial-gradient(circle, #d1d1d6 1px, transparent 1px);
-            background-size: 30px 30px;
-            opacity: 0.3;
-            z-index: -1;
+        .particles {
+            position: fixed; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0;
+            transform-style: preserve-3d;
+        }
+        .dot {
+            position: absolute; background: white; border-radius: 50%;
+            opacity: 0;
+            box-shadow: 0 0 5px white;
+            animation: twinkle var(--duration) infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: translateZ(var(--z)) scale(0.8); }
+            50% { opacity: var(--max-opacity); transform: translateZ(var(--z)) scale(1.2); }
+        }
+
+        .layer-back {
+            position: absolute; font-size: 18vw; font-weight: 900;
+            color: rgba(255,255,255,0.03); transform: translate3d(0, 0, -500px);
+            user-select: none; white-space: nowrap; z-index: 1;
+            letter-spacing: -5px; pointer-events: none;
         }
 
         .scene {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
             transform-style: preserve-3d;
-            will-change: transform;
+            transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1);
         }
 
-        /* 背景装饰：在手机上调小字号 */
-        .layer-back {
-            position: absolute;
-            font-size: 15vw;
-            font-weight: 900;
-            color: var(--paper-gray);
-            transform: translate3d(0, 0, -150px);
-            user-select: none;
-            white-space: nowrap;
-            z-index: 1;
-        }
-
-        /* 核心卡片容器：响应式关键 */
         .poster-frame {
-            position: relative;
-            width: 90%;
-            max-width: 400px; /* PC端最大宽度 */
-            aspect-ratio: 3 / 4; /* 保持海报比例 */
-            background: white;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            z-index: 10;
-            transform: translate3d(0, 0, 0);
-        }
-
-        .poster-image {
-            flex-grow: 1;
-            margin: 20px 0;
-            background: #1c1c1e;
-            position: relative;
+            position: relative; width: 90%; max-width: 420px; aspect-ratio: 3 / 4;
+            background: var(--paper-white); 
+            box-shadow: 0 50px 100px rgba(0,0,0,0.8);
+            padding: 30px; display: flex; flex-direction: column;
+            justify-content: space-between; z-index: 10;
+            border: 1px solid rgba(255,255,255,0.1);
             overflow: hidden;
-            border-radius: 1px;
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        .poster-image::after {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.05) 45%, transparent 50%);
-            animation: light-sweep 4s infinite;
-        }
-
-        @keyframes light-sweep {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* 标签：手机端自动调整 */
-        .layer-front {
-            position: absolute;
-            z-index: 20;
-            transform: translate3d(0, 0, 40px);
+        .poster-frame::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), 
+                        rgba(255,255,255,0.2) 0%, transparent 60%);
             pointer-events: none;
         }
 
-        .tag {
-            background: var(--accent-black);
-            color: white;
-            padding: 4px 10px;
-            font-size: 10px;
-            font-weight: bold;
-            letter-spacing: 1px;
+        .poster-image {
+            flex-grow: 1; margin: 20px 0; background: #000;
+            position: relative; overflow: hidden; border-radius: 2px;
+            display: flex; justify-content: center; align-items: center;
+            perspective: 1000px;
         }
 
-        .title-group h1 { font-size: 20px; font-weight: 800; }
-        .title-group p { font-size: 9px; color: var(--text-dim); margin-top: 4px; }
-        .time-code { font-family: monospace; font-size: 12px; color: var(--accent-red); }
+        .inner-grid {
+            position: absolute; width: 200%; height: 200%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: rotateX(70deg) translateY(-20%);
+            animation: grid-move 15s linear infinite;
+        }
+
+        @keyframes grid-move {
+            from { transform: rotateX(70deg) translateY(0); }
+            to { transform: rotateX(70deg) translateY(50px); }
+        }
+
+        /* --- 优化后的点击区域 --- */
+        .nav-container { 
+            position: relative; 
+            z-index: 5; 
+            width: 100%; 
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .nav-rail {
+            width: 100%; 
+            height: 22%; /* 使用百分比平分高度，确保热区最大化 */
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            position: relative;
+            cursor: pointer; 
+            /* 增加一个几乎透明的背景，让浏览器更容易捕捉点击 */
+            background: rgba(255,255,255,0.001); 
+            transition: all 0.3s ease;
+            user-select: none;
+        }
+
+        .nav-item {
+            color: rgba(255,255,255,0.2); 
+            font-size: 1.6rem; 
+            font-weight: 800;
+            letter-spacing: 0.5em; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none; /* 防止文字干扰轨道点击 */
+        }
+
+        .nav-rail:hover .nav-item {
+            color: #fff; 
+            transform: scale(1.15) translateZ(40px);
+            text-shadow: 0 0 15px rgba(255,255,255,0.8);
+        }
+
+        /* 点击那一瞬间的物理反馈 */
+        .nav-rail:active .nav-item {
+            transform: scale(0.9) translateZ(10px);
+            transition: transform 0.1s;
+        }
+
+        .nav-rail.active .nav-item {
+            color: var(--accent-red) !important;
+            text-shadow: 0 0 20px rgba(255, 59, 48, 0.6);
+        }
+
+        .deco-text {
+            position: absolute; font-size: 9px; color: var(--accent-red);
+            bottom: 20px; right: 20px; opacity: 0.8; letter-spacing: 2px;
+            writing-mode: vertical-lr;
+            pointer-events: none;
+        }
+
+        .title-group h1 { font-size: 20px; font-weight: 900; letter-spacing: 2px; }
+        .title-group p { font-size: 10px; color: var(--text-dim); margin-top: 5px; font-weight: 500;}
+        .time-code { font-family: 'Courier New', monospace; font-size: 13px; color: var(--accent-red); text-shadow: 0 0 5px rgba(255,59,48,0.3); }
 
         .footer-info { border-top: 1px solid #eee; padding-top: 15px; }
-        .meta-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 10px; }
+        .meta-row { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 10px; }
         .meta-label { color: var(--text-dim); }
-
-        /* 响应式微调 */
-        @media (max-height: 700px) {
-            .poster-frame { padding: 20px; }
-            .poster-image { margin: 10px 0; }
-        }
-
-        /* 中间黑色方块的悬停菜单 */
-        .poster-image .menu-area { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; align-items: center; justify-content: center; width: 140px; height: 140px; pointer-events: auto; }
-
-        .menu-trigger { width: 64px; height: 64px; border-radius: 50%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform .18s ease, background .18s ease; }
-        .menu-trigger span { display: block; width: 28px; height: 2px; background: white; position: relative; }
-        .menu-trigger span::before, .menu-trigger span::after { content: ''; position: absolute; left: 0; right: 0; height: 2px; background: white; }
-        .menu-trigger span::before { top: -8px; }
-        .menu-trigger span::after { top: 8px; }
-
-        .menu-panel { position: absolute; top: calc(50% + 58px); left: 50%; transform: translateX(-50%) translateY(10px) scale(.98); background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)), rgba(28,28,30,0.98); padding: 8px; border-radius: 10px; display: flex; flex-direction: column; gap: 6px; min-width: 120px; box-shadow: 0 8px 24px rgba(0,0,0,0.45); opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .22s cubic-bezier(.2,.9,.2,1); z-index: 5; backdrop-filter: blur(6px); }
-        .menu-item { color: #fff; text-decoration: none; padding: 8px 12px; font-size: 14px; border-radius: 6px; transition: background .12s ease; }
-        .menu-item:hover { background: rgba(255,255,255,0.04); }
-
-        .menu-area:hover .menu-panel, .menu-area:focus-within .menu-panel { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
-        .menu-area:hover .menu-trigger { transform: scale(.96); }
-
-        /* 点击切换（用于手机/触摸设备） */
-        .menu-area::before { content: ''; position: absolute; inset: 0; border-radius: 6px; background: radial-gradient(circle at center, rgba(0,0,0,0.12), rgba(0,0,0,0.5)); opacity: 0; transition: opacity .25s ease; pointer-events: none; }
-        .menu-area.open::before { opacity: 1; }
-        .menu-area.open .menu-panel { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); pointer-events: auto; }
-
-        /* 小屏幕上微调：菜单靠下显示且保持可点击 */
-        @media (max-width: 420px) {
-            .poster-image .menu-area { width: 110px; height: 110px; }
-            .menu-panel { top: calc(50% + 62px); min-width: 100px; }
-        }
+        .meta-val { font-weight: 600; }
     </style>
 </head>
 <body>
 
-    <div class="grid-bg"></div>
+    <div class="particles" id="particles"></div>
 
     <div class="scene" id="scene">
-        <div class="layer-back">TANG ZE ZHEN</div>
+        <div class="layer-back" id="back-name">TANG ZE ZHEN</div>
 
-        <div class="poster-frame">
+        <div class="poster-frame" id="poster">
             <div class="header">
                 <div class="title-group">
-                    <h1>唐择镇的博客</h1>
-                    <p>VISUAL ARCHIVE // 2026</p>
+                    <h1>唐择镇</h1>
+                    <p>个人档案 / 2026</p>
                 </div>
                 <div class="time-code" id="time-code">00:00:00:00</div>
             </div>
 
             <div class="poster-image">
-                <div class="menu-area" aria-hidden="false">
-                    <div class="menu-trigger" tabindex="0" title="菜单">
-                        <span></span>
-                    </div>
+                <div class="inner-grid"></div>
+                
+                <nav class="nav-container" id="main-nav">
+                    <div class="nav-rail" data-label="简介"><span class="nav-item">简介</span></div>
+                    <div class="nav-rail" data-label="理论"><span class="nav-item">理论</span></div>
+                    <div class="nav-rail" data-label="文本"><span class="nav-item">文本</span></div>
+                    <div class="nav-rail" data-label="影像"><span class="nav-item">影像</span></div>
+                </nav>
 
-                    <div class="menu-backdrop" aria-hidden="true"></div>
-
-                    <nav class="menu-panel" role="menu" aria-label="主菜单">
-                        <a class="menu-item" href="#" role="menuitem">首页</a>
-                        <a class="menu-item" href="#" role="menuitem">归档</a>
-                        <a class="menu-item" href="#" role="menuitem">关于</a>
-                        <a class="menu-item" href="#" role="menuitem">联系</a>
-                    </nav>
-                </div>
-
-                <div style="position:absolute; bottom:15px; left:15px; color:white; font-size:24px; font-weight:100; opacity:0.3;">
-                    [ 思考 / 留白 ]
-                </div>
+                <div class="deco-text"> MENU </div>
             </div>
 
             <div class="footer-info">
                 <div class="meta-row">
-                    <span class="meta-label">项目 / PROJECT</span>
-                    <span class="meta-val">个人博文存档</span>
+                    <span class="meta-label">专业</span>
+                    <span class="meta-val">戏剧与影视</span>
                 </div>
                 <div class="meta-row">
-                    <span class="meta-label">状态 / STATUS</span>
-                    <span class="meta-val" style="color: var(--accent-red);">LIVE</span>
+                    <span class="meta-label">状态</span>
+                    <span class="meta-val" id="status-text" style="color: var(--accent-red);">准备就绪</span>
                 </div>
             </div>
         </div>
-
-        
     </div>
 
     <script>
         const scene = document.getElementById('scene');
+        const poster = document.getElementById('poster');
+        const backName = document.getElementById('back-name');
+        const particlesContainer = document.getElementById('particles');
         const timeCodeEl = document.getElementById('time-code');
+        const statusText = document.getElementById('status-text');
 
-        // 兼容 PC 鼠标和手机陀螺仪
-        function handleMove(x, y) {
-            const rotX = (y / window.innerHeight - 0.5) * -30;
-            const rotY = (x / window.innerWidth - 0.5) * 30;
-            scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        // 星丛生成
+        function createConstellation() {
+            const count = 80;
+            for (let i = 0; i < count; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'dot';
+                const size = Math.random() * 2 + (Math.random() > 0.9 ? 2 : 0.5);
+                const z = Math.random() * 800 - 400;
+                const duration = 3 + Math.random() * 5;
+                const delay = Math.random() * -10;
+                const maxOpacity = 0.2 + Math.random() * 0.5;
+                dot.style.cssText = `width: ${size}px; height: ${size}px; left: ${Math.random() * 100}%; top: ${Math.random() * 100}%; --z: ${z}px; --duration: ${duration}s; --max-opacity: ${maxOpacity}; animation-delay: ${delay}s;`;
+                particlesContainer.appendChild(dot);
+            }
         }
+        createConstellation();
 
-        // PC端鼠标事件
+        // 视差动效
         document.addEventListener('mousemove', (e) => {
-            handleMove(e.pageX, e.pageY);
+            const xPct = e.clientX / window.innerWidth;
+            const yPct = e.clientY / window.innerHeight;
+            const rotX = (yPct - 0.5) * -15;
+            const rotY = (xPct - 0.5) * 15;
+            poster.style.setProperty('--mouse-x', `${xPct * 100}%`);
+            poster.style.setProperty('--mouse-y', `${yPct * 100}%`);
+            requestAnimationFrame(() => {
+                scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+                backName.style.transform = `translate3d(${(xPct-0.5)*-120}px, ${(yPct-0.5)*-60}px, -500px)`;
+            });
         });
 
-        // 手机端加速度计（可选：需用户交互触发权限）
-        if (window.DeviceOrientationEvent) {
-            window.addEventListener('deviceorientation', (e) => {
-                if(e.beta && e.gamma) {
-                    // beta: 前后倾斜 (-180 to 180)
-                    // gamma: 左右倾斜 (-90 to 90)
-                    const x = (e.gamma + 45) * (window.innerWidth / 90);
-                    const y = (e.beta - 45) * (window.innerHeight / 90);
-                    handleMove(x, y);
-                }
-            }, true);
+        // --- 核心优化：点击逻辑 ---
+        const navRails = document.querySelectorAll('.nav-rail');
+        
+        function handleNavigation(e) {
+            // 阻止默认行为（如移动端双击缩放）
+            if (e.type === 'touchstart') e.preventDefault();
+            
+            const rail = e.currentTarget;
+            const targetName = rail.getAttribute('data-label');
+
+            // 1. 视觉激活态
+            navRails.forEach(r => r.classList.remove('active'));
+            rail.classList.add('active');
+
+            // 2. 交互反馈
+            statusText.textContent = `载入中: ${targetName}`;
+            statusText.style.color = "var(--accent-red)";
+            
+            // 模拟“确认”震动感
+            poster.style.transition = "transform 0.1s ease-out";
+            poster.style.transform = "scale(0.97) translateZ(-30px)";
+            
+            setTimeout(() => {
+                poster.style.transition = "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+                poster.style.transform = "scale(1) translateZ(0)";
+                statusText.textContent = `已进入: ${targetName}`;
+            }, 150);
+
+            // 这里可以添加具体的页面跳转逻辑，例如：
+            // console.log("Navigate to:", targetName);
         }
 
-        // 时间码逻辑
+        navRails.forEach(rail => {
+            // 同时监听点击和触摸，提升响应速度
+            rail.addEventListener('click', handleNavigation);
+            rail.addEventListener('touchstart', handleNavigation, {passive: false});
+        });
+
+        // 计时器
         let frames = 0;
         function updateTime() {
             frames++;
-            const totalSeconds = Math.floor(frames / 30);
-            const f = (frames % 30).toString().padStart(2, '0');
-            const s = (totalSeconds % 60).toString().padStart(2, '0');
-            const m = (Math.floor(totalSeconds / 60) % 60).toString().padStart(2, '0');
-            const h = (Math.floor(totalSeconds / 3600)).toString().padStart(2, '0');
+            const f = (frames % 24).toString().padStart(2, '0');
+            const s = (Math.floor(frames / 24) % 60).toString().padStart(2, '0');
+            const m = (Math.floor(frames / 1440) % 60).toString().padStart(2, '0');
+            const h = (Math.floor(frames / 86400)).toString().padStart(2, '0');
             timeCodeEl.textContent = `${h}:${m}:${s}:${f}`;
             requestAnimationFrame(updateTime);
         }
         updateTime();
-        
-        // 手机/触摸设备：点击切换菜单并支持点击外部关闭
-        (function(){
-            const area = document.querySelector('.menu-area');
-            const trigger = area && area.querySelector('.menu-trigger');
-            const panel = area && area.querySelector('.menu-panel');
-
-            if(!area || !trigger || !panel) return;
-
-            // 切换 open 类
-            trigger.addEventListener('click', (e) => {
-                e.stopPropagation();
-                area.classList.toggle('open');
-            });
-
-            // 点击面板内不会关闭（阻止冒泡）
-            panel.addEventListener('click', (e) => e.stopPropagation());
-
-            // 点击页面其他地方关闭（手机友好）
-            document.addEventListener('click', () => {
-                area.classList.remove('open');
-            });
-
-            // 键盘 Esc 关闭
-            window.addEventListener('keydown', (e) => {
-                if(e.key === 'Escape') area.classList.remove('open');
-            });
-        })();
     </script>
 </body>
 </html>
