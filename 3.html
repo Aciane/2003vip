@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>INDEX - 唐择镇</title>
+    <style>
+        :root {
+            --paper-white: #f5f5f7;
+            --accent-red: #ff3b30;
+            --text-dim: #86868b;
+            --black: #1d1d1f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: #0a0b10; 
+            color: var(--black);
+            font-family: -apple-system, sans-serif;
+            height: 100vh; overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+            perspective: 2000px;
+        }
+
+        /* 粒子背景 */
+        .particles { position: fixed; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .dot { position: absolute; background: white; border-radius: 50%; opacity: 0.2; animation: twinkle var(--duration) infinite ease-in-out; }
+        @keyframes twinkle { 0%, 100% { opacity: 0.1; transform: translateZ(var(--z)) scale(0.8); } 50% { opacity: 0.6; transform: translateZ(var(--z)) scale(1.2); } }
+
+        /* 卡片框架 */
+        .poster-frame {
+            position: relative; width: 85%; max-width: 380px; aspect-ratio: 3 / 4.2;
+            background: var(--paper-white); 
+            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
+            padding: 25px; display: flex; flex-direction: column;
+            z-index: 10; transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .back-link { font-size: 10px; font-weight: 800; color: var(--accent-red); text-decoration: none; border-bottom: 1px solid var(--accent-red); }
+
+        /* 列表区域 */
+        .list-container {
+            flex-grow: 1; overflow-y: auto; padding-right: 5px;
+        }
+        .list-container::-webkit-scrollbar { width: 2px; }
+        .list-container::-webkit-scrollbar-thumb { background: var(--accent-red); }
+
+        .list-item {
+            display: block; text-decoration: none; color: inherit;
+            padding: 12px 0; border-bottom: 1px solid #e0e0e0;
+            position: relative; transition: all 0.3s;
+        }
+
+        .item-meta { font-family: monospace; font-size: 9px; color: var(--accent-red); margin-bottom: 4px; display: flex; justify-content: space-between; }
+        .item-title { font-size: 14px; font-weight: 700; letter-spacing: 0.5px; transition: 0.3s; }
+
+        /* 悬停效果：标题变色及模拟加载条 */
+        .list-item:hover .item-title { color: var(--accent-red); transform: translateX(5px); }
+        
+        .section-title { font-size: 18px; font-weight: 900; letter-spacing: 2px; margin-bottom: 5px; }
+        .section-sub { font-size: 9px; color: var(--text-dim); margin-bottom: 15px; text-transform: uppercase; }
+
+        .footer { margin-top: 15px; display: flex; justify-content: space-between; font-size: 9px; font-weight: 700; border-top: 1px solid #eee; padding-top: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="particles" id="particles"></div>
+
+    <div class="scene">
+        <div class="poster-frame" id="poster">
+            <div class="header">
+                <a href="javascript:history.back()" class="back-link">← RETURN</a>
+                <div id="time-code" style="font-family: monospace; font-size: 10px;">00:00:00</div>
+            </div>
+
+            <div class="section-title">DIRECTORY</div>
+            <div class="section-sub">Archive / Theory Node 2.0</div>
+
+            <div class="list-container">
+                <a href="post1.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_01</span><span>2024/05/12</span></div>
+                    <div class="item-title">数字空间的熵增与重构</div>
+                </a>
+                <a href="post2.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_02</span><span>2024/06/20</span></div>
+                    <div class="item-title">非线性叙事的视觉逻辑</div>
+                </a>
+                <a href="post3.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_03</span><span>2024/08/01</span></div>
+                    <div class="item-title">人机交互中的“幽灵”审美</div>
+                </a>
+                <a href="post4.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_04</span><span>2024/09/15</span></div>
+                    <div class="item-title">赛博格宣言与当代艺术</div>
+                </a>
+                <a href="post5.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_05</span><span>2024/10/05</span></div>
+                    <div class="item-title">极简主义在数据过载时代的变体</div>
+                </a>
+                <a href="post6.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_06</span><span>2024/11/11</span></div>
+                    <div class="item-title">流动影像的感官边界</div>
+                </a>
+                <a href="post7.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_07</span><span>2024/12/24</span></div>
+                    <div class="item-title">算法生成的偶然性美学</div>
+                </a>
+                <a href="post8.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_08</span><span>2025/01/10</span></div>
+                    <div class="item-title">物理触感与虚拟现实的矛盾</div>
+                </a>
+                <a href="post9.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_09</span><span>2025/02/14</span></div>
+                    <div class="item-title">暗色模式下的视觉传达</div>
+                </a>
+                <a href="post10.html" class="list-item">
+                    <div class="item-meta"><span>INDEX_10</span><span>2025/03/01</span></div>
+                    <div class="item-title">后人类主义的文本实验</div>
+                </a>
+            </div>
+
+            <div class="footer">
+                <div>CATALOG ACCESS GRANTED</div>
+                <div style="color: var(--accent-red)">ID: TZ-2026</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const poster = document.getElementById('poster');
+        let targetX = 0, targetY = 0;
+        let currentX = 0, currentY = 0;
+
+        window.addEventListener('mousemove', (e) => {
+            targetX = (e.clientX / window.innerWidth - 0.5) * 30;
+            targetY = (e.clientY / window.innerHeight - 0.5) * 30;
+        });
+
+        function updateParallax() {
+            currentX += (targetX - currentX) * 0.1;
+            currentY += (targetY - currentY) * 0.1;
+            poster.style.transform = `rotateY(${currentX}deg) rotateX(${-currentY}deg)`;
+            requestAnimationFrame(updateParallax);
+        }
+        updateParallax();
+
+        // 简易时间显示
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('time-code').textContent = now.toLocaleTimeString();
+        }, 1000);
+
+        // 背景粒子生成
+        const partContainer = document.getElementById('particles');
+        for(let i=0; i<50; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            const size = Math.random() * 2;
+            dot.style.cssText = `width:${size}px; height:${size}px; left:${Math.random()*100}%; top:${Math.random()*100}%; --z:${Math.random()*1000-500}px; --duration:${2+Math.random()*3}s;`;
+            partContainer.appendChild(dot);
+        }
+    </script>
+</body>
+</html>
