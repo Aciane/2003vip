@@ -9,44 +9,58 @@
             --paper-white: #f5f5f7;
             --accent-red: #ff3b30;
             --text-dim: #86868b;
-            --overlay: rgba(0,0,0,0.85);
+            --overlay: rgba(0,0,0,0.9);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
             background-color: #0a0b10; color: #1d1d1f;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            height: 100vh; overflow: hidden;
+            height: 100vh; height: 100svh; 
+            overflow: hidden;
             display: flex; justify-content: center; align-items: center;
             perspective: 2000px;
         }
 
-        /* 延续粒子背景 */
+        /* 粒子背景 */
         .particles { position: fixed; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
         .dot { position: absolute; background: white; border-radius: 50%; opacity: 0.2; animation: twinkle var(--duration) infinite ease-in-out; }
         @keyframes twinkle { 0%, 100% { opacity: 0.1; transform: translateZ(var(--z)) scale(0.8); } 50% { opacity: 0.6; transform: translateZ(var(--z)) scale(1.2); } }
 
-        /* 卡片主框架 */
+        /* 响应式卡片框架 */
         .poster-frame {
-            position: relative; width: 90%; max-width: 400px; aspect-ratio: 3 / 4.2;
+            position: relative; 
+            width: 90%; 
+            max-width: 450px; 
+            height: 85vh;
+            max-height: 750px;
             background: var(--paper-white); 
             box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-            padding: 24px; display: flex; flex-direction: column;
-            z-index: 10; transition: transform 0.1s ease-out;
+            padding: clamp(15px, 5vw, 25px); 
+            display: flex; flex-direction: column;
+            z-index: 10; 
+            transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
         }
 
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-shrink: 0; }
         .back-link { font-size: 10px; font-weight: 800; color: var(--accent-red); text-decoration: none; border: 1px solid var(--accent-red); padding: 2px 8px; transition: 0.3s; }
-        .back-link:hover { background: var(--accent-red); color: white; }
+        
+        @media (hover: hover) {
+            .back-link:hover { background: var(--accent-red); color: white; }
+        }
 
         /* 影像网格区域 */
         .video-grid {
-            flex-grow: 1; overflow-y: auto;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+            flex-grow: 1; 
+            overflow-y: auto;
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px;
             padding-right: 5px;
         }
         .video-grid::-webkit-scrollbar { width: 3px; }
-        .video-grid::-webkit-scrollbar-thumb { background: #ddd; border-radius: 10px; }
+        .video-grid::-webkit-scrollbar-thumb { background: #d1d1d6; border-radius: 10px; }
 
         .video-card { cursor: pointer; text-decoration: none; color: inherit; display: flex; flex-direction: column; }
 
@@ -55,7 +69,11 @@
             background: #111; border-radius: 2px; overflow: hidden;
         }
         .cover-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; opacity: 0.9; }
-        .video-card:hover img { transform: scale(1.05); opacity: 1; }
+        
+        @media (hover: hover) {
+            .video-card:hover img { transform: scale(1.05); opacity: 1; }
+            .video-card:hover .video-title { color: var(--accent-red); }
+        }
 
         .cover-stat {
             position: absolute; bottom: 0; width: 100%; padding: 4px 6px;
@@ -64,27 +82,38 @@
         }
 
         .video-title {
-            font-size: 11px; font-weight: 700; line-height: 1.4;
+            font-size: clamp(10px, 3vw, 12px); font-weight: 700; line-height: 1.4;
             margin-top: 8px; display: -webkit-box; -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical; overflow: hidden; transition: 0.3s;
+            -webkit-box-orient: vertical; overflow: hidden;
         }
-        .video-card:hover .video-title { color: var(--accent-red); }
 
-        .section-tag { font-size: 18px; font-weight: 900; letter-spacing: 1px; margin-bottom: 2px; color: #000; }
-        .sub-tag { font-size: 8px; color: var(--text-dim); margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
+        .section-tag { font-size: clamp(18px, 6vw, 22px); font-weight: 900; letter-spacing: 1px; margin-bottom: 2px; color: #000; }
+        .sub-tag { font-size: 9px; color: var(--text-dim); margin-bottom: 15px; letter-spacing: 1px; text-transform: uppercase; }
 
-        .footer { margin-top: 15px; font-size: 9px; border-top: 1px solid #e0e0e0; padding-top: 10px; display: flex; justify-content: space-between; font-weight: bold; font-family: monospace; }
+        .footer { margin-top: 15px; font-size: 9px; border-top: 1px solid #e0e0e0; padding-top: 10px; display: flex; justify-content: space-between; font-weight: bold; font-family: monospace; flex-shrink: 0; }
 
-        /* 播放器弹出层 */
+        /* 播放器弹出层 - 响应式优化 */
         #player-modal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--overlay); z-index: 100;
             display: none; justify-content: center; align-items: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
         }
-        .modal-content { position: relative; width: 90%; max-width: 800px; aspect-ratio: 16 / 9; background: #000; }
-        .close-btn { position: absolute; top: -30px; right: 0; color: white; cursor: pointer; font-size: 12px; font-family: monospace; }
-        iframe { width: 100%; height: 100%; }
+        .modal-content { 
+            position: relative; 
+            width: 95%; 
+            max-width: 900px; 
+            aspect-ratio: 16 / 9; 
+            background: #000;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+        .close-btn { 
+            position: absolute; top: -35px; right: 0; 
+            color: white; cursor: pointer; font-size: 11px; 
+            font-family: monospace; letter-spacing: 1px;
+            padding: 5px;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
@@ -93,7 +122,7 @@
 
     <div id="player-modal" onclick="closeVideo()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="close-btn">[ CLOSE_PLAYER ]</div>
+            <div class="close-btn" onclick="closeVideo()">[ CLOSE_PLAYER ]</div>
             <iframe id="bili-iframe" src="" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
         </div>
     </div>
@@ -105,47 +134,47 @@
         </div>
 
         <div class="section-tag">ARCHIVE / 影像</div>
-        <div class="sub-tag">Moving Images & Documentaries 2024-2026</div>
+        <div class="sub-tag">Moving Images & Documentaries</div>
 
         <div class="video-grid">
             <div class="video-card" onclick="openVideo('BV1KpgfebEGQ')">
                 <div class="cover-box">
-                    <img src="https://i0.hdslb.com/bfs/archive/7d6a50352554746ec1007a905a5a22d765870b2e.jpg" alt="云梦紫歌">
-                    <div class="cover-stat"><span>DOCU</span><span>12:25</span></div>
+                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/7d6a50352554746ec1007a905a5a22d765870b2e.jpg" alt="云梦紫歌">
+                    <div class="cover-stat"><span>DOCU</span><span>[01]</span></div>
                 </div>
-                <div class="video-title">云梦紫歌 -紫阳民歌- 大学生非遗纪录短片</div>
+                <div class="video-title">非遗纪录短片：云梦紫歌</div>
             </div>
 
             <div class="video-card" onclick="openVideo('BV1WdkRYGEL6')">
                 <div class="cover-box">
-                    <img src="https://i0.hdslb.com/bfs/archive/f7d3e6480e6097560875e478564c7873528b1e06.jpg" alt="送你去远方">
-                    <div class="cover-stat"><span>FILM</span><span>08:42</span></div>
+                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/f7d3e6480e6097560875e478564c7873528b1e06.jpg" alt="送你去远方">
+                    <div class="cover-stat"><span>FILM</span><span>[02]</span></div>
                 </div>
-                <div class="video-title">送你去远方 - 大学生微电影作品</div>
+                <div class="video-title">微电影创作：送你去远方</div>
             </div>
 
             <div class="video-card" onclick="openVideo('BV1AjvkBLENx')">
                 <div class="cover-box">
-                    <img src="https://i0.hdslb.com/bfs/archive/4785f29917300438ec3011a681d45c6020c02f1a.jpg" alt="防尘">
-                    <div class="cover-stat"><span>EXPT</span><span>03:15</span></div>
+                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/4785f29917300438ec3011a681d45c6020c02f1a.jpg" alt="防尘">
+                    <div class="cover-stat"><span>EXPT</span><span>[03]</span></div>
                 </div>
-                <div class="video-title">防 尘 (Digital Experiment)</div>
+                <div class="video-title">个人独立实验：防 尘</div>
             </div>
 
             <div class="video-card" onclick="openVideo('BV16eM1zKEQ1')">
                 <div class="cover-box">
-                    <img src="https://i0.hdslb.com/bfs/archive/c78167f4c398327c53f6a297924e2c884693a17e.jpg" alt="毕业设计">
-                    <div class="cover-stat"><span style="color:#ff3b30">MISC_ERROR</span><span>??:??</span></div>
+                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/c78167f4c398327c53f6a297924e2c884693a17e.jpg" alt="毕业设计">
+                    <div class="cover-stat"><span style="color:#ff3b30">ERROR</span><span>[04]</span></div>
                 </div>
-                <div class="video-title">毕业设计：未被审核直投家装区的存档</div>
+                <div class="video-title">多媒体：开门指南</div>
             </div>
 
             <div class="video-card" onclick="openVideo('BV1rZ421u7aX')">
                 <div class="cover-box">
-                    <img src="https://i0.hdslb.com/bfs/archive/e8615c4d638927902d1d0728c40751e7a5c719e5.jpg" alt="大广赛">
-                    <div class="cover-stat"><span>PROCESS</span><span>01:30</span></div>
+                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/e8615c4d638927902d1d0728c40751e7a5c719e5.jpg" alt="大广赛">
+                    <div class="cover-stat"><span>PROD</span><span>[05]</span></div>
                 </div>
-                <div class="video-title">可画大广赛：一种关于“摆烂”的视觉表达</div>
+                <div class="video-title">大广赛：你可以的！</div>
             </div>
         </div>
 
@@ -161,11 +190,13 @@
         const iframe = document.getElementById('bili-iframe');
         let targetX = 0, targetY = 0, currentX = 0, currentY = 0;
 
-        // 视差效果保持
-        window.addEventListener('mousemove', (e) => {
-            targetX = (e.clientX / window.innerWidth - 0.5) * 20;
-            targetY = (e.clientY / window.innerHeight - 0.5) * 20;
-        });
+        // 仅在非触摸设备开启鼠标跟随
+        if (window.matchMedia("(pointer: fine)").matches) {
+            window.addEventListener('mousemove', (e) => {
+                targetX = (e.clientX / window.innerWidth - 0.5) * 15;
+                targetY = (e.clientY / window.innerHeight - 0.5) * 15;
+            });
+        }
 
         function updateParallax() {
             currentX += (targetX - currentX) * 0.1;
@@ -175,25 +206,26 @@
         }
         updateParallax();
 
-        // 视频播放控制
         function openVideo(bvid) {
-            iframe.src = `//player.bilibili.com/player.html?bvid=${bvid}&page=1&high_quality=1&danmaku=0`;
+            // 优化 Bilibili 嵌入参数：自动播放=0，高画质=1
+            iframe.src = `//player.bilibili.com/player.html?bvid=${bvid}&page=1&high_quality=1&danmaku=0&autoplay=1`;
             modal.style.display = 'flex';
         }
 
         function closeVideo() {
             modal.style.display = 'none';
-            iframe.src = ''; // 停止播放
+            iframe.src = ''; 
         }
 
-        // 时间逻辑
+        // 时间显示
         setInterval(() => {
-            document.getElementById('time-code').textContent = new Date().toLocaleTimeString('en-GB');
+            document.getElementById('time-code').textContent = new Date().toLocaleTimeString('en-GB', { hour12: false });
         }, 1000);
 
-        // 粒子背景生成
+        // 粒子系统
         const partContainer = document.getElementById('particles');
-        for(let i=0; i<30; i++) {
+        const pCount = window.innerWidth < 768 ? 20 : 40;
+        for(let i=0; i<pCount; i++) {
             const dot = document.createElement('div');
             dot.className = 'dot';
             const size = Math.random() * 2;
