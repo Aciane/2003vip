@@ -2,8 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TZR_VISUAL_ARCHIVE_3.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>唐择镇的博客</title>
     <style>
         :root {
             --paper-white: #f5f5f7;
@@ -11,81 +11,78 @@
             --accent-black: #1d1d1f;
             --accent-red: #ff3b30;
             --text-dim: #86868b;
-            --ease-ios: cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
             background-color: var(--paper-white);
             color: var(--accent-black);
-            font-family: "SF Pro SC", "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-family: -apple-system, "SF Pro SC", "PingFang SC", system-ui, sans-serif;
             height: 100vh;
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            perspective: 1500px; /* 开启全局透视 */
+            perspective: 1000px;
         }
 
-        /* 极简背景网格 */
         .grid-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                radial-gradient(circle, #d1d1d6 1px, transparent 1px);
-            background-size: 40px 40px;
+            background-image: radial-gradient(circle, #d1d1d6 1px, transparent 1px);
+            background-size: 30px 30px;
             opacity: 0.3;
             z-index: -1;
         }
 
-        /* 视差场景容器 */
         .scene {
-            width: 80vw;
-            height: 80vh;
-            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             transform-style: preserve-3d;
-            transition: transform 0.1s linear;
+            will-change: transform;
         }
 
-        /* 图层 1：底部大字 (最远) */
+        /* 背景装饰：在手机上调小字号 */
         .layer-back {
             position: absolute;
-            font-size: 25vw;
+            font-size: 15vw;
             font-weight: 900;
             color: var(--paper-gray);
-            top: 50%; left: 50%;
-            transform: translate3d(-50%, -50%, -200px);
+            transform: translate3d(0, 0, -150px);
             user-select: none;
             white-space: nowrap;
+            z-index: 1;
         }
 
-        /* 图层 2：主海报框架 */
+        /* 核心卡片容器：响应式关键 */
         .poster-frame {
-            position: absolute;
-            width: 450px;
-            height: 600px;
+            position: relative;
+            width: 90%;
+            max-width: 400px; /* PC端最大宽度 */
+            aspect-ratio: 3 / 4; /* 保持海报比例 */
             background: white;
-            top: 50%; left: 50%;
-            transform: translate3d(-50%, -50%, 0);
-            box-shadow: 0 40px 100px rgba(0,0,0,0.1);
-            padding: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.12);
+            padding: 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            border: 1px solid rgba(0,0,0,0.05);
+            z-index: 10;
+            transform: translate3d(0, 0, 0);
         }
 
         .poster-image {
-            width: 100%;
-            height: 60%;
-            background: #2c2c2e;
+            flex-grow: 1;
+            margin: 20px 0;
+            background: #1c1c1e;
             position: relative;
             overflow: hidden;
-            border-radius: 2px;
+            border-radius: 1px;
         }
 
-        /* 模拟电影画幅 */
         .poster-image::after {
             content: '';
             position: absolute;
@@ -99,78 +96,36 @@
             100% { transform: translateX(100%); }
         }
 
-        /* 图层 3：浮动信息 (最近) */
+        /* 标签：手机端自动调整 */
         .layer-front {
             position: absolute;
-            transform: translate3d(0, 0, 100px);
+            z-index: 20;
+            transform: translate3d(0, 0, 40px);
             pointer-events: none;
         }
 
         .tag {
-            position: absolute;
             background: var(--accent-black);
             color: white;
-            padding: 4px 12px;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            border-radius: 2px;
-        }
-
-        /* 布局元素 */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-
-        .title-group h1 {
-            font-size: 24px;
-            font-weight: 800;
-            line-height: 1;
-        }
-
-        .title-group p {
+            padding: 4px 10px;
             font-size: 10px;
-            color: var(--text-dim);
-            margin-top: 4px;
+            font-weight: bold;
             letter-spacing: 1px;
         }
 
-        .time-code {
-            font-family: "Courier New", monospace;
-            font-size: 14px;
-            color: var(--accent-red);
-            font-weight: bold;
-        }
+        .title-group h1 { font-size: 20px; font-weight: 800; }
+        .title-group p { font-size: 9px; color: var(--text-dim); margin-top: 4px; }
+        .time-code { font-family: monospace; font-size: 12px; color: var(--accent-red); }
 
-        .footer-info {
-            border-top: 1px solid #eee;
-            padding-top: 20px;
-        }
-
-        .meta-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-size: 11px;
-        }
-
+        .footer-info { border-top: 1px solid #eee; padding-top: 15px; }
+        .meta-row { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 10px; }
         .meta-label { color: var(--text-dim); }
-        .meta-val { font-weight: 600; }
 
-        /* 装饰性侧边条 */
-        .side-bar {
-            position: absolute;
-            right: -100px;
-            top: 100px;
-            transform: rotate(90deg) translateZ(50px);
-            font-size: 10px;
-            letter-spacing: 5px;
-            color: var(--text-dim);
-            text-transform: uppercase;
+        /* 响应式微调 */
+        @media (max-height: 700px) {
+            .poster-frame { padding: 20px; }
+            .poster-image { margin: 10px 0; }
         }
-
     </style>
 </head>
 <body>
@@ -178,65 +133,70 @@
     <div class="grid-bg"></div>
 
     <div class="scene" id="scene">
-        <!-- 远景图层 -->
         <div class="layer-back">TANG ZE ZHEN</div>
 
-        <!-- 主体图层 -->
         <div class="poster-frame">
             <div class="header">
                 <div class="title-group">
-                    <h1>唐择镇</h1>
-                    <p>VISUAL RESEARCH ARCHIVE // 2024</p>
+                    <h1>唐择镇的博客</h1>
+                    <p>VISUAL ARCHIVE // 2026</p>
                 </div>
                 <div class="time-code" id="time-code">00:00:00:00</div>
             </div>
 
             <div class="poster-image">
-                <!-- 这里可以用抽象几何图形代替文字 -->
-                <div style="position:absolute; bottom:20px; left:20px; color:white; font-size:40px; font-weight:100; opacity:0.3;">
-                    [ 影像 / 叙事 ]
+                <div style="position:absolute; bottom:15px; left:15px; color:white; font-size:24px; font-weight:100; opacity:0.3;">
+                    [ 思考 / 留白 ]
                 </div>
             </div>
 
             <div class="footer-info">
                 <div class="meta-row">
-                    <span class="meta-label">类别 / CATEGORY</span>
-                    <span class="meta-val">戏剧与影视</span>
+                    <span class="meta-label">项目 / PROJECT</span>
+                    <span class="meta-val">个人博文存档</span>
                 </div>
                 <div class="meta-row">
                     <span class="meta-label">状态 / STATUS</span>
-                    <span class="meta-val" style="color: var(--accent-red);">已存档 / RECORDED</span>
-                </div>
-                <div class="meta-row" style="margin-top: 15px;">
-                    <span class="meta-val">影像-空间</span>
+                    <span class="meta-val" style="color: var(--accent-red);">LIVE</span>
                 </div>
             </div>
         </div>
 
-        <!-- 近景图层 -->
-        <div class="layer-front" style="top: 20%; left: 15%;">
-            <div class="tag">VERIFIED</div>
+        <div class="layer-front" style="top: 25%; left: 10%;">
+            <div class="tag">BLOG_3.0</div>
         </div>
-        <div class="layer-front" style="bottom: 15%; right: 10%;">
-            <div class="tag" style="background:none; border:1px solid black; color:black;">MASTER_OF_ARTS</div>
-        </div>
-
-        <div class="side-bar">INDEX. NO. 8829-TZR-001</div>
     </div>
 
     <script>
         const scene = document.getElementById('scene');
         const timeCodeEl = document.getElementById('time-code');
 
-        // 1. 鼠标追踪透视效果
+        // 兼容 PC 鼠标和手机陀螺仪
+        function handleMove(x, y) {
+            const rotX = (y / window.innerHeight - 0.5) * -30;
+            const rotY = (x / window.innerWidth - 0.5) * 30;
+            scene.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+        }
+
+        // PC端鼠标事件
         document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 30;
-            const y = (window.innerHeight / 2 - e.pageY) / 30;
-            
-            scene.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
+            handleMove(e.pageX, e.pageY);
         });
 
-        // 2. 修复后的专业时间码逻辑 (30FPS)
+        // 手机端加速度计（可选：需用户交互触发权限）
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (e) => {
+                if(e.beta && e.gamma) {
+                    // beta: 前后倾斜 (-180 to 180)
+                    // gamma: 左右倾斜 (-90 to 90)
+                    const x = (e.gamma + 45) * (window.innerWidth / 90);
+                    const y = (e.beta - 45) * (window.innerHeight / 90);
+                    handleMove(x, y);
+                }
+            }, true);
+        }
+
+        // 时间码逻辑
         let frames = 0;
         function updateTime() {
             frames++;
@@ -245,23 +205,10 @@
             const s = (totalSeconds % 60).toString().padStart(2, '0');
             const m = (Math.floor(totalSeconds / 60) % 60).toString().padStart(2, '0');
             const h = (Math.floor(totalSeconds / 3600)).toString().padStart(2, '0');
-            
             timeCodeEl.textContent = `${h}:${m}:${s}:${f}`;
             requestAnimationFrame(updateTime);
         }
-        
-        // 使用 requestAnimationFrame 保证动画同步和丝滑度
         updateTime();
-
-        // 3. 点击效果反馈
-        document.addEventListener('mousedown', () => {
-            scene.style.transition = 'transform 0.1s';
-            scene.style.transform += ' translateZ(-50px)';
-        });
-        document.addEventListener('mouseup', () => {
-            scene.style.transform = scene.style.transform.replace(' translateZ(-50px)', '');
-        });
-
     </script>
 </body>
 </html>
