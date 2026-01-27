@@ -22,7 +22,6 @@
             perspective: 2000px;
         }
 
-        /* 粒子系统 */
         .particles {
             position: fixed; width: 100%; height: 100%;
             pointer-events: none; z-index: 0;
@@ -37,13 +36,11 @@
             50% { opacity: 0.6; transform: translateZ(var(--z)) scale(1.2); }
         }
 
-        /* 底部背景大字 */
         .layer-back {
             position: absolute; font-size: 18vw; font-weight: 900;
             color: rgba(255,255,255,0.03); transform: translate3d(0, 0, -500px);
             user-select: none; white-space: nowrap; z-index: 1;
             letter-spacing: -5px; pointer-events: none;
-            transition: transform 0.1s linear;
         }
 
         .scene {
@@ -52,14 +49,13 @@
             transform-style: preserve-3d;
         }
 
-        /* 海报主体 */
         .poster-frame {
             position: relative; width: 85%; max-width: 380px; aspect-ratio: 3 / 4.2;
             background: var(--paper-white); 
             box-shadow: 0 40px 80px rgba(0,0,0,0.6);
             padding: 25px; display: flex; flex-direction: column;
             justify-content: space-between; z-index: 10;
-            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
         }
 
         .poster-image {
@@ -68,7 +64,6 @@
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* 网格动画 */
         .inner-grid {
             position: absolute; width: 200%; height: 200%;
             background-image: 
@@ -77,30 +72,49 @@
             background-size: 40px 40px;
             transform: rotateX(65deg) translateY(0);
             animation: grid-run 10s linear infinite;
+            pointer-events: none; /* 防止网格遮挡点击 */
+            z-index: 1;
         }
+
         @keyframes grid-run {
             from { transform: rotateX(65deg) translateY(0); }
             to { transform: rotateX(65deg) translateY(40px); }
         }
 
-        /* 菜单区域 */
-        .nav-container { width: 100%; height: 100%; display: flex; flex-direction: column; z-index: 5; }
+        .nav-container { 
+            width: 100%; height: 100%; 
+            display: flex; flex-direction: column; 
+            z-index: 10; /* 确保导航在网格之上 */
+            position: relative;
+        }
+
         .nav-rail {
             flex: 1; display: flex; justify-content: center; align-items: center;
             cursor: pointer; position: relative;
+            background: transparent; 
+            transition: background 0.3s;
+            text-decoration: none;
         }
+
         .nav-item {
             color: rgba(255,255,255,0.3); font-size: 1.5rem; font-weight: 800;
             letter-spacing: 0.4em; transition: all 0.3s ease;
+            pointer-events: none; /* 让点击事件穿透文字，由 rail 捕捉 */
         }
 
-        /* 激活反馈 */
+        @media (hover: hover) {
+            .nav-rail:hover .nav-item {
+                color: rgba(255,255,255,0.8);
+                transform: scale(1.1);
+            }
+        }
+
         .nav-rail.active .nav-item {
-            color: var(--accent-red); transform: scale(1.1);
+            color: var(--accent-red) !important;
+            transform: scale(1.1);
             text-shadow: 0 0 15px rgba(255, 59, 48, 0.4);
         }
 
-        /* 状态显示 */
         .status-bar { display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 15px; }
         #status-text { font-size: 10px; font-weight: 700; text-transform: uppercase; }
         .blink { animation: blinker 1s linear infinite; }
@@ -108,7 +122,7 @@
 
         .time-code { font-family: monospace; color: var(--accent-red); font-size: 12px; }
         .title-group h1 { font-size: 18px; letter-spacing: 2px; }
-        .deco-side { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; font-size: 8px; color: var(--accent-red); letter-spacing: 3px; opacity: 0.5;}
+        .deco-side { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); writing-mode: vertical-rl; font-size: 8px; color: var(--accent-red); letter-spacing: 3px; opacity: 0.5; pointer-events: none;}
     </style>
 </head>
 <body>
@@ -130,10 +144,10 @@
                 <div class="inner-grid" id="grid"></div>
                 <div class="deco-side">COMMUNICATION</div>
                 <nav class="nav-container">
-                    <div class="nav-rail" data-label="PROFILE"><span class="nav-item">简介</span></div>
-                    <div class="nav-rail" data-label="THEORY"><span class="nav-item">理论</span></div>
-                    <div class="nav-rail" data-label="ARCHIVE"><span class="nav-item">文本</span></div>
-                    <div class="nav-rail" data-label="VISION"><span class="nav-item">影像</span></div>
+                    <a href="1/index.html" class="nav-rail" data-label="PROFILE"><span class="nav-item">简介</span></a>
+                    <a href="2/index.html" class="nav-rail" data-label="THEORY"><span class="nav-item">理论</span></a>
+                    <a href="3/index.html" class="nav-rail" data-label="ARCHIVE"><span class="nav-item">文本</span></a>
+                    <a href="4/index.html" class="nav-rail" data-label="VISION"><span class="nav-item">影像</span></a>
                 </nav>
             </div>
 
@@ -150,61 +164,57 @@
         const grid = document.getElementById('grid');
         const statusText = document.getElementById('status-text');
 
-        // 1. 响应式视差（兼顾鼠标与重力感应）
         let targetX = 0, targetY = 0;
         let currentX = 0, currentY = 0;
 
-        window.addEventListener('mousemove', (e) => {
-            targetX = (e.clientX / window.innerWidth - 0.5) * 30;
-            targetY = (e.clientY / window.innerHeight - 0.5) * 30;
-        });
+        function handleMove(x, y) {
+            targetX = (x / window.innerWidth - 0.5) * 40;
+            targetY = (y / window.innerHeight - 0.5) * 40;
+        }
 
-        // 陀螺仪逻辑：仅在移动端触发
+        window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+
         if (window.DeviceOrientationEvent) {
             window.addEventListener('deviceorientation', (e) => {
-                targetX = Math.min(Math.max(e.gamma, -30), 30); // 左右倾斜
-                targetY = Math.min(Math.max(e.beta - 45, -30), 30); // 前后倾斜
+                if(e.gamma) {
+                    targetX = Math.min(Math.max(e.gamma, -30), 30);
+                    targetY = Math.min(Math.max(e.beta - 45, -30), 30);
+                }
             });
         }
 
         function updateParallax() {
             currentX += (targetX - currentX) * 0.1;
             currentY += (targetY - currentY) * 0.1;
-            
             poster.style.transform = `rotateY(${currentX}deg) rotateX(${-currentY}deg)`;
-            backName.style.transform = `translate3d(${-currentX * 5}px, ${-currentY * 5}px, -500px)`;
+            backName.style.transform = `translate3d(${-currentX * 6}px, ${-currentY * 6}px, -500px)`;
             requestAnimationFrame(updateParallax);
         }
         updateParallax();
 
-        // 2. 强化点击反馈
         const navRails = document.querySelectorAll('.nav-rail');
-        navRails.forEach(rail => {
-            const triggerEvent = 'ontouchstart' in window ? 'touchstart' : 'mousedown';
+        
+        function onAction(rail) {
+            navRails.forEach(r => r.classList.remove('active'));
+            rail.classList.add('active');
             
-            rail.addEventListener(triggerEvent, function(e) {
-                // 瞬间动感
-                navRails.forEach(r => r.classList.remove('active'));
-                this.classList.add('active');
-                
-                // 加速网格
-                grid.style.animationDuration = '2s';
-                
-                // 海报微颤
-                poster.style.transition = 'transform 0.1s';
-                poster.style.transform += ' translateZ(-20px) scale(0.98)';
-                
-                const label = this.getAttribute('data-label');
-                statusText.innerHTML = `LOADING ${label}<span class="blink">...</span>`;
+            // 动效反馈
+            grid.style.animationDuration = '1s';
+            
+            const label = rail.getAttribute('data-label');
+            statusText.innerHTML = `LOADING ${label}<span class="blink">...</span>`;
 
-                setTimeout(() => {
-                    poster.style.transition = 'transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-                    grid.style.animationDuration = '10s';
-                }, 200);
-            });
+            setTimeout(() => {
+                grid.style.animationDuration = '10s';
+            }, 500);
+        }
+
+        navRails.forEach(rail => {
+            // 使用 click 兼容性最好，包括移动端和 PC
+            rail.addEventListener('click', () => onAction(rail));
         });
 
-        // 3. 极客计时器
+        // 计时器
         setInterval(() => {
             const now = new Date();
             const h = String(now.getHours()).padStart(2, '0');
@@ -214,7 +224,7 @@
             document.getElementById('time-code').textContent = `${h}:${m}:${s}:${ms}`;
         }, 40);
 
-        // 初始化星丛粒子
+        // 星丛粒子
         const partContainer = document.getElementById('particles');
         for(let i=0; i<60; i++) {
             const dot = document.createElement('div');
@@ -225,4 +235,4 @@
         }
     </script>
 </body>
-</html>ß
+</html>
