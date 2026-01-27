@@ -72,7 +72,7 @@
             background-size: 40px 40px;
             transform: rotateX(65deg) translateY(0);
             animation: grid-run 10s linear infinite;
-            pointer-events: none; /* 防止网格遮挡点击 */
+            pointer-events: none; 
             z-index: 1;
         }
 
@@ -84,7 +84,7 @@
         .nav-container { 
             width: 100%; height: 100%; 
             display: flex; flex-direction: column; 
-            z-index: 10; /* 确保导航在网格之上 */
+            z-index: 10; 
             position: relative;
         }
 
@@ -99,7 +99,7 @@
         .nav-item {
             color: rgba(255,255,255,0.3); font-size: 1.5rem; font-weight: 800;
             letter-spacing: 0.4em; transition: all 0.3s ease;
-            pointer-events: none; /* 让点击事件穿透文字，由 rail 捕捉 */
+            pointer-events: none; 
         }
 
         @media (hover: hover) {
@@ -144,10 +144,10 @@
                 <div class="inner-grid" id="grid"></div>
                 <div class="deco-side">COMMUNICATION</div>
                 <nav class="nav-container">
-                    <a href="1/index.html" class="nav-rail" data-label="PROFILE"><span class="nav-item">简介</span></a>
-                    <a href="2/index.html" class="nav-rail" data-label="THEORY"><span class="nav-item">理论</span></a>
-                    <a href="3/index.html" class="nav-rail" data-label="ARCHIVE"><span class="nav-item">文本</span></a>
-                    <a href="4/index.html" class="nav-rail" data-label="VISION"><span class="nav-item">影像</span></a>
+                    <a href="https://tangzezhen2003.vip/1" class="nav-rail" data-label="PROFILE"><span class="nav-item">简介</span></a>
+                    <a href="https://tangzezhen2003.vip/2" class="nav-rail" data-label="THEORY"><span class="nav-item">理论</span></a>
+                    <a href="https://tangzezhen2003.vip/3" class="nav-rail" data-label="ARCHIVE"><span class="nav-item">文本</span></a>
+                    <a href="https://tangzezhen2003.vip/4" class="nav-rail" data-label="VISION"><span class="nav-item">影像</span></a>
                 </nav>
             </div>
 
@@ -198,7 +198,6 @@
             navRails.forEach(r => r.classList.remove('active'));
             rail.classList.add('active');
             
-            // 动效反馈
             grid.style.animationDuration = '1s';
             
             const label = rail.getAttribute('data-label');
@@ -210,11 +209,9 @@
         }
 
         navRails.forEach(rail => {
-            // 使用 click 兼容性最好，包括移动端和 PC
             rail.addEventListener('click', () => onAction(rail));
         });
 
-        // 计时器
         setInterval(() => {
             const now = new Date();
             const h = String(now.getHours()).padStart(2, '0');
@@ -224,7 +221,6 @@
             document.getElementById('time-code').textContent = `${h}:${m}:${s}:${ms}`;
         }, 40);
 
-        // 星丛粒子
         const partContainer = document.getElementById('particles');
         for(let i=0; i<60; i++) {
             const dot = document.createElement('div');
