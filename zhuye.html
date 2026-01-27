@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>TTPIG_ARCHIVE_V1.0</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1b;
+            --vhs-green: #00ff41;
+            --vhs-blue: #00f0ff;
+            --vhs-yellow: #fff200;
+            --scanline-color: rgba(18, 16, 16, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--vhs-green);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* 扫描线效果 */
+        .container::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 4px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            border: 4px solid var(--vhs-green);
+            padding: 20px;
+            position: relative;
+            box-shadow: 0 0 15px var(--vhs-green);
+            background: #000;
+        }
+
+        /* VHS 状态栏 */
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--vhs-green);
+            padding-bottom: 10px;
+        }
+
+        h1 {
+            text-shadow: 2px 0 var(--vhs-blue), -2px 0 #ff00c1;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        /* CSV 数据表格样式 */
+        .csv-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        .csv-table th, .csv-table td {
+            border: 1px solid var(--vhs-green);
+            padding: 10px;
+            text-align: left;
+        }
+
+        .csv-table th {
+            background-color: var(--vhs-green);
+            color: #000;
+        }
+
+        /* 模拟故障效果 */
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+
+        .glitch-text:hover {
+            animation: glitch 0.3s infinite;
+            color: var(--vhs-yellow);
+        }
+
+        .footer-controls {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+
+        .btn {
+            border: 1px solid var(--vhs-green);
+            padding: 5px 15px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--vhs-green);
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="status-bar">
+        <div>PLAY ▶️</div>
+        <div id="clock">00:00:00</div>
+    </div>
+
+    <h1 class="glitch-text">TTPIG // ARCHIVE</h1>
+    <p>> 正在加载...</p>
+    <p>> 现代影像</p>
+
+    <table class="csv-table" id="data-table">
+        <thead>
+            <tr>
+                <th>CATEGORY</th>
+                <th>CONTENT</th>
+                <th>STATUS</th>
+            </tr>
+        </thead>
+        <tbody>
+            </tbody>
+    </table>
+
+    <div class="footer-controls">
+        <span class="btn">■ STOP</span>
+        <span class="btn">◀◀ REW</span>
+        <span class="btn">▶ PLAY</span>
+        <span class="btn">⏺ REC</span>
+    </div>
+</div>
+
+<script>
+    // 模拟 CSV 数据
+    const csvData = [
+        ["IDENTITY", "MA in Drama & Film", "VERIFIED"],
+        ["THEORY", "Deleuze & Foucault", "LOADING"],
+        ["PROJECT", "Chinese TV Analysis", "RECORDED"],
+        ["PATH", "Education / Civil Service", "PENDING"]
+    ];
+
+    const tableBody = document.querySelector('#data-table tbody');
+    
+    csvData.forEach(row => {
+        const tr = document.createElement('tr');
+        row.forEach(cell => {
+            const td = document.createElement('td');
+            td.textContent = cell;
+            tr.appendChild(td);
+        });
+        tableBody.appendChild(tr);
+    });
+
+    // 模拟录像带时钟
+    function updateClock() {
+        const now = new Date();
+        const timeStr = now.getHours().toString().padStart(2, '0') + ":" + 
+                        now.getMinutes().toString().padStart(2, '0') + ":" + 
+                        now.getSeconds().toString().padStart(2, '0');
+        document.getElementById('clock').textContent = timeStr;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>
+
+</body>
+</html>
