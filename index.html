@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>唐择镇_档案库_V2.1</title>
+    <style>
+        :root {
+            --bg-deep: #0a0a0b;
+            --accent-green: #00ff88;
+            --apple-glass: rgba(255, 255, 255, 0.05);
+            --vhs-blue: #00f0ff;
+            --vhs-red: #ff0055;
+            --text-main: #e0e0e0;
+            --ease-ios: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", "PingFang SC", "Microsoft YaHei", monospace;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* 动态背景噪点 */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+            opacity: 0.06;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* CRT 扫描线 */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(18, 16, 16, 0) 50%,
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 11;
+            pointer-events: none;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            background: var(--apple-glass);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transition: transform 0.5s var(--ease-ios);
+        }
+
+        /* 磁带转轴区域 */
+        .tape-reels {
+            display: flex;
+            justify-content: center;
+            gap: 120px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        .reel {
+            width: 80px;
+            height: 80px;
+            border: 4px solid var(--accent-green);
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: rotate-reel 4s linear infinite;
+            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        }
+
+        .reel::before {
+            content: '';
+            width: 10px;
+            height: 60px;
+            background: var(--accent-green);
+            position: absolute;
+            border-radius: 5px;
+        }
+
+        .reel::after {
+            content: '';
+            width: 60px;
+            height: 10px;
+            background: var(--accent-green);
+            position: absolute;
+            border-radius: 5px;
+        }
+
+        @keyframes rotate-reel {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* VHS 状态栏 */
+        .vhs-header {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: var(--accent-green);
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 5px var(--accent-green);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(90deg, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            font-weight: 800;
+        }
+
+        p.sub-title {
+            color: var(--accent-green);
+            font-family: 'Courier New', monospace;
+            margin-top: 5px;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        /* 数据列表 */
+        .data-grid {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border-left: 3px solid transparent;
+            transition: all 0.3s var(--ease-ios);
+            cursor: pointer;
+        }
+
+        .data-row:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-left-color: var(--accent-green);
+            transform: translateX(5px);
+        }
+
+        .label { color: #888; font-size: 11px; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px;}
+        .val { font-weight: 500; color: #fff; font-size: 1.1rem; }
+
+        /* 控制按钮 */
+        .controls {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: var(--apple-glass);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 28px;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.3s var(--ease-ios);
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: white;
+            color: black;
+            transform: scale(1.05);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-rec {
+            color: var(--vhs-red);
+            border-color: rgba(255, 0, 85, 0.3);
+        }
+
+        .btn-rec:hover {
+            background: var(--vhs-red);
+            color: white;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 600px) {
+            .tape-reels { gap: 40px; }
+            h1 { font-size: 1.8rem; }
+            .btn { padding: 10px 20px; font-size: 12px; }
+        }
+
+        #time-code {
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 1px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="noise-overlay"></div>
+<div class="scanlines"></div>
+
+<div class="container" id="main-container">
+    <div class="vhs-header">
+        <div id="status-text">正在播放 ▶</div>
+        <div id="time-code">00:00:00:00</div>
+    </div>
+
+    <div class="tape-reels">
+        <div class="reel" id="reel-l"></div>
+        <div class="reel" id="reel-r"></div>
+    </div>
+
+    <div class="glitch-container">
+        <h1>唐择镇 // 档案库</h1>
+        <p class="sub-title">> 系统状态: 运行良好_就绪中</p>
+    </div>
+
+    <div class="data-grid" id="data-grid">
+        <!-- 动态生成数据行 -->
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="updateMode('停止', 0)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect width="24" height="24" /></svg>
+            停止
+        </button>
+        <button class="btn" onclick="updateMode('快退', -5)">
+            ◀◀ 快退
+        </button>
+        <button class="btn" style="background: rgba(0, 255, 136, 0.1); border-color: var(--accent-green);" onclick="updateMode('播放', 1)">
+            ▶ 播放
+        </button>
+        <button class="btn btn-rec" onclick="updateMode('录制', 1)">
+            <span style="display:inline-block; width:10px; height:10px; background:red; border-radius:50%"></span>
+            录制
+        </button>
+    </div>
+</div>
+
+<script>
+    const archiveData = [
+        { cat: "个人身份", val: "戏剧影视学硕士", status: "已验证" },
+        { cat: "研究领域", val: "视觉文化与媒体", status: "活跃中" },
+        { cat: "当前项目", val: "理论""评论""实践", status: "记录中" },
+        { cat: "档案编号", val: "tangzezhen2003@126.com, status: "加密安全" }
+    ];
+
+    const grid = document.getElementById('data-grid');
+    const statusText = document.getElementById('status-text');
+    const container = document.getElementById('main-container');
+    const reels = document.querySelectorAll('.reel');
+
+    // 初始化数据列表
+    archiveData.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'data-row';
+        div.style.animation = `fade-in 0.5s var(--ease-ios) forwards ${index * 0.1}s`;
+        div.style.opacity = 0;
+        div.innerHTML = `
+            <div>
+                <div class="label">${item.cat}</div>
+                <div class="val">${item.val}</div>
+            </div>
+            <div style="color: var(--accent-green); font-size: 10px; font-weight: bold; align-self: center; border: 1px solid var(--accent-green); padding: 2px 6px; border-radius: 4px;">
+                ${item.status}
+            </div>
+        `;
+        grid.appendChild(div);
+    });
+
+    // 模式切换
+    function updateMode(mode, speed) {
+        let icon = '■';
+        if (speed > 0) icon = '▶';
+        if (speed < 0) icon = '◀';
+        
+        statusText.textContent = `正在${mode} ${icon}`;
+        
+        // 改变转轴速度
+        reels.forEach(r => {
+            if (speed === 0) {
+                r.style.animationPlayState = 'paused';
+            } else {
+                r.style.animationPlayState = 'running';
+                r.style.animationDuration = `${Math.abs(2 / speed)}s`;
+            }
+        });
+
+        // 触觉反馈反馈
+        container.style.transform = 'scale(0.98)';
+        setTimeout(() => container.style.transform = 'scale(1)', 150);
+    }
+
+    // 时间码生成 (30fps)
+    let frames = 0;
+    function updateTimeCode() {
+        frames++;
+        const totalSeconds = Math.floor(frames / 30);
+        const f = (frames % 30).toString().padStart(2, '0');
+        const s = (totalSeconds % 60).toString().padStart(2, '0');
+        const m = (Math.floor(totalSeconds / 60) % 60).toString().padStart(2, '0');
+        const h = (Math.floor(totalSeconds / 3600)).toString().padStart(2, '0');
+        document.getElementById('time-code').textContent = `${h}:${m}:${s}:${f}`;
+    }
+    setInterval(updateTimeCode, 33.33);
+
+    // CSS 动画
+    const style = document.createElement('style');
+    style.innerHTML = `
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    `;
+    document.head.appendChild(style);
+</script>
+
+</body>
+</html>
