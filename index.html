@@ -3,352 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>唐择镇_档案库_V2.1</title>
+    <title>TZR_VISUAL_ARCHIVE_3.0</title>
     <style>
         :root {
-            --bg-deep: #0a0a0b;
-            --accent-green: #00ff88;
-            --apple-glass: rgba(255, 255, 255, 0.05);
-            --vhs-blue: #00f0ff;
-            --vhs-red: #ff0055;
-            --text-main: #e0e0e0;
-            --ease-ios: cubic-bezier(0.4, 0, 0.2, 1);
+            --paper-white: #f5f5f7;
+            --paper-gray: #e5e5e7;
+            --accent-black: #1d1d1f;
+            --accent-red: #ff3b30;
+            --text-dim: #86868b;
+            --ease-ios: cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        * { box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: var(--bg-deep);
-            color: var(--text-main);
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", "PingFang SC", "Microsoft YaHei", monospace;
-            margin: 0;
+            background-color: var(--paper-white);
+            color: var(--accent-black);
+            font-family: "SF Pro SC", "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+            height: 100vh;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
+            perspective: 1500px; /* 开启全局透视 */
         }
 
-        /* 动态背景噪点 */
-        .noise-overlay {
+        /* 极简背景网格 */
+        .grid-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://grainy-gradients.vercel.app/noise.svg');
-            opacity: 0.06;
-            pointer-events: none;
-            z-index: 10;
+            background-image: 
+                radial-gradient(circle, #d1d1d6 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+            z-index: -1;
         }
 
-        /* CRT 扫描线 */
-        .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(18, 16, 16, 0) 50%,
-                rgba(0, 0, 0, 0.1) 50%
-            );
-            background-size: 100% 4px;
-            z-index: 11;
-            pointer-events: none;
-        }
-
-        .container {
-            width: 90%;
-            max-width: 900px;
-            background: var(--apple-glass);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 40px;
+        /* 视差场景容器 */
+        .scene {
+            width: 80vw;
+            height: 80vh;
             position: relative;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            transition: transform 0.5s var(--ease-ios);
+            transform-style: preserve-3d;
+            transition: transform 0.1s linear;
         }
 
-        /* 磁带转轴区域 */
-        .tape-reels {
-            display: flex;
-            justify-content: center;
-            gap: 120px;
-            margin-bottom: 30px;
-            opacity: 0.8;
-        }
-
-        .reel {
-            width: 80px;
-            height: 80px;
-            border: 4px solid var(--accent-green);
-            border-radius: 50%;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: rotate-reel 4s linear infinite;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
-        }
-
-        .reel::before {
-            content: '';
-            width: 10px;
-            height: 60px;
-            background: var(--accent-green);
+        /* 图层 1：底部大字 (最远) */
+        .layer-back {
             position: absolute;
-            border-radius: 5px;
+            font-size: 25vw;
+            font-weight: 900;
+            color: var(--paper-gray);
+            top: 50%; left: 50%;
+            transform: translate3d(-50%, -50%, -200px);
+            user-select: none;
+            white-space: nowrap;
         }
 
-        .reel::after {
-            content: '';
-            width: 60px;
-            height: 10px;
-            background: var(--accent-green);
+        /* 图层 2：主海报框架 */
+        .poster-frame {
             position: absolute;
-            border-radius: 5px;
-        }
-
-        @keyframes rotate-reel {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* VHS 状态栏 */
-        .vhs-header {
-            display: flex;
-            justify-content: space-between;
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
-            color: var(--accent-green);
-            font-size: 14px;
-            margin-bottom: 20px;
-            text-shadow: 0 0 5px var(--accent-green);
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            background: linear-gradient(90deg, #fff, #aaa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-            font-weight: 800;
-        }
-
-        p.sub-title {
-            color: var(--accent-green);
-            font-family: 'Courier New', monospace;
-            margin-top: 5px;
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
-
-        /* 数据列表 */
-        .data-grid {
-            margin-top: 30px;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 15px 20px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            border-left: 3px solid transparent;
-            transition: all 0.3s var(--ease-ios);
-            cursor: pointer;
-        }
-
-        .data-row:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-left-color: var(--accent-green);
-            transform: translateX(5px);
-        }
-
-        .label { color: #888; font-size: 11px; text-transform: uppercase; margin-bottom: 4px; letter-spacing: 1px;}
-        .val { font-weight: 500; color: #fff; font-size: 1.1rem; }
-
-        /* 控制按钮 */
-        .controls {
-            margin-top: 40px;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            background: var(--apple-glass);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 12px 28px;
-            border-radius: 100px;
-            cursor: pointer;
-            transition: all 0.3s var(--ease-ios);
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
+            width: 450px;
+            height: 600px;
             background: white;
-            color: black;
-            transform: scale(1.05);
+            top: 50%; left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.1);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .btn:active {
-            transform: scale(0.95);
+        .poster-image {
+            width: 100%;
+            height: 60%;
+            background: #2c2c2e;
+            position: relative;
+            overflow: hidden;
+            border-radius: 2px;
         }
 
-        .btn-rec {
-            color: var(--vhs-red);
-            border-color: rgba(255, 0, 85, 0.3);
+        /* 模拟电影画幅 */
+        .poster-image::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.05) 45%, transparent 50%);
+            animation: light-sweep 4s infinite;
         }
 
-        .btn-rec:hover {
-            background: var(--vhs-red);
+        @keyframes light-sweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* 图层 3：浮动信息 (最近) */
+        .layer-front {
+            position: absolute;
+            transform: translate3d(0, 0, 100px);
+            pointer-events: none;
+        }
+
+        .tag {
+            position: absolute;
+            background: var(--accent-black);
             color: white;
+            padding: 4px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border-radius: 2px;
         }
 
-        /* 响应式调整 */
-        @media (max-width: 600px) {
-            .tape-reels { gap: 40px; }
-            h1 { font-size: 1.8rem; }
-            .btn { padding: 10px 20px; font-size: 12px; }
+        /* 布局元素 */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
         }
 
-        #time-code {
-            font-variant-numeric: tabular-nums;
+        .title-group h1 {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .title-group p {
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 4px;
             letter-spacing: 1px;
+        }
+
+        .time-code {
+            font-family: "Courier New", monospace;
+            font-size: 14px;
+            color: var(--accent-red);
+            font-weight: bold;
+        }
+
+        .footer-info {
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+
+        .meta-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 11px;
+        }
+
+        .meta-label { color: var(--text-dim); }
+        .meta-val { font-weight: 600; }
+
+        /* 装饰性侧边条 */
+        .side-bar {
+            position: absolute;
+            right: -100px;
+            top: 100px;
+            transform: rotate(90deg) translateZ(50px);
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: var(--text-dim);
+            text-transform: uppercase;
         }
 
     </style>
 </head>
 <body>
 
-<div class="noise-overlay"></div>
-<div class="scanlines"></div>
+    <div class="grid-bg"></div>
 
-<div class="container" id="main-container">
-    <div class="vhs-header">
-        <div id="status-text">正在播放 ▶</div>
-        <div id="time-code">00:00:00:00</div>
-    </div>
+    <div class="scene" id="scene">
+        <!-- 远景图层 -->
+        <div class="layer-back">TANG ZE ZHEN</div>
 
-    <div class="tape-reels">
-        <div class="reel" id="reel-l"></div>
-        <div class="reel" id="reel-r"></div>
-    </div>
-
-    <div class="glitch-container">
-        <h1>唐择镇 // 档案库</h1>
-        <p class="sub-title">> 系统状态: 运行良好_就绪中</p>
-    </div>
-
-    <div class="data-grid" id="data-grid">
-        <!-- 动态生成数据行 -->
-    </div>
-
-    <div class="controls">
-        <button class="btn" onclick="updateMode('停止', 0)">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><rect width="24" height="24" /></svg>
-            停止
-        </button>
-        <button class="btn" onclick="updateMode('快退', -5)">
-            ◀◀ 快退
-        </button>
-        <button class="btn" style="background: rgba(0, 255, 136, 0.1); border-color: var(--accent-green);" onclick="updateMode('播放', 1)">
-            ▶ 播放
-        </button>
-        <button class="btn btn-rec" onclick="updateMode('录制', 1)">
-            <span style="display:inline-block; width:10px; height:10px; background:red; border-radius:50%"></span>
-            录制
-        </button>
-    </div>
-</div>
-
-<script>
-    const archiveData = [
-        { cat: "个人身份", val: "戏剧影视学硕士", status: "已验证" },
-        { cat: "研究领域", val: "视觉文化与媒体", status: "活跃中" },
-        { cat: "当前项目", val: "理论""评论""实践", status: "记录中" },
-        { cat: "档案编号", val: "tangzezhen2003@126.com, status: "加密安全" }
-    ];
-
-    const grid = document.getElementById('data-grid');
-    const statusText = document.getElementById('status-text');
-    const container = document.getElementById('main-container');
-    const reels = document.querySelectorAll('.reel');
-
-    // 初始化数据列表
-    archiveData.forEach((item, index) => {
-        const div = document.createElement('div');
-        div.className = 'data-row';
-        div.style.animation = `fade-in 0.5s var(--ease-ios) forwards ${index * 0.1}s`;
-        div.style.opacity = 0;
-        div.innerHTML = `
-            <div>
-                <div class="label">${item.cat}</div>
-                <div class="val">${item.val}</div>
+        <!-- 主体图层 -->
+        <div class="poster-frame">
+            <div class="header">
+                <div class="title-group">
+                    <h1>唐择镇</h1>
+                    <p>VISUAL RESEARCH ARCHIVE // 2024</p>
+                </div>
+                <div class="time-code" id="time-code">00:00:00:00</div>
             </div>
-            <div style="color: var(--accent-green); font-size: 10px; font-weight: bold; align-self: center; border: 1px solid var(--accent-green); padding: 2px 6px; border-radius: 4px;">
-                ${item.status}
-            </div>
-        `;
-        grid.appendChild(div);
-    });
 
-    // 模式切换
-    function updateMode(mode, speed) {
-        let icon = '■';
-        if (speed > 0) icon = '▶';
-        if (speed < 0) icon = '◀';
-        
-        statusText.textContent = `正在${mode} ${icon}`;
-        
-        // 改变转轴速度
-        reels.forEach(r => {
-            if (speed === 0) {
-                r.style.animationPlayState = 'paused';
-            } else {
-                r.style.animationPlayState = 'running';
-                r.style.animationDuration = `${Math.abs(2 / speed)}s`;
-            }
+            <div class="poster-image">
+                <!-- 这里可以用抽象几何图形代替文字 -->
+                <div style="position:absolute; bottom:20px; left:20px; color:white; font-size:40px; font-weight:100; opacity:0.3;">
+                    [ 影像 / 叙事 ]
+                </div>
+            </div>
+
+            <div class="footer-info">
+                <div class="meta-row">
+                    <span class="meta-label">类别 / CATEGORY</span>
+                    <span class="meta-val">戏剧与影视</span>
+                </div>
+                <div class="meta-row">
+                    <span class="meta-label">状态 / STATUS</span>
+                    <span class="meta-val" style="color: var(--accent-red);">已存档 / RECORDED</span>
+                </div>
+                <div class="meta-row" style="margin-top: 15px;">
+                    <span class="meta-val">影像-空间</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 近景图层 -->
+        <div class="layer-front" style="top: 20%; left: 15%;">
+            <div class="tag">VERIFIED</div>
+        </div>
+        <div class="layer-front" style="bottom: 15%; right: 10%;">
+            <div class="tag" style="background:none; border:1px solid black; color:black;">MASTER_OF_ARTS</div>
+        </div>
+
+        <div class="side-bar">INDEX. NO. 8829-TZR-001</div>
+    </div>
+
+    <script>
+        const scene = document.getElementById('scene');
+        const timeCodeEl = document.getElementById('time-code');
+
+        // 1. 鼠标追踪透视效果
+        document.addEventListener('mousemove', (e) => {
+            const x = (window.innerWidth / 2 - e.pageX) / 30;
+            const y = (window.innerHeight / 2 - e.pageY) / 30;
+            
+            scene.style.transform = `rotateY(${-x}deg) rotateX(${y}deg)`;
         });
 
-        // 触觉反馈反馈
-        container.style.transform = 'scale(0.98)';
-        setTimeout(() => container.style.transform = 'scale(1)', 150);
-    }
-
-    // 时间码生成 (30fps)
-    let frames = 0;
-    function updateTimeCode() {
-        frames++;
-        const totalSeconds = Math.floor(frames / 30);
-        const f = (frames % 30).toString().padStart(2, '0');
-        const s = (totalSeconds % 60).toString().padStart(2, '0');
-        const m = (Math.floor(totalSeconds / 60) % 60).toString().padStart(2, '0');
-        const h = (Math.floor(totalSeconds / 3600)).toString().padStart(2, '0');
-        document.getElementById('time-code').textContent = `${h}:${m}:${s}:${f}`;
-    }
-    setInterval(updateTimeCode, 33.33);
-
-    // CSS 动画
-    const style = document.createElement('style');
-    style.innerHTML = `
-        @keyframes fade-in {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        // 2. 修复后的专业时间码逻辑 (30FPS)
+        let frames = 0;
+        function updateTime() {
+            frames++;
+            const totalSeconds = Math.floor(frames / 30);
+            const f = (frames % 30).toString().padStart(2, '0');
+            const s = (totalSeconds % 60).toString().padStart(2, '0');
+            const m = (Math.floor(totalSeconds / 60) % 60).toString().padStart(2, '0');
+            const h = (Math.floor(totalSeconds / 3600)).toString().padStart(2, '0');
+            
+            timeCodeEl.textContent = `${h}:${m}:${s}:${f}`;
+            requestAnimationFrame(updateTime);
         }
-    `;
-    document.head.appendChild(style);
-</script>
+        
+        // 使用 requestAnimationFrame 保证动画同步和丝滑度
+        updateTime();
 
+        // 3. 点击效果反馈
+        document.addEventListener('mousedown', () => {
+            scene.style.transition = 'transform 0.1s';
+            scene.style.transform += ' translateZ(-50px)';
+        });
+        document.addEventListener('mouseup', () => {
+            scene.style.transform = scene.style.transform.replace(' translateZ(-50px)', '');
+        });
+
+    </script>
 </body>
 </html>
