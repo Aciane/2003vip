@@ -6,164 +6,228 @@
     <title>PROFILE - 唐择镇</title>
     <style>
         :root {
-            --paper-white: #f5f5f7;
+            --paper-white: #ffffff;
             --accent-red: #ff3b30;
             --text-dim: #86868b;
             --black: #1d1d1f;
         }
 
-        /* 继承原有基础样式 */
+        /* 基础重置 */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            background-color: #0a0b10; 
+            background-color: #000; 
             color: var(--black);
-            font-family: -apple-system, "SF Pro SC", "SF Pro Display", sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", sans-serif;
             height: 100vh; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
-            perspective: 2000px;
+            perspective: 1500px;
         }
 
-        /* 背景粒子继承 */
-        .particles { position: fixed; width: 100%; height: 100%; pointer-events: none; z-index: 0; transform-style: preserve-3d; }
-        .dot { position: absolute; background: white; border-radius: 50%; opacity: 0.2; animation: twinkle var(--duration) infinite ease-in-out; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.1; transform: translateZ(var(--z)) scale(0.8); } 50% { opacity: 0.6; transform: translateZ(var(--z)) scale(1.2); } }
+        /* --- 背景星空 --- */
+        #starfield {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
 
-        /* 卡片框架 */
+        /* --- 校园牌主体 (同步首页比例 3:4.2) --- */
         .poster-frame {
-            position: relative; width: 85%; max-width: 380px; aspect-ratio: 3 / 4.2;
+            position: relative; 
+            width: 90vw; max-width: 380px; aspect-ratio: 3 / 4.2; 
+            max-height: 85vh;
             background: var(--paper-white); 
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-            padding: 25px; display: flex; flex-direction: column;
-            z-index: 10; transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+            border-radius: 4px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
+            padding: 22px; display: flex; flex-direction: column;
+            z-index: 10; transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
         }
 
-        /* 头部样式 */
-        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-        .back-btn { font-size: 10px; font-weight: 800; color: var(--accent-red); text-decoration: none; border: 1px solid var(--accent-red); padding: 2px 6px; transition: 0.3s; }
+        /* 顶部装饰条 */
+        .poster-frame::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 8px;
+            background: var(--accent-red); border-radius: 4px 4px 0 0;
+        }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-top: 5px; margin-bottom: 20px; }
+        .back-btn { font-size: 10px; font-weight: 800; color: var(--accent-red); text-decoration: none; border: 1px solid var(--accent-red); padding: 2px 8px; transition: 0.2s; }
         .back-btn:hover { background: var(--accent-red); color: white; }
+        .time-code { font-family: monospace; color: var(--accent-red); font-size: 11px; font-weight: bold; }
+
+        /* 个人信息区 (左图右字) */
+        .id-main { display: flex; gap: 15px; margin-bottom: 20px; }
         
-        /* 个人详情内容区 */
-        .content-scroll {
-            flex-grow: 1; overflow-y: auto; overflow-x: hidden;
-            padding-right: 5px; margin-bottom: 15px;
+        .photo-space {
+            width: 105px; height: 135px; 
+            background: #f0f0f0; border: 1px solid #eee;
+            flex-shrink: 0; position: relative; overflow: hidden;
+            border-radius: 2px;
         }
-        /* 自定义滚动条 */
-        .content-scroll::-webkit-scrollbar { width: 2px; }
-        .content-scroll::-webkit-scrollbar-thumb { background: var(--accent-red); }
+        .photo-space img { 
+            width: 100%; height: 100%; object-fit: cover; 
+            position: relative; z-index: 2;
+        }
+        .photo-placeholder {
+            font-size: 9px; color: #bbb; text-align: center; font-weight: 900;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        }
 
-        .bio-title { font-size: 24px; font-weight: 900; margin-bottom: 5px; letter-spacing: -1px; }
-        .bio-tag { font-size: 10px; color: var(--text-dim); margin-bottom: 20px; letter-spacing: 2px; }
+        .id-identity { flex-grow: 1; display: flex; flex-direction: column; justify-content: flex-end; }
+        .id-name { font-size: 28px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; color: var(--black); }
+        .id-en-name { font-size: 11px; color: var(--text-dim); margin-top: 4px; font-weight: 700; }
+        .id-dept { font-size: 11px; margin-top: 15px; font-weight: 800; color: var(--accent-red); line-height: 1.3; }
+
+        /* 详情滚动区 */
+        .content-scroll {
+            flex-grow: 1; overflow-y: auto; padding-right: 5px;
+            scrollbar-width: none;
+        }
+        .content-scroll::-webkit-scrollbar { display: none; }
+
+        .section-label { font-size: 9px; font-weight: 800; color: #ccc; margin: 12px 0 8px 0; text-transform: uppercase; display: flex; align-items: center; }
+        .section-label::after { content: ''; flex-grow: 1; height: 1px; background: #f0f0f0; margin-left: 10px; }
         
-        .section-label { font-size: 9px; font-weight: 800; color: var(--accent-red); margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
-        
-        .info-p { font-size: 13px; line-height: 1.6; color: #444; margin-bottom: 20px; text-align: justify; }
+        .info-p { font-size: 12px; line-height: 1.6; color: #444; margin-bottom: 10px; text-align: justify; }
 
-        /* 技能条样式 */
-        .skill-item { margin-bottom: 12px; }
-        .skill-info { display: flex; justify-content: space-between; font-size: 10px; font-weight: 700; margin-bottom: 4px; }
-        .skill-bar { height: 2px; background: #e0e0e0; width: 100%; }
-        .skill-progress { height: 100%; background: var(--accent-red); width: 0; transition: width 1.5s ease-out; }
+        .skill-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .skill-tag { font-size: 9px; background: #f8f8f8; padding: 5px; border-radius: 2px; font-weight: 700; color: #666; border-left: 2px solid #ddd; }
 
-        /* 履历样式 */
-        .exp-item { margin-bottom: 10px; position: relative; padding-left: 12px; }
-        .exp-item::before { content: ''; position: absolute; left: 0; top: 5px; width: 4px; height: 4px; background: var(--accent-red); }
-        .exp-date { font-size: 9px; font-family: monospace; color: var(--text-dim); }
-        .exp-name { font-size: 12px; font-weight: 700; }
+        .exp-item { margin-bottom: 10px; }
+        .exp-date { font-size: 8px; font-family: monospace; color: var(--text-dim); font-weight: 600; }
+        .exp-name { font-size: 11px; font-weight: 700; color: #222; margin-top: 2px; }
 
-        .footer-status { display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 15px; font-size: 10px; font-weight: 700; }
-        .time-code { font-family: monospace; color: var(--accent-red); }
+        /* 页脚 */
+        .footer { border-top: 1px dashed #eee; margin-top: 15px; padding-top: 12px; display: flex; justify-content: space-between; align-items: center; }
+        .barcode { height: 18px; opacity: 0.8; }
+        .id-number { font-size: 8px; font-family: monospace; color: var(--text-dim); font-weight: bold; }
+
     </style>
 </head>
 <body>
 
-    <div class="particles" id="particles"></div>
+    <canvas id="starfield"></canvas>
 
-    <div class="scene" id="scene">
-        <div class="poster-frame" id="poster">
-            <div class="header">
-                <a href="javascript:history.back()" class="back-btn">RETURN</a>
-                <div class="time-code" id="time-code">00:00:00:00</div>
+    <div class="poster-frame" id="poster">
+        <div class="header">
+            <a href="javascript:history.back()" class="back-btn">← RETURN</a>
+            <div class="time-code" id="time-code">00:00:00:00</div>
+        </div>
+
+        <div class="id-main">
+            <div class="photo-space">
+                <div class="photo-placeholder">TZZ_STUDIO<br>IMG_LOADING</div>
+                <img src="http://tangzezhen2003.vip/tzz.jpg" alt="唐择镇" onerror="this.style.opacity='0';">
+            </div>
+            <div class="id-identity">
+                <div class="id-name">唐择镇</div>
+                <div class="id-en-name">TANG ZE ZHEN</div>
+                <div class="id-dept">MFA<br>戏剧与影视研究</div>
+            </div>
+        </div>
+
+        <div class="content-scroll">
+            <div class="section-label">Bio / 简介</div>
+            <p class="info-p">
+                跨媒介创作者。致力于探索叙事与数字影像的边界，擅长以文本为核心进行空间视觉构建。加速时代，依然需要思想的留白。
+            </p>
+
+            <div class="section-label">Toolbox / 技能组</div>
+            <div class="skill-grid">
+                <div class="skill-tag">DRAMATURGY 剧作</div>
+                <div class="skill-tag">EDITING 剪辑</div>
+                <div class="skill-tag">SCRIPT 脚本</div>
+                <div class="skill-tag">PHOTOGRAPH 摄影</div>
             </div>
 
-            <div class="content-scroll">
-                <h1 class="bio-title">唐择镇</h1>
-                <p class="bio-tag">VISUAL DESIGNER / ARTIST</p>
-
-                <div class="section-label">Profile / 简介</div>
-                <p class="info-p">
-                    致力于探索媒体与空间的边界。通过实验性的视觉语言，重构感官体验。
-                </p>
-
-                <div class="section-label">Skills / 技能</div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>剧本</span><span>90%</span></div>
-                    <div class="skill-bar"><div class="skill-progress" style="width: 90%;"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>剪辑</span><span>85%</span></div>
-                    <div class="skill-bar"><div class="skill-progress" style="width: 85%;"></div></div>
-                </div>
-                <div class="skill-item">
-                    <div class="skill-info"><span>脚本</span><span>70%</span></div>
-                    <div class="skill-bar"><div class="skill-progress" style="width: 70%;"></div></div>
-                </div>
-
-                <div style="margin-top: 20px;" class="section-label">Experience / 履历</div>
-                <div class="exp-item">
-                    <div class="exp-date">2025 - PRESENT</div>
-                    <div class="exp-name">MFA 研究生在读 / 戏剧与影视</div>
-                </div>
-                <div class="exp-item">
-                    <div class="exp-date">2022 - 2024</div>
-                    <div class="exp-name">自由摄影师 / 独立工作室</div>
-                </div>
+            <div class="section-label">Timeline / 履历</div>
+            <div class="exp-item">
+                <div class="exp-date">2025 - 2028</div>
+                <div class="exp-name">MFA  / 戏剧与影视 </div>
             </div>
-
-            <div class="footer-status">
-                <div>DOC.TYPE: PERSONAL_PROFILE</div>
-                <div style="color: var(--accent-red)">VER 2.0.26</div>
+            <div class="exp-item">
+                <div class="exp-date">2021 - 2025</div>
+                <div class="exp-name">BFA / 广播电视编导</div>
             </div>
+        </div>
+
+        <div class="footer">
+            <div class="id-number">ID-NO: 2026-TZZ-VISUAL</div>
+            <svg class="barcode" viewBox="0 0 100 20">
+                <rect width="2" height="20" x="0"/><rect width="1" height="20" x="4"/>
+                <rect width="3" height="20" x="7"/><rect width="1" height="20" x="12"/>
+                <rect width="2" height="20" x="15"/><rect width="4" height="20" x="20"/>
+                <rect width="1" height="20" x="26"/><rect width="2" height="20" x="30"/>
+            </svg>
         </div>
     </div>
 
     <script>
         const poster = document.getElementById('poster');
-        let targetX = 0, targetY = 0;
-        let currentX = 0, currentY = 0;
+        let mouseX = 0, mouseY = 0;
 
-        // 维持原有的3D视差效果
+        // 3D 旋转效果
         window.addEventListener('mousemove', (e) => {
-            targetX = (e.clientX / window.innerWidth - 0.5) * 30;
-            targetY = (e.clientY / window.innerHeight - 0.5) * 30;
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+            poster.style.transform = `rotateY(${mouseX * 15}deg) rotateX(${mouseY * -15}deg)`;
         });
 
-        function updateParallax() {
-            currentX += (targetX - currentX) * 0.1;
-            currentY += (targetY - currentY) * 0.1;
-            poster.style.transform = `rotateY(${currentX}deg) rotateX(${-currentY}deg)`;
-            requestAnimationFrame(updateParallax);
+        // 极速时钟
+        function clock() {
+            const d = new Date();
+            const timeStr = d.getHours().toString().padStart(2,'0') + ":" + 
+                            d.getMinutes().toString().padStart(2,'0') + ":" + 
+                            d.getSeconds().toString().padStart(2,'0') + ":" + 
+                            Math.floor(d.getMilliseconds()/10).toString().padStart(2,'0');
+            document.getElementById('time-code').textContent = timeStr;
+            requestAnimationFrame(clock);
         }
-        updateParallax();
+        clock();
 
-        // 时间戳逻辑
-        setInterval(() => {
-            const now = new Date();
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            const s = String(now.getSeconds()).padStart(2, '0');
-            const ms = String(Math.floor(now.getMilliseconds() / 10)).padStart(2, '0');
-            document.getElementById('time-code').textContent = `${h}:${m}:${s}:${ms}`;
-        }, 40);
+        // 3D 闪烁星空背景
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        const numStars = 400;
 
-        // 粒子背景逻辑
-        const partContainer = document.getElementById('particles');
-        for(let i=0; i<60; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'dot';
-            const size = Math.random() * 2;
-            dot.style.cssText = `width:${size}px; height:${size}px; left:${Math.random()*100}%; top:${Math.random()*100}%; --z:${Math.random()*1000-500}px; --duration:${2+Math.random()*3}s;`;
-            partContainer.appendChild(dot);
+        function initStars() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: (Math.random() - 0.5) * 2000,
+                    y: (Math.random() - 0.5) * 2000,
+                    z: Math.random() * 2000,
+                    phase: Math.random() * Math.PI * 2
+                });
+            }
         }
+
+        function drawStars() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
+            stars.forEach(s => {
+                s.phase += 0.03;
+                const perspective = 800 / (800 + s.z);
+                const x = s.x * perspective + cx;
+                const y = s.y * perspective + cy;
+                const alpha = (0.5 + Math.sin(s.phase) * 0.5) * (1 - s.z / 2000);
+                
+                ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                ctx.beginPath();
+                ctx.arc(x, y, 1.2 * perspective, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            requestAnimationFrame(drawStars);
+        }
+
+        window.addEventListener('resize', initStars);
+        initStars();
+        drawStars();
     </script>
 </body>
 </html>

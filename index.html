@@ -3,154 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>唐择镇的个人界面 </title>
+    <title>唐择镇的个人界面</title>
     <style>
         :root {
-            --paper-white: #f5f5f7;
+            --paper-white: #ffffff;
             --accent-red: #ff3b30;
-            --text-dim: #86868b;
+            --text-main: #1d1d1f;
+            --text-bright: #ffffff;
+            --bg-dark: #000000;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background-color: #0a0b10; color: #1d1d1f;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #000;
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", sans-serif;
             height: 100vh; overflow: hidden;
             display: flex; justify-content: center; align-items: center;
-            perspective: 1000px;
+            perspective: 1200px;
         }
 
-        /* --- 装饰层 --- */
-        .deco-layer {
-            position: fixed; width: 100%; height: 100%;
-            pointer-events: none; z-index: 1;
+        /* --- 背景 3D 星丛 Canvas --- */
+        #starfield {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
         }
 
-        .layer-back {
+        .layer-back-text {
             position: absolute; font-size: 15vw; font-weight: 900;
-            color: rgba(255,255,255,0.02); left: 50%; top: 50%;
-            transform: translate(-50%, -50%);
-            white-space: nowrap; transition: transform 0.2s ease-out;
+            color: transparent; -webkit-text-stroke: 1.5px rgba(255,255,255,0.15);
+            left: 50%; top: 50%; transform: translate(-50%, -50%);
+            white-space: nowrap; z-index: 2; pointer-events: none;
         }
 
-        /* --- 核心容器 --- */
+        /* --- 主容器 --- */
+        .poster-wrapper { position: relative; z-index: 10; transition: transform 0.1s ease-out; transform-style: preserve-3d; }
+
         .poster-frame {
-            position: relative; width: 88%; max-width: 380px; aspect-ratio: 3 / 4.2;
-            background: var(--paper-white); 
-            box-shadow: 0 40px 80px rgba(0,0,0,0.8);
-            padding: 25px; display: flex; flex-direction: column;
-            justify-content: space-between; z-index: 10;
+            position: relative; width: 90vw; max-width: 380px; aspect-ratio: 3 / 4.2;
+            background: var(--paper-white); padding: 30px; border-radius: 2px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; justify-content: space-between;
         }
 
-        .poster-image {
-            flex-grow: 1; margin: 15px 0; background: #000;
-            position: relative; overflow: hidden; border-radius: 2px;
-            display: flex; justify-content: center; align-items: center;
+        /* --- 核心展示区：极速胶片滚动效果 --- */
+        .display-area {
+            position: relative; flex-grow: 1; margin: 20px 0;
+            background: var(--bg-dark); overflow: hidden; border-radius: 2px;
         }
 
-        .inner-grid {
-            position: absolute; width: 150%; height: 150%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px);
-            background-size: 40px 40px;
-            transform: rotateX(65deg);
-            transition: transform 0.3s ease-out;
-            z-index: 1;
+        .display-area::before, .display-area::after {
+            content: ''; position: absolute; top: 0; width: 10px; height: 200%;
+            background-image: radial-gradient(circle, #333 3px, transparent 3px);
+            background-size: 100% 10px; 
+            animation: film-scroll-fast 0.02s linear infinite;
+            z-index: 6; opacity: 0.6;
+        }
+        .display-area::before { left: 6px; }
+        .display-area::after { right: 6px; }
+
+        @keyframes film-scroll-fast {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
         }
 
-        /* --- 导航 UI --- */
-        .nav-container { 
-            width: 100%; height: 100%; 
-            display: flex; flex-direction: column; 
-            position: relative; z-index: 20;
+        .visual-container {
+            position: absolute; width: 100%; height: 100%;
+            pointer-events: none;
+        }
+        .grid-bg {
+            position: absolute; width: 200%; height: 200%; left: -50%;
+            background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px; transform: rotateX(60deg);
         }
 
-        .nav-rail {
+        .nav-visual-list {
+            position: absolute; width: 100%; height: 100%;
+            display: flex; flex-direction: column; z-index: 5;
+        }
+        .nav-visual-item {
             flex: 1; display: flex; justify-content: center; align-items: center;
-            text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.1);
-            background: transparent; transition: background 0.3s;
+            color: rgba(255,255,255,0.4); font-size: 1.6rem; font-weight: 800;
+            letter-spacing: 0.4em; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .nav-item {
-            color: rgba(255,255,255,0.4); font-size: 1.4rem; font-weight: 800;
-            letter-spacing: 0.5em; transition: 0.3s;
+        /* --- 交互层 --- */
+        .interaction-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 100; display: flex; flex-direction: column;
+        }
+        .touch-zone { flex: 1; cursor: pointer; text-decoration: none; }
+
+        .touch-zone:nth-child(1):hover ~ .visual-container .nav-visual-item:nth-child(1),
+        .touch-zone:nth-child(2):hover ~ .visual-container .nav-visual-item:nth-child(2),
+        .touch-zone:nth-child(3):hover ~ .visual-container .nav-visual-item:nth-child(3),
+        .touch-zone:nth-child(4):hover ~ .visual-container .nav-visual-item:nth-child(4) {
+            color: #fff; letter-spacing: 0.7em; transform: scale(1.15);
+            text-shadow: 0 0 25px var(--accent-red), 0 0 10px rgba(255,255,255,0.8);
         }
 
-        .nav-rail:hover .nav-item {
-            color: #fff; letter-spacing: 0.6em;
-        }
-
-        .status-bar { display: flex; justify-content: space-between; border-top: 1px solid #ddd; padding-top: 15px; }
-        .time-code { font-family: monospace; color: var(--accent-red); font-size: 12px; }
-        .blink { animation: blinker 1s linear infinite; }
+        /* --- 细节 UI --- */
+        .header { display: flex; justify-content: space-between; align-items: flex-start; }
+        .title-group h1 { font-size: 22px; letter-spacing: 2px; font-weight: 900; color: #000; }
+        .time-code { font-family: monospace; color: var(--accent-red); font-weight: bold; }
+        .footer { display: flex; justify-content: space-between; border-top: 1px solid #eee; padding-top: 15px; font-size: 11px; font-weight: 700; }
+        .blink { animation: blinker 0.5s steps(2) infinite; }
         @keyframes blinker { 50% { opacity: 0; } }
+
     </style>
 </head>
 <body>
 
-    <div class="deco-layer">
-        <div class="layer-back" id="back-name">TANG ZE ZHEN</div>
-    </div>
+    <canvas id="starfield"></canvas>
+    <div class="layer-back-text" id="back-name">TANG ZE ZHEN</div>
 
-    <div class="poster-frame">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div class="title-group">
-                <h1 style="font-size: 18px; letter-spacing: 2px;">唐择镇</h1>
-                <p style="font-size: 9px; color: var(--text-dim);">DYNAMICS ENABLED</p>
+    <div class="poster-wrapper" id="poster-wrapper">
+        <div class="poster-frame">
+            <div class="header">
+                <div class="title-group">
+                    <h1>唐择镇</h1>
+                    <div style="font-size: 10px; color: var(--accent-red); margin-top: 4px;">2026🌲作品集</div>
+                </div>
+                <div class="time-code" id="time-code">00:00:00:00</div>
             </div>
-            <div class="time-code" id="time-code">00:00:00:00</div>
-        </div>
 
-        <div class="poster-image">
-            <div class="inner-grid" id="grid"></div>
-            
-            <nav class="nav-container">
-                <a href="http://tangzezhen2003.vip/1" class="nav-rail"><span class="nav-item">简介</span></a>
-                <a href="http://tangzezhen2003.vip/2" class="nav-rail"><span class="nav-item">理论</span></a>
-                <a href="http://tangzezhen2003.vip/3" class="nav-rail"><span class="nav-item">文本</span></a>
-                <a href="http://tangzezhen2003.vip/4" class="nav-rail"><span class="nav-item">影像</span></a>
-            </nav>
-        </div>
+            <div class="display-area">
+                <nav class="interaction-overlay">
+                    <a href="http://tangzezhen2003.vip/1" class="touch-zone"></a>
+                    <a href="http://tangzezhen2003.vip/2" class="touch-zone"></a>
+                    <a href="http://tangzezhen2003.vip/3" class="touch-zone"></a>
+                    <a href="http://tangzezhen2003.vip/4" class="touch-zone"></a>
+                    
+                    <div class="visual-container">
+                        <div class="grid-bg" id="grid"></div>
+                        <div class="nav-visual-list">
+                            <div class="nav-visual-item">简介</div>
+                            <div class="nav-visual-item">理论</div>
+                            <div class="nav-visual-item">文本</div>
+                            <div class="nav-visual-item">影像</div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
 
-        <div class="status-bar">
-            <div id="status-text" style="font-size: 10px; font-weight: 700;">SYSTEM ACTIVE<span class="blink">_</span></div>
-            <div style="font-size: 10px; font-weight: bold;">2026 / MFA</div>
+            <div class="footer">
+                <div>STATUS: <span style="color:var(--accent-red)">传输中</span><span class="blink">_</span></div>
+                <div>MFA </div>
+            </div>
         </div>
     </div>
 
     <script>
-        const grid = document.getElementById('grid');
+        const wrapper = document.getElementById('poster-wrapper');
         const backName = document.getElementById('back-name');
+        
+        let mouseX = 0;
+        let mouseY = 0;
 
-        // 微观交互逻辑
+        // --- 3D 星丛逻辑 (带闪烁效果) ---
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+        const numStars = 800; 
+        const fov = 800; 
+
+        function initStars() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < numStars; i++) {
+                stars.push({
+                    x: (Math.random() - 0.5) * 3000,
+                    y: (Math.random() - 0.5) * 3000,
+                    z: (Math.random() - 0.5) * 3000,
+                    baseSize: Math.random() * 1.5 + 0.5,
+                    // 闪烁参数：随机初相和随机频率
+                    phase: Math.random() * Math.PI * 2,
+                    blinkSpeed: 0.02 + Math.random() * 0.05
+                });
+            }
+        }
+
+        function updateStars() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            const rotY = mouseX * 0.8; 
+            const rotX = mouseY * -0.8;
+
+            const cx = canvas.width / 2;
+            const cy = canvas.height / 2;
+
+            for (let i = 0; i < numStars; i++) {
+                let s = stars[i];
+
+                // 更新闪烁相位
+                s.phase += s.blinkSpeed;
+
+                let x1 = s.x * Math.cos(rotY) - s.z * Math.sin(rotY);
+                let z1 = s.z * Math.cos(rotY) + s.x * Math.sin(rotY);
+                let y1 = s.y * Math.cos(rotX) - z1 * Math.sin(rotX);
+                let z2 = z1 * Math.cos(rotX) + s.y * Math.sin(rotX);
+
+                const perspective = fov / (fov + z2);
+                const x2d = x1 * perspective + cx;
+                const y2d = y1 * perspective + cy;
+                const size = s.baseSize * perspective;
+
+                if (z2 > -fov + 50 && perspective > 0) {
+                    // 计算动态透明度：基础透视透明度 * (0.3 到 1.0 之间的闪烁系数)
+                    const twinkle = 0.65 + Math.sin(s.phase) * 0.35;
+                    const alpha = Math.min(1, (perspective - 0.1) * 1.5) * twinkle;
+                    
+                    ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(x2d, y2d, size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+            requestAnimationFrame(updateStars);
+        }
+
+        window.addEventListener('resize', initStars);
+        initStars();
+        updateStars();
+
         window.addEventListener('mousemove', (e) => {
-            const moveX = (e.clientX / window.innerWidth - 0.5) * 20;
-            const moveY = (e.clientY / window.innerHeight - 0.5) * 20;
-            grid.style.transform = `rotateX(${65 + moveY * 0.5}deg) rotateZ(${moveX * 0.2}deg)`;
-            backName.style.transform = `translate(calc(-50% + ${-moveX * 2}px), calc(-50% + ${-moveY * 2}px))`;
+            mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+            mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+            wrapper.style.transform = `rotateY(${mouseX * 12}deg) rotateX(${mouseY * -12}deg)`;
+            backName.style.transform = `translate(calc(-50% + ${-mouseX * 60}px), calc(-50% + ${-mouseY * 60}px))`;
         });
 
-        const navRails = document.querySelectorAll('.nav-rail');
-        navRails.forEach(rail => {
-            rail.addEventListener('mouseenter', () => {
-                grid.style.transition = '0.1s';
-                grid.style.filter = 'brightness(2)';
-            });
-            rail.addEventListener('mouseleave', () => {
-                grid.style.transition = '0.3s';
-                grid.style.filter = 'brightness(1)';
-            });
-            // 移除了 e.preventDefault() 以允许正常跳转
-        });
-
-        // 时钟
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('time-code').textContent = 
-                `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}:${Math.floor(now.getMilliseconds()/10)}`;
-        }, 40);
+        function clock() {
+            const d = new Date();
+            const timeStr = d.getHours().toString().padStart(2,'0') + ":" + 
+                            d.getMinutes().toString().padStart(2,'0') + ":" + 
+                            d.getSeconds().toString().padStart(2,'0') + ":" + 
+                            Math.floor(d.getMilliseconds()/10).toString().padStart(2,'0');
+            document.getElementById('time-code').textContent = timeStr;
+            requestAnimationFrame(clock);
+        }
+        clock();
     </script>
 </body>
 </html>
