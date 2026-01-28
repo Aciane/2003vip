@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>站点 B：生存空间 | 梅洛-庞蒂空间哲学</title>
+    <style>
+        :root {
+            --bg-color: #0f172a; /* 更深邃的蓝黑色，象征深度 */
+            --text-color: #cbd5e1;
+            --accent-color: #38bdf8; /* 天蓝色，代表空间的开敞 */
+            --highlight: #f472b6;
+            --panel-bg: rgba(30, 41, 59, 0.8);
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            transition: transform 1.5s ease-in-out; /* 用于空间旋转实验 */
+        }
+
+        header {
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: radial-gradient(circle at 50% 30%, #1e293b 0%, #0f172a 70%);
+            position: relative;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            color: var(--accent-color);
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .concept-block {
+            background: var(--panel-bg);
+            border-left: 5px solid var(--accent-color);
+            padding: 2rem;
+            margin-bottom: 4rem;
+            backdrop-filter: blur(5px);
+            border-radius: 0 10px 10px 0;
+        }
+
+        /* 深度实验区域 */
+        .depth-box {
+            height: 300px;
+            background: #000;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #333;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #444;
+            transition: all 0.8s ease;
+        }
+
+        .depth-box:hover {
+            box-shadow: inset 0 0 100px rgba(56, 189, 248, 0.1);
+        }
+
+        .hidden-object {
+            opacity: 0;
+            transition: opacity 2s ease;
+            font-style: italic;
+        }
+
+        .depth-box:hover .hidden-object {
+            opacity: 1;
+            color: var(--accent-color);
+        }
+
+        /* 空间水平实验控制台 */
+        .experiment-controls {
+            text-align: center;
+            padding: 2rem;
+            border: 1px dashed var(--text-color);
+            margin: 2rem 0;
+        }
+
+        button {
+            background: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 10px 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: var(--accent-color);
+            color: #000;
+        }
+
+        .citation {
+            font-size: 0.7rem;
+            color: #64748b;
+            vertical-align: super;
+            margin-left: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5rem;
+            border-top: 1px solid #334155;
+            padding-top: 2rem;
+        }
+
+        a { color: var(--accent-color); text-decoration: none; }
+        
+        /* 模拟黑夜的笼罩感 */
+        .night-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 20%, #000 90%);
+            pointer-events: none;
+        }
+
+    </style>
+</head>
+<body id="main-body">
+
+    <header>
+        <div class="night-overlay"></div>
+        <h1>Site B: 生存空间</h1>
+        <div class="subtitle">Lived Space & Primordial Depth</div>
+        <p>“空间不是我们身外的一个容器，而是我们要去栖居的某种环境。”</p>
+        <div style="margin-top: 50px; font-size: 2rem; animation: bounce 2s infinite;">↓</div>
+    </header>
+
+    <div class="container">
+
+        <!-- 概念 1：情境空间 -->
+        <section class="concept-block">
+            <h2>1. 从位置到情境 (Situation over Position)</h2>
+            <p>
+                客观思维（科学与几何学）将空间视为一种“位置的空间性”（spatiality of position），其中的每一个点都是均匀的、可互换的。
+                但在我们的实际体验中，空间是<b>“情境的空间性”（spatiality of situation）</b><span class="citation">[1, 2]</span>。
+            </p>
+            <p>
+                当我们全神贯注于一项任务（如阅读或修车）时，空间不再是XYZ坐标轴，而是由我们的<b>“任务”</b>（Task）所组织的场域。
+                物体不是“在”某个几何位置上，而是“在”我们行动的射程之内<span class="citation">[3, 4]</span>。
+            </p>
+        </section>
+
+        <!-- 交互实验：空间水平 -->
+        <section class="concept-block" style="border-color: var(--highlight);">
+            <h2>2. 实验：空间水平与锚定 (Spatial Level & Anchoring)</h2>
+            <p>
+                如果把世界颠倒过来，会发生什么？心理学家斯特拉顿（Stratton）曾戴上颠倒视觉得眼镜生活。
+                起初世界是混乱的，但随着身体开始<b>行动</b>，一个新的“空间水平”建立了，世界重新看起来是“正”的<span class="citation">[5, 6]</span>。
+            </p>
+            <p>这证明了：“上”与“下”不是物理绝对的，而是取决于身体与环境达成的<b>“契约”</b>（Pact）。</p>
+            
+            <div class="experiment-controls">
+                <h3>🧪 交互体验：破坏与重建</h3>
+                <p id="orientation-status">当前状态：正常世界</p>
+                <button onclick="tiltWorld()">1. 戴上颠倒眼镜</button>
+                <button onclick="anchorWorld()">2. 在新环境中生活（锚定）</button>
+                <button onclick="resetWorld()">3. 摘下眼镜</button>
+                <p id="exp-feedback" style="margin-top: 15px; color: var(--highlight); font-style: italic;"></p>
+            </div>
+        </section>
+
+        <!-- 概念 3：深度 -->
+        <section class="concept-block">
+            <h2>3. 深度：原初的维度 (Depth)</h2>
+            <p>
+                在笛卡尔的几何学中，深度只是“侧过来的宽度”，是不可见的第三维度。
+                但梅洛-庞蒂认为，深度是<b>最具有存在意义的维度</b><span class="citation">[7, 8]</span>。
+                它不是两个物体之间的距离，而是世界对我们的“包裹”（Envelopment）。深度证明了我们并未凌驾于世界之上，而是身处其中。
+            </p>
+            
+            <!-- 深度交互 -->
+            <div class="depth-box">
+                <div style="text-align: center; z-index: 2;">
+                    <p>把鼠标移入黑暗之中 (Touch the Dark)</p>
+                    <p class="hidden-object">
+                        “在黑夜中，空间没有清晰的轮廓，它不再是对象，<br>
+                        而是一种纯粹的深度，一种充满神秘张力的存在。”<br>
+                        ——梅洛-庞蒂 <span class="citation">[9]</span>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 导航系统 -->
+        <nav class="nav-links">
+            <a href="site_a.html">&larr; 返回 站点 A：身体 (Body)</a>
+            <a href="site_c.html">前往 站点 C：肉身与交织 (Flesh) &rarr;</a>
+        </nav>
+
+    </div>
+
+    <script>
+        const body = document.getElementById('main-body');
+        const statusText = document.getElementById('orientation-status');
+        const feedback = document.getElementById('exp-feedback');
+        let isAnchored = false;
+
+        function tiltWorld() {
+            // 模拟视觉颠倒：旋转整个页面
+            body.style.transform = "rotate(180deg)";
+            statusText.innerText = "状态：视觉颠倒，身体感到眩晕";
+            statusText.style.transform = "rotate(-180deg)"; // 让文字保持可读以便用户操作
+            feedback.innerText = "世界变得混乱了。因为你的身体图式（旧的空间水平）与新的视觉输入不匹配。";
+            feedback.style.transform = "rotate(-180deg)";
+            isAnchored = false;
+        }
+
+        function anchorWorld() {
+            if (body.style.transform !== "rotate(180deg)") {
+                feedback.innerText = "请先戴上眼镜（点击按钮 1）。";
+                return;
+            }
+            // 模拟锚定：虽然物理视觉没变（页面还是转的），但主观感觉“正”了
+            // 这是一个哲学隐喻，在网页中我们通过把文字转正，背景保持旋转来模拟
+            // 更好的模拟：让用户觉得操作顺手了。
+            
+            feedback.innerText = "奇迹发生了：虽然视网膜图像依然是倒的，但随着你的行动，你的身体重新'锚定'了空间。世界对你来说重新变得'可居住'和'垂直'了。";
+            // 在哲学上，这意味着建立了一个新的空间水平。
+            isAnchored = true;
+        }
+
+        function resetWorld() {
+            body.style.transform = "rotate(0deg)";
+            statusText.innerText = "状态：正常世界";
+            statusText.style.transform = "none";
+            
+            if (isAnchored) {
+                feedback.innerText = "摘下眼镜后，你反而觉得正常世界是颠倒的！因为你的身体已经习惯了之前的'新常态'。";
+                feedback.style.transform = "none";
+            } else {
+                feedback.innerText = "世界恢复了原状。";
+                feedback.style.transform = "none";
+            }
+            isAnchored = false;
+        }
+    </script>
+
+    <style>
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+    </style>
+</body>
+</html>

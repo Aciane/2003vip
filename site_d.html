@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>站点 D：现象学档案 | 具身的存在与原初的深度</title>
+    <style>
+        :root {
+            --bg-paper: #f9f7f1; /* 仿羊皮纸底色 */
+            --text-main: #333333;
+            --text-light: #666666;
+            --accent-color: #800020; /* 勃艮第红，象征学术与肉身 */
+            --highlight-bg: #e8dcb5;
+            --sidebar-width: 260px;
+            --glossary-width: 320px;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: "Georgia", "Songti SC", "Noto Serif SC", serif;
+            background-color: var(--bg-paper);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- 左侧导航栏 (TOC) --- */
+        .sidebar-left {
+            width: var(--sidebar-width);
+            background: #f0ebe0;
+            border-right: 1px solid #dcdcdc;
+            padding: 40px 20px;
+            overflow-y: auto;
+            flex-shrink: 0;
+            font-family: "Helvetica Neue", sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .sidebar-title {
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .toc-list { list-style: none; padding: 0; }
+        .toc-item { margin-bottom: 12px; }
+        .toc-link {
+            text-decoration: none;
+            color: var(--text-light);
+            transition: color 0.3s;
+            display: block;
+            padding: 5px 0;
+            border-left: 2px solid transparent;
+            padding-left: 10px;
+        }
+        .toc-link:hover, .toc-link.active {
+            color: var(--accent-color);
+            border-left-color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        .lab-links {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ccc;
+        }
+        .lab-btn {
+            display: block;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: #fff;
+            background: #555;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            text-align: center;
+            transition: background 0.3s;
+        }
+        .lab-btn:hover { background: var(--accent-color); }
+
+        /* --- 中间主内容 (Paper) --- */
+        .main-content {
+            flex: 1;
+            padding: 60px 80px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+        }
+
+        h1 { font-size: 2.4rem; color: #000; margin-bottom: 10px; line-height: 1.2; }
+        h2 { font-size: 1.8rem; color: var(--accent-color); margin-top: 60px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        h3 { font-size: 1.4rem; margin-top: 40px; color: #444; }
+        h4 { font-size: 1.1rem; font-weight: bold; margin-top: 30px; font-style: italic; }
+        
+        p { margin-bottom: 24px; text-align: justify; }
+        
+        .abstract {
+            background: #f4f4f4;
+            padding: 30px;
+            margin: 40px 0;
+            font-style: italic;
+            border-left: 4px solid var(--accent-color);
+            color: #555;
+        }
+
+        /* 交互式术语高亮 */
+        .term {
+            color: var(--accent-color);
+            cursor: pointer;
+            border-bottom: 1px dotted var(--accent-color);
+            font-weight: 600;
+            position: relative;
+            transition: background 0.2s;
+        }
+        .term:hover { background-color: var(--highlight-bg); }
+
+        /* 引用角标 */
+        .cite {
+            font-size: 0.75rem;
+            color: #999;
+            vertical-align: super;
+            text-decoration: none;
+            margin-left: 2px;
+            cursor: help;
+        }
+
+        /* --- 右侧逻辑伴读栏 (Logic & Glossary) --- */
+        .sidebar-right {
+            width: var(--glossary-width);
+            background: #fcfcfc;
+            border-left: 1px solid #e0e0e0;
+            padding: 0;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            background: #333;
+            color: #fff;
+            padding: 15px 20px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .panel-content {
+            padding: 25px;
+            overflow-y: auto;
+            height: 100%;
+        }
+
+        /* 逻辑卡片样式 */
+        .logic-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-left: 4px solid var(--accent-color);
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            animation: slideIn 0.3s ease;
+        }
+        .logic-title { font-weight: bold; color: var(--accent-color); margin-bottom: 8px; font-size: 0.95rem; }
+        .logic-text { font-size: 0.9rem; color: #555; }
+        .logic-source { margin-top: 10px; font-size: 0.8rem; color: #999; font-style: italic; }
+
+        .default-msg {
+            color: #aaa;
+            text-align: center;
+            margin-top: 50%;
+            font-style: italic;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 1. 左侧导航 (TOC) -->
+    <nav class="sidebar-left">
+        <div class="sidebar-title">论文结构</div>
+        <ul class="toc-list">
+            <li class="toc-item"><a href="#intro" class="toc-link">0. 导论：客观思维的断裂</a></li>
+            <li class="toc-item"><a href="#body" class="toc-link">1. 具身身体：感知的零点</a></li>
+            <li class="toc-item"><a href="#intentionality" class="toc-link">2. 运动意向性：我能</a></li>
+            <li class="toc-item"><a href="#schema" class="toc-link">3. 习惯与身体图式的扩张</a></li>
+            <li class="toc-item"><a href="#space" class="toc-link">4. 具身空间：锚定与情境</a></li>
+            <li class="toc-item"><a href="#depth" class="toc-link">5. 深度：原初的维度</a></li>
+            <li class="toc-item"><a href="#flesh" class="toc-link">6. 终极逻辑：肉身与交织</a></li>
+            <li class="toc-item"><a href="#conclusion" class="toc-link">7. 结论</a></li>
+        </ul>
+
+        <div class="sidebar-title" style="margin-top: 40px;">现象学实验室</div>
+        <a href="site_a.html" class="lab-btn">⟲ Site A: 具身主体交互</a>
+        <a href="site_b.html" class="lab-btn">⟲ Site B: 生存空间交互</a>
+        <a href="site_c.html" class="lab-btn">⟲ Site C: 肉身本体论交互</a>
+    </nav>
+
+    <!-- 2. 中间正文 (Main Text) -->
+    <main class="main-content">
+        <h1>具身的存在与原初的深度</h1>
+        <p style="font-size: 1.2rem; color: #555;">——梅洛-庞蒂空间现象学的逻辑演进与本体论还原</p>
+        
+        <div class="abstract">
+            <b>摘要：</b> 本文旨在通过梅洛-庞蒂《知觉现象学》及后期著作，梳理空间如何从身体的潜能中被“分泌”出来。这一过程不是物理位移，而是从“位置”到“情境”，从“几何”到“深度”的本体论跨越。本文论证了身体如何作为“绝对零点”打破了主客二元对立，并通过“运动意向性”生成了具有意义的生存空间。
+        </div>
+
+        <!-- 第0章 -->
+        <section id="intro">
+            <h2>0. 导论：知觉考古学与客观思维的断裂</h2>
+            <p>
+                在梅洛-庞蒂的哲学体系中，从<span class="term" data-term="le-corps-propre">具身身体 (le corps propre)</span>向<span class="term" data-term="lived-space">具身空间 (lived space)</span>的逻辑过渡并非一种简单的空间位移或物理感知过程，而是一场深刻的<b>现象学考古学</b>。这一过程旨在揭示隐藏在科学自然主义和理性主义——梅洛-庞蒂统称为<span class="term" data-term="objective-thought">客观思维 (Objective Thought)</span>——之下的前反射领域 <span class="cite" title="Source: [2], [1]">1,506</span>。
+            </p>
+            <p>
+                客观思维将空间视为一个中性的、均质的、先于任何经验而存在的几何容器，同时将身体简化为该容器内的一个物理客体（Körper），受制于因果律和定量的时空坐标 <span class="cite" title="Source: [2], [3], [4]">2,3,506</span>。经验主义将空间视为外在物理属性的总和，而理智主义（如康德）将空间视为意识先验构建的形式。梅洛-庞蒂认为，这两者都预设了一个“已经完成的世界”，忽略了世界是在知觉中生成的 <span class="cite" title="Source: [1], [5]">1,520</span>。
+            </p>
+            <p>
+                为了理解真正的空间，我们必须执行<span class="term" data-term="reduction">现象学还原</span>。这并非要撤回纯粹意识的内在性，而是要回到前反思的、身体与世界尚未分离的“原初知觉场” <span class="cite" title="Source: [2], [5]">506,520</span>。
+            </p>
+        </section>
+
+        <!-- 第1章 -->
+        <section id="body">
+            <h2>1. 具身身体：作为世界锚点的主体性</h2>
+            
+            <h3>1.1 身体不是物体 (Körper vs. Leib)</h3>
+            <p>
+                逻辑的第一步是重新定义身体。身体不是被动的物质块（Körper），而是<b>具身身体</b>（Lived Body/Leib）。它是我们拥有世界的媒介，是所有空间测量的<span class="term" data-term="zero-point">绝对零点 (Zero Point)</span> <span class="cite" title="Source: [2], [6], [7]">506,15,33</span>。身体不“在”空间中，而是栖居（inhabit）于空间。正如梅洛-庞蒂所言：“身体是空间性的源头。”如果我们将身体视为一个客体，我们就切断了通往原始空间的路径 <span class="cite" title="Source: [8]">521</span>。
+            </p>
+
+            <h3>1.2 身体图式作为前反思的综合</h3>
+            <p>
+                连接身体与空间的逻辑枢纽是<span class="term" data-term="body-schema">身体图式 (Body Schema)</span>。这不同于“身体意象”（Body Image）。后者是对身体的视觉表征，而身体图式是一个动态的、前意识的感官-运动系统 <span class="cite" title="Source: [9], [10], [11]">507,141,145</span>。它不仅整合了身体的姿态，还将身体的边界向外延伸，使身体能够作为一个整体对环境的“召唤”做出反应 <span class="cite" title="Source: [9]">507</span>。
+            </p>
+        </section>
+
+        <!-- 第2章 -->
+        <section id="intentionality">
+            <h2>2. 运动意向性：从“我思”到“我能”</h2>
+            <p>
+                空间是如何被“开启”的？动力来自于<span class="term" data-term="motor-intentionality">运动意向性 (Motor Intentionality)</span>。梅洛-庞蒂修正了胡塞尔的概念，提出在反思性的“我思”（I think）之下，存在着一种更原初的“我能”（I can） <span class="cite" title="Source: [9], [12]">507,20</span>。
+            </p>
+            
+            <h3>2.1 施耐德案例与意向弧</h3>
+            <p>
+                通过分析<span class="term" data-term="schneider">施耐德病例 (Schneider Case)</span>，这一逻辑得到了病理学的反证。施耐德可以进行“具体运动”（如拍蚊子），但无法进行“抽象运动”（如闭眼指鼻子） <span class="cite" title="Source: [13], [14]">508,14</span>。这揭示了他失去了<b>意向弧 (Intentional Arc)</b>，即失去了将身体投射到“虚拟空间”的能力。正常人的空间充满了“可供性”（Affordances），而施耐德的空间坍缩为当下的物理接触 <span class="cite" title="Source: [9], [13]">507,508</span>。
+            </p>
+        </section>
+
+        <!-- 第3章 -->
+        <section id="schema">
+            <h2>3. 习惯与工具：身体图式的扩张逻辑</h2>
+            <p>
+                <span class="term" data-term="habit">习惯 (Habit)</span>不仅仅是动作的重复，它是身体图式的重新刻画。梅洛-庞蒂以<b>盲人的手杖</b>为例：当手杖被熟练使用时，它不再是客体，而是感知的延伸 <span class="cite" title="Source: [15], [16]">509,92</span>。
+            </p>
+            <p>
+                通过习惯，外部工具被“吸纳”进身体图式，从而扩张了具身空间。这证明了空间不是固定的容器，而是随着我们身体能力的扩张而动态生成的“体积” <span class="cite" title="Source: [15]">509</span>。这种空间的“可塑性”表明，空间是由“感知-运动”的范围定义的，而非由几何边界定义的。
+            </p>
+        </section>
+
+        <!-- 第4章 -->
+        <section id="space">
+            <h2>4. 具身空间：从位置到情境</h2>
+            
+            <h3>4.1 情境空间性 (Spatiality of Situation)</h3>
+            <p>
+                基于身体的介入，空间不再是各向同性的几何容器（位置空间），而是<span class="term" data-term="lived-space">具身空间 (Lived Space)</span>或情境空间 <span class="cite" title="Source: [2], [17]">506,6</span>。在这里，“上方”不是几何轴线，而是身体对抗重力、渴望站立的生存姿态；“下方”是休息与大地的召唤。空间方位不是绝对的，而是相对于身体的任务而言的 <span class="cite" title="Source: [18], [14]">511,14</span>。
+            </p>
+
+            <h3>4.2 锚定与空间水平</h3>
+            <p>
+                通过斯特拉顿（Stratton）的倒视实验，梅洛-庞蒂证明空间方向（上下左右）不是绝对的物理事实，而是身体与环境达成的“契约”。当视觉被颠倒时，身体通过行动在混乱中<span class="term" data-term="anchoring">锚定 (Anchoring)</span>一个新的“空间水平”，重新赋予世界以稳定性 <span class="cite" title="Source: [19], [17]">510,6</span>。
+            </p>
+        </section>
+
+        <!-- 第5章 -->
+        <section id="depth">
+            <h2>5. 深度：原初的维度</h2>
+            <p>
+                在所有维度中，<span class="term" data-term="depth">深度 (Depth)</span>具有本体论的优先性。在传统光学中，深度被视为不可见的第三维度（侧过来的宽度）。但梅洛-庞蒂认为，深度是“第一维度”，是主体与世界“共存”的直接证据 <span class="cite" title="Source: [19], [1], [20]">510,1,26</span>。
+            </p>
+            <p>
+                深度揭示了事物是如何一个一个地掩盖又揭示彼此的，它反映了我们并未凌驾于世界之上，而是被世界所“包裹”（Envelopment）。深度不是两点之间的距离，而是我与世界之间的连接纽带，是存在的厚度 <span class="cite" title="Source: [18], [21]">511,19</span>。
+            </p>
+        </section>
+
+        <!-- 第6章 -->
+        <section id="flesh">
+            <h2>6. 终极逻辑：肉身与交织</h2>
+            <p>
+                在晚期哲学（如《可见的与不可见的》）中，梅洛-庞蒂进一步打破了“身体-世界”的对立，提出了<span class="term" data-term="flesh">肉身 (Flesh/Chair)</span>的概念 <span class="cite" title="Source: [18], [22]">511,21</span>。
+            </p>
+            <p>
+                肉身不是物质，也不是精神，而是存在的“元素”。空间既不是纯粹的广延，也不是纯粹的意识，而是“肉身”的<span class="term" data-term="chiasm">交织 (Chiasm)</span>。看者与被看者、触者与被触者（如左手摸右手）具有一种<span class="term" data-term="reversibility">可逆性 (Reversibility)</span> <span class="cite" title="Source: [18], [23]">511,465</span>。这种可逆性证明了我们与世界是由同一种“质料”构成的。空间，就是这种肉身的裂隙与粘连，是世界卷曲回来感知它自己。
+            </p>
+        </section>
+
+        <!-- 第7章 -->
+        <section id="conclusion">
+            <h2>7. 结论</h2>
+            <p>
+                梅洛-庞蒂的空间现象学完成了一场从“几何空间”到“生存空间”的哥白尼式革命。
+                1. <b>逻辑起点</b>：发现身体不是物，而是具有“我能”力量的具身主体。
+                2. <b>逻辑中介</b>：通过运动意向性、习惯和工具的合并，身体将自身投射到环境之中。
+                3. <b>逻辑归宿</b>：最终在肉身的本体论中，主体、他者与世界在交织中共同构成了无限深邃的、可逆的生存空间 <span class="cite" title="Source: [24]">513</span>。
+            </p>
+        </section>
+        
+        <div style="height: 100px;"></div>
+    </main>
+
+    <!-- 3. 右侧逻辑伴读栏 -->
+    <aside class="sidebar-right">
+        <div class="panel-header">逻辑伴读 & 术语库</div>
+        <div class="panel-content" id="logic-container">
+            <div class="default-msg">
+                将鼠标悬停在左侧<br>
+                <span style="color:var(--accent-color); font-weight:bold; border-bottom:1px dotted;">标红术语</span><br>
+                上以查看深度逻辑解析
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        // 术语与逻辑数据库
+        const logicData = {
+            "objective-thought": {
+                title: "客观思维 (Objective Thought)",
+                desc: "这是梅洛-庞蒂批判的靶子。它指的是一种将世界视为“对象集合”、将空间视为“几何容器”的思维方式（包括科学自然主义和康德的理智主义）。它忽略了我们“栖居”于世界的原初体验。",
+                source: "参考: [2], [1]"
+            },
+            "le-corps-propre": {
+                title: "具身身体 (Le Corps Propre)",
+                desc: "逻辑起点。身体不是生理学上的物体（Körper），而是感知的活体（Leib）。它是我们拥有世界的媒介。所有的空间方位（上、下、左、右）都源于身体这个“绝对零点”。",
+                source: "参考: [2], [7], [6]"
+            },
+            "lived-space": {
+                title: "具身空间 (Lived Space)",
+                desc: "逻辑终点之一。与几何空间相对。它不是各向同性的，而是以身体的任务和意图为导向的“情境空间”。它是由身体的行动能力开辟出来的场域。",
+                source: "参考: [2], [17]"
+            },
+            "reduction": {
+                title: "现象学还原 (Reduction)",
+                desc: "方法论工具。目的是“悬置”我们要么将世界视为理所当然（自然态度），要么将其视为意识构建（唯心主义）的成见。目的是回到前反思的“生活世界”。",
+                source: "参考: [5]"
+            },
+            "zero-point": {
+                title: "零点 (Zero Point)",
+                desc: "胡塞尔与梅洛-庞蒂的概念。身体是空间测量的绝对原点。所有的空间坐标（米、千米）最终都必须参照身体的“此处”（Here）才有意义。",
+                source: "参考: [8], [6]"
+            },
+            "body-schema": {
+                title: "身体图式 (Body Schema)",
+                desc: "核心中介机制。它不是对身体的视觉想象（Body Image），而是一个前意识的、动态的“我能”系统。它负责在不需思考的情况下协调身体姿态和工具使用。",
+                source: "参考: [9], [10], [25]"
+            },
+            "motor-intentionality": {
+                title: "运动意向性 (Motor Intentionality)",
+                desc: "空间的动力源。不同于“表象意向性”（指向观念），它是“我能”（I can）。它直接指向环境中的行动可能性（Affordances）。施耐德病例证明了这种意向性的存在。",
+                source: "参考: [9], [12], [26]"
+            },
+            "schneider": {
+                title: "施耐德病例 (Schneider Case)",
+                desc: "关键反证。施耐德能打蚊子（具体空间），却不能指鼻子（抽象空间）。因为他失去了将身体投射到虚拟空间的能力（意向弧断裂）。这证明了正常空间感依赖于“投射”。",
+                source: "参考: [13], [14]"
+            },
+            "habit": {
+                title: "习惯 (Habit)",
+                desc: "空间的扩张机制。习惯不仅是机械重复，它是身体图式的重组。盲人手杖不仅是工具，更成为了感知器官。这说明空间边界是可塑的。",
+                source: "参考: [15], [16], [27]"
+            },
+            "anchoring": {
+                title: "锚定 (Anchoring)",
+                desc: "空间的生成机制。斯特拉顿倒视实验表明，上下方向不是绝对的。身体通过行动与环境达成“契约”，重新确立一个“空间水平”。空间是身体行动建立的平衡。",
+                source: "参考: [19], [17]"
+            },
+            "depth": {
+                title: "深度 (Depth)",
+                desc: "原初的维度。它不是视觉计算出来的第三维度，而是主体被世界“包裹”的证明。深度显示了世界并未完全向我们敞开，而是具有神秘的厚度。",
+                source: "参考: [19], [1], [20]"
+            },
+            "flesh": {
+                title: "肉身 (The Flesh / La Chair)",
+                desc: "晚期本体论核心。它既不是物质也不是精神，而是“元素”。它是看者与被看者、主体与客体共同的质地，标志着二元论的终结。",
+                source: "参考: [18], [22]"
+            },
+            "chiasm": {
+                title: "交织 (The Chiasm)",
+                desc: "空间关系的终极形态。主体与世界、身体与他人之间相互交叉、相互重叠。我们是世界的一部分，世界也是我们要去感知的肉身。",
+                source: "参考: [18], [28], [23]"
+            },
+            "reversibility": {
+                title: "可逆性 (Reversibility)",
+                desc: "知觉的基本结构。如左手摸右手时，触者同时也是被触者。这种角色的瞬间互换揭示了身体既是主体又是客体，是通往本体论统一的关键。",
+                source: "参考: [18], [23]"
+            }
+        };
+
+        const terms = document.querySelectorAll('.term');
+        const container = document.getElementById('logic-container');
+
+        // 鼠标悬停显示逻辑解释
+        terms.forEach(term => {
+            term.addEventListener('mouseenter', function() {
+                const key = this.getAttribute('data-term');
+                const data = logicData[key];
+                if (data) {
+                    container.innerHTML = `
+                        <div class="logic-card">
+                            <div class="logic-title">${data.title}</div>
+                            <div class="logic-text">${data.desc}</div>
+                            <div class="logic-source">${data.source}</div>
+                        </div>
+                    `;
+                }
+            });
+        });
+
+        // 简单的目录高亮逻辑
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.toc-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

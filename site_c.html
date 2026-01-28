@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>站点 C：肉身与交织 | 梅洛-庞蒂空间哲学</title>
+    <style>
+        :root {
+            --bg-color: #2c1e1e; /* 深红褐色，象征“肉身” */
+            --text-color: #efe6e6;
+            --flesh-tone: #e6b8a2;
+            --intertwine-1: #d65a31;
+            --intertwine-2: #588da8;
+            --panel-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.8;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        header {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            background: linear-gradient(135deg, #2c1e1e 0%, #4a2c2a 100%);
+            overflow: hidden;
+        }
+
+        /* 背景动画：模拟交织 */
+        .chiasm-bg {
+            position: absolute;
+            width: 60vw;
+            height: 60vw;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            animation: pulse 10s infinite alternate;
+        }
+        .bg-1 { background: var(--intertwine-1); top: -10%; left: -10%; }
+        .bg-2 { background: var(--intertwine-2); bottom: -10%; right: -10%; }
+
+        @keyframes pulse {
+            0% { transform: scale(1) translate(0, 0); }
+            100% { transform: scale(1.2) translate(20px, -20px); }
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            z-index: 10;
+            mix-blend-mode: overlay;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--flesh-tone);
+            z-index: 10;
+            margin-bottom: 30px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            position: relative;
+            z-index: 5;
+        }
+
+        .concept-card {
+            background: var(--panel-bg);
+            padding: 2.5rem;
+            border-radius: 15px;
+            margin-bottom: 4rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        /* 交互：可逆性 (Reversibility) */
+        .hand-experiment {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 250px;
+            margin: 2rem 0;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            color: #fff;
+        }
+
+        .circle-subject {
+            background-color: var(--intertwine-1);
+            left: 25%;
+            z-index: 2;
+            opacity: 0.8;
+        }
+
+        .circle-object {
+            background-color: var(--intertwine-2);
+            right: 25%;
+            z-index: 1;
+            opacity: 0.8;
+        }
+
+        /* 交织状态 */
+        .hand-experiment:hover .circle-subject {
+            transform: translateX(60px); /* 移动重叠 */
+            content: "Touching";
+        }
+        .hand-experiment:hover .circle-object {
+            transform: translateX(-60px);
+            content: "Touched";
+        }
+        
+        .hand-experiment:active .circle-subject {
+            background-color: var(--intertwine-2); /* 颜色交换 */
+        }
+        .hand-experiment:active .circle-object {
+            background-color: var(--intertwine-1);
+        }
+
+        .status-text {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--flesh-tone);
+            margin-top: 10px;
+        }
+
+        .nav-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 5rem;
+        }
+
+        .nav-btn {
+            padding: 20px;
+            text-align: center;
+            border: 1px solid var(--flesh-tone);
+            color: var(--text-color);
+            text-decoration: none;
+            transition: all 0.3s;
+            border-radius: 8px;
+        }
+
+        .nav-btn:hover {
+            background: var(--flesh-tone);
+            color: var(--bg-color);
+        }
+
+        .citation {
+            font-size: 0.75rem;
+            opacity: 0.6;
+            vertical-align: super;
+        }
+
+        /* 引用块 */
+        blockquote {
+            border-left: 3px solid var(--flesh-tone);
+            margin: 20px 0;
+            padding-left: 20px;
+            font-style: italic;
+            color: #ddd;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="chiasm-bg bg-1"></div>
+        <div class="chiasm-bg bg-2"></div>
+        <h1>Site C: 肉身与交织</h1>
+        <div class="subtitle">The Flesh & The Chiasm</div>
+        <p>“看者与被看者，触摸者与被触摸者，由同一种血肉构成。”</p>
+    </header>
+
+    <div class="container">
+
+        <!-- 概念 1：肉身 -->
+        <section class="concept-card">
+            <h2>1. 肉身 (La Chair)</h2>
+            <p>
+                在梅洛-庞蒂的晚期哲学中，他不再谈论“身体”与“世界”的对立。他引入了一个古老而全新的概念：<b>肉身 (Flesh)</b>。
+            </p>
+            <p>
+                肉身不是物质，不是精神，也不是实体。它是一种<b>“元素”</b>（Element），就像古人说的水、火、土、气一样 <span class="citation">[1, 2]</span>。它是存在本身的质地，是连接我看与被看、触与被触的通用介质。
+            </p>
+            <blockquote>
+                “肉身不是一种事实，而是让事实成为可能的不变式。” <span class="citation">[2, 3]</span>
+            </blockquote>
+        </section>
+
+        <!-- 交互实验：可逆性 -->
+        <section class="concept-card">
+            <h2>2. 交互实验：交织与可逆性 (The Chiasm)</h2>
+            <p>
+                梅洛-庞蒂最著名的例子是：<b>左手触摸右手</b>。
+                当这一动作发生时，我是“触摸者”（主体）还是“被触摸者”（客体）？<span class="citation">[1, 4, 5]</span>
+            </p>
+            <div style="text-align: center; margin-bottom: 10px; font-size: 0.9rem; color: #aaa;">
+                (将鼠标悬停下方圆圈，观察重叠；<br>长按鼠标左键，体验角色的翻转)
+            </div>
+
+            <div class="hand-experiment" id="experiment-zone">
+                <div class="circle circle-subject">触摸者<br>(Touching)</div>
+                <div class="circle circle-object">被触者<br>(Touched)</div>
+            </div>
+            
+            <p id="exp-desc" class="status-text">
+                当前状态：二元对立。左手是主体，右手是客体。
+            </p>
+
+            <p style="margin-top: 20px;">
+                <b>哲学解析：</b> 当两者重叠（交织）时，你会发现一种<b>“可逆性” (Reversibility)</b>。这种角色可以瞬间互换，但永远不会完全重合。这种“几乎接触但又有裂隙（Hiatus）”的状态，就是感知的本质 <span class="citation">[6, 7]</span>。
+            </p>
+        </section>
+
+        <!-- 概念 3：间身性 -->
+        <section class="concept-card">
+            <h2>3. 间身性 (Intercorporeality)</h2>
+            <p>
+                既然我的身体是由“肉身”构成的，他人的身体也是。当我握住别人的手时，我也参与了同一个世界的肉身。
+            </p>
+            <p>
+                我们像是一个巨大身体的不同器官 <span class="citation">[8]</span>。我们通过共享的肉身，居住在同一个世界里。空间不再是分隔我们的虚空，而是连接我们的结缔组织 <span class="citation">[9, 10]</span>。
+            </p>
+        </section>
+
+        <!-- 循环导航 -->
+        <div class="nav-grid">
+            <a href="site_a.html" class="nav-btn">
+                &#8634; 重返 站点 A：具身主体<br>
+                <span style="font-size:0.8rem">回到感知的零点</span>
+            </a>
+            <a href="site_b.html" class="nav-btn">
+                &larr; 返回 站点 B：生存空间<br>
+                <span style="font-size:0.8rem">回到身体的栖居</span>
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        const zone = document.getElementById('experiment-zone');
+        const desc = document.getElementById('exp-desc');
+
+        // 鼠标悬停事件
+        zone.addEventListener('mouseenter', () => {
+            desc.innerHTML = "<b>状态：交织 (Chiasm)。</b><br>感知者与被感知者开始重叠，界限变得模糊。";
+            desc.style.color = "#fff";
+        });
+
+        // 鼠标离开
+        zone.addEventListener('mouseleave', () => {
+            desc.innerHTML = "当前状态：二元对立。左手是主体，右手是客体。";
+            desc.style.color = "var(--flesh-tone)";
+        });
+
+        // 鼠标点击（长按）模拟可逆性
+        zone.addEventListener('mousedown', () => {
+            desc.innerHTML = "<b>状态：反转 (Reversal)！</b><br>被触者瞬间变成了触摸者。这就是肉身的可逆性。";
+            desc.style.color = "var(--intertwine-1)";
+        });
+
+        zone.addEventListener('mouseup', () => {
+            desc.innerHTML = "<b>状态：交织 (Chiasm)。</b><br>恢复到一种模糊的共存状态。";
+            desc.style.color = "#fff";
+        });
+    </script>
+
+</body>
+</html>
