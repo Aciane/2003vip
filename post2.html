@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>电影空间实验室</title>
+    <style>
+        body { margin: 0; background-color: #000; overflow: hidden; cursor: crosshair; }
+        #overlay {
+            position: absolute; bottom: 40px; left: 40px; pointer-events: none;
+            color: rgba(0, 255, 200, 0.7); font-family: 'Courier New', monospace;
+            font-size: 11px; letter-spacing: 2px; z-index: 10;
+            text-shadow: 0 0 10px rgba(0,255,200,0.5);
+        }
+        #status { margin-top: 10px; color: #fff; opacity: 0.5; font-style: italic; }
+        #canvas-container { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <div>电影的拓扑学机制</div>
+        <div id="status">>>> 点击屏幕 <<<</div>
+    </div>
+    <div id="canvas-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <script>
+        
+
+        let scene, camera, renderer, mesh, clock, audioCtx;
+        const MAX_RIPPLES = 10;
+        let rippleIndex = 0;
+
+        const ripplePositions = Array(MAX_RIPPLES).fill().map(() => new THREE.Vector2(-1, -1));
+        const rippleTimes = Array(MAX_RIPPLES).fill(-10.0);
+
+        // --- 声音拓扑模块 ---
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+
+        function playResonance(uv) {
+            initAudio();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+
+            // 频率拓扑映射：距离图像中心越远，频率越高（张力越大）
+            const dist = uv.distanceTo(new THREE.Vector2(0.5, 0.5));
+            const baseFreq = 40 + (dist * 120); 
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(baseFreq, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(baseFreq * 0.2, audioCtx.currentTime + 3);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(150, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 3.5);
+
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 4);
+        }
+
+        // --- GLSL 着色器 ---
+        const vertexShader = `
+            uniform float uTime;
+            uniform vec2 uRipplePositions[${MAX_RIPPLES}];
+            uniform float uRippleTimes[${MAX_RIPPLES}];
+            varying vec2 vUv;
+            varying float vWarp;
+
+            void main() {
+                vUv = uv;
+                vec3 pos = position;
+                float totalWarp = 0.0;
+
+                for(int i = 0; i < ${MAX_RIPPLES}; i++) {
+                    float d = distance(uv, uRipplePositions[i]);
+                    float t = uTime - uRippleTimes[i];
+                    if(t > 0.0 && t < 6.0) {
+                        float wave = sin(d * 25.0 - t * 3.0) * exp(-d * 4.0);
+                        totalWarp += wave * smoothstep(6.0, 0.0, t);
+                    }
+                }
+                
+                // 模拟空间的物理厚度
+                pos.z += totalWarp * 0.4;
+                vWarp = totalWarp;
+                gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+            }
+        `;
+
+        const fragmentShader = `
+            uniform float uTime;
+            varying vec2 vUv;
+            varying float vWarp;
+
+            void main() {
+                // 拓扑色散：RGB在扭曲处分离
+                float r = vWarp * 0.3;
+                float b = -vWarp * 0.2;
+                
+                vec3 color = vec3(0.02, 0.03, 0.08); // 深渊底色
+                color += vec3(0.1, 0.5, 0.4) * vWarp; // 涟漪光泽
+                color += vec3(r, 0.0, b); // 色散偏移
+
+                // 增加电影胶片颗粒
+                float grain = fract(sin(dot(vUv, vec2(12.9898, 78.233) + uTime)) * 43758.5453);
+                color += grain * 0.04;
+
+                // 观看范围限制
+                float vignette = 1.0 - distance(vUv, vec2(0.5)) * 1.5;
+                gl_FragColor = vec4(color * vignette, 1.0);
+            }
+        `;
+
+        // --- 核心逻辑 ---
+        function init() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(0, -1.2, 1.4);
+            camera.lookAt(0, 0, 0);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+            clock = new THREE.Clock();
+
+            const geometry = new THREE.PlaneGeometry(2.2, 2.2, 256, 256);
+            const material = new THREE.ShaderMaterial({
+                vertexShader,
+                fragmentShader,
+                uniforms: {
+                    uTime: { value: 0 },
+                    uRipplePositions: { value: ripplePositions },
+                    uRippleTimes: { value: rippleTimes }
+                }
+            });
+
+            mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+
+            window.addEventListener('mousedown', onInteract);
+            window.addEventListener('resize', onResize);
+            
+            animate();
+        }
+
+        function onInteract(e) {
+            const mouse = new THREE.Vector2(
+                (e.clientX / window.innerWidth) * 2 - 1,
+                -(e.clientY / window.innerHeight) * 2 + 1
+            );
+            
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObject(mesh);
+
+            if (intersects.length > 0) {
+                const uv = intersects[0].uv;
+                
+                // 1. 触发视觉拓扑褶皱
+                ripplePositions[rippleIndex].copy(uv);
+                rippleTimes[rippleIndex] = clock.getElapsedTime();
+                rippleIndex = (rippleIndex + 1) % MAX_RIPPLES;
+
+                // 2. 触发听觉虚空共振
+                playResonance(uv);
+
+                // UI 状态反馈
+                document.getElementById('status').innerText = `>>> EVENT: RUPTURE AT [${uv.x.toFixed(2)}, ${uv.y.toFixed(2)}] <<<`;
+            }
+        }
+
+        function onResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+            mesh.material.uniforms.uTime.value = t;
+
+            // 模拟观看者的呼吸与不稳定的目光
+            camera.position.x += (Math.sin(t * 0.5) * 0.001);
+            camera.position.y += (Math.cos(t * 0.3) * 0.001);
+            
+            renderer.render(scene, camera);
+        }
+
+        init();
+    </script>
+</body>
+</html>
