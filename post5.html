@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>账外人 - 剧本页</title>
+    <style>
+        /* 基础复位，确保在所有浏览器上观感一致 */
+        body {
+            background-color: #fcfcfc;
+            color: #222;
+            font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Courier New", monospace;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 剧本主容器：模仿A4纸比例 */
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            background: white;
+            padding: 80px 100px;
+            border: 1px solid #eee;
+        }
+
+        /* 标题部分 */
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            letter-spacing: 8px;
+            margin-bottom: 10px;
+        }
+
+        .meta {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        /* 策划书区块 */
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 1.2em;
+            border-bottom: 2px solid #222;
+            padding-bottom: 5px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .info-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            width: 100px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        /* 剧本内容排版：遵循标准剧本格式 */
+        .scene {
+            margin-top: 50px;
+        }
+
+        .scene-title {
+            font-weight: bold;
+            background: #f0f0f0;
+            padding: 5px 10px;
+            margin-bottom: 20px;
+        }
+
+        .action {
+            margin-bottom: 15px;
+        }
+
+        .character {
+            text-align: center;
+            width: 50%;
+            margin: 20px auto 5px auto;
+            font-weight: bold;
+        }
+
+        .parenthetical {
+            text-align: center;
+            width: 40%;
+            margin: 0 auto 5px auto;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .dialogue {
+            text-align: center;
+            width: 70%;
+            margin: 0 auto 20px auto;
+        }
+
+        .v-o {
+            font-weight: normal;
+            font-size: 0.8em;
+            margin-left: 5px;
+        }
+
+        /* 手机端适配：取消缩进，改为左对齐 */
+        @media (max-width: 600px) {
+            .container { padding: 40px 20px; margin: 0; }
+            .character, .dialogue, .parenthetical { width: 100%; text-align: left; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>账外人</h1>
+        <div class="meta">剧本策划书 · 第一集剧本选段</div>
+        <div class="meta">编剧：唐择镇</div>
+    </header>
+
+    <section>
+        <h2>一、基础信息</h2>
+        <div class="info-row"><div class="info-label">类型</div>悬疑 / 犯罪 / 金融</div>
+        <div class="info-row"><div class="info-label">规模</div>12集 / 每集约45分钟</div>
+        <div class="info-row"><div class="info-label">核心冲突</div>金融逻辑 vs 暴力手段</div>
+    </section>
+
+    <section>
+        <h2>二、人物表</h2>
+        <p><strong>周小白 (34岁)：</strong>前合规经理，外卖骑手，警方特勤。高智商，极度缺乏安全感。</p>
+        <p><strong>王浩恩 (浩哥)：</strong>黑帮大佬，伪装成合法商人。奉行社会达尔文主义。</p>
+        <p><strong>赵旻 (35岁)：</strong>刑侦支队副队长。身陷内鬼迷局，违规启用平民线人。</p>
+    </section>
+
+    <hr style="border: none; border-top: 1px solid #eee; margin: 80px 0;">
+
+    <section class="script">
+        <h2 style="text-align: center; border: none;">第一集：死局</h2>
+
+        <div class="scene">
+            <div class="scene-title">1、城中村巷道 外 日</div>
+            <div class="action">周小白狂奔。呼吸声像拉风箱。身后脚步声杂乱。</div>
+            
+            <div class="character">追债人A <span class="v-o">(O.S)</span></div>
+            <div class="dialogue">往那边堵！别让他进大路！</div>
+
+            <div class="character">周小白 <span class="v-o">(V.O)</span></div>
+            <div class="dialogue">根据大数定律，倒霉是有周期的。但我的周期，似乎比别人长了整整十年。我叫周小白。前金融合规经理。现役负债人。</div>
+        </div>
+
+        <div class="scene">
+            <div class="scene-title">2、写字楼办公区 内 日</div>
+            <div class="action">2014年。老板满面红光，用力拍着周小白瘦弱的肩膀。</div>
+            
+            <div class="character">老板</div>
+            <div class="parenthetical">(高声)</div>
+            <div class="dialogue">大家静一静！从这一分钟开始。周小白正式晋升为合规部总经理！</div>
+            
+            <div class="action">掌声雷动。老板把一支昂贵的金笔硬塞进周小白手里。</div>
+
+            <div class="character">周小白</div>
+            <div class="dialogue">李总……这也太突然了。而且这个项目的资金池对接方我还没做尽调。</div>
+
+            <div class="character">老板</div>
+            <div class="parenthetical">(凑近耳边)</div>
+            <div class="dialogue">小白，你的房子，叫什么来着？幸福里那套顶楼？</div>
+        </div>
+
+        <div class="scene">
+            <div class="scene-title">11、“浩哥帮你办”公司 内 夜</div>
+            <div class="action">浩哥穿着一身唐装。手里盘着核桃。脸上堆满了弥勒佛一样和蔼的笑容。</div>
+
+            <div class="character">浩哥</div>
+            <div class="dialogue">哎呀！可把你等来了，这不是小白吗？这是咱们安平县的大才子，当年的高考状元！倒热茶！</div>
+            
+            <div class="character">周小白</div>
+            <div class="dialogue">浩哥……谢谢你还记得我。我给安平县丢人了。</div>
+        </div>
+
+        <div class="scene">
+            <div class="scene-title">17、街道/大排档 外 夜</div>
+            <div class="action">赵旻拉开对面的塑料凳子，大马金刀地坐在了周小白对面。</div>
+
+            <div class="character">赵旻</div>
+            <div class="dialogue">加了两个蛋？胃口不错啊，周经理。</div>
+            
+            <div class="action">周小白看着赵旻。那口面硬生生咽了下去。</div>
+        </div>
+
+        <div style="text-align: center; margin-top: 80px; font-weight: bold; letter-spacing: 5px;">（第一集 完）</div>
+    </section>
+
+    <hr style="border: none; border-top: 2px solid #222; margin: 80px 0;">
+
+    <section>
+        <h2>完整剧本信息</h2>
+        
+        <h3>一、基础信息</h3>
+        <div class="info-row"><div class="info-label">中文剧名</div>《账外人》</div>
+        <div class="info-row"><div class="info-label">英文剧名</div>The Off-Book Man</div>
+        <div class="info-row"><div class="info-label">剧集类型</div>悬疑 / 犯罪 / 金融</div>
+        <div class="info-row"><div class="info-label">预计集数</div>12集</div>
+        <div class="info-row"><div class="info-label">播出平台</div>爱奇艺迷雾剧场、腾讯X剧场或优酷白夜剧场</div>
+
+        <h3 style="margin-top: 40px;">二、时空背景</h3>
+        <p><strong>时间设定：</strong>2014年左右（互联网金融野蛮生长时期）</p>
+        <p><strong>地点设定：</strong>宁江市（参考杭州）</p>
+
+        <h3 style="margin-top: 40px;">三、目标受众</h3>
+        <p><strong>核心受众：</strong>25-45岁男性观众。喜爱快节奏犯罪悬疑、烧脑剧情，且对金融运作逻辑有一定兴趣或认知的群体。</p>
+        <p><strong>泛受众：</strong>城市中产及白领阶层。对社会热点议题有共鸣，关注个人命运在资本浪潮中沉浮的观众。</p>
+
+        <h3 style="margin-top: 40px;">四、创作阐述</h3>
+        <p>剧本旨在通过"金融犯罪"这一特定视角拓展悬疑题材的叙事范围，重点探讨专业知识在现代犯罪与执法过程中的双重作用。主角周小白被设定为一名性格懦弱的金融合规经理，剧作核心在于展示他如何在面对黑恶势力的暴力胁迫时，依靠金融专业逻辑进行生存博弈，而非传统的对抗模式。创作立足于现实主义基调，结合P2P网贷、地下钱庄洗钱等具体社会案例，客观呈现犯罪手段从传统暴力恐吓向数据化、制度化转型的过程。</p>
+        <p>在戏剧结构上，本剧构建了反派对主角的功能性利用与主角利用专业壁垒进行反向渗透的矛盾关系。故事的高潮逻辑建立在真实的国际反洗钱法则与离岸信托架构之上，主角通过技术手段完成了警方难以执行的跨境证据锁定。结局采用写实主义处理，主角虽然协助破案，但依然承担了相应的法律后果与经济损失，以此强调维护正义所需的现实代价。</p>
+
+        <h3 style="margin-top: 40px;">五、主要人物表</h3>
+        <p><strong>周小白：</strong>前金融合规经理，因背锅入狱，被迫卷入黑金体系的线人。34岁，身材消瘦，常年佩戴眼镜，心理上高智商与低自尊的矛盾体。</p>
+        <p><strong>王浩恩（浩哥）：</strong>伪装成合法商人的黑帮大佬，操控地下金融犯罪链条。45岁，身材肥硕，脸上总是和蔼的笑容，眼神却藏着阴狠与贪婪。</p>
+        <p><strong>赵旻：</strong>刑侦支队副队长，违规启用平民线人追查保护伞。35岁，身材高挑，干练短发，眼神锐利如鹰，长期失眠。</p>
+        <p><strong>刀疤：</strong>浩哥心腹，暴力催收负责人，组织一线执行者。一脸凶相，是浩哥最忠实的打手。</p>
+        <p><strong>罗立国：</strong>地方实权官员，浩哥背后的长期保护伞。黑白勾连，二十年共生。</p>
+        <p><strong>家教：</strong>警方卧底，冒险偷取浩哥的保护伞名单被抓，后成为英雄。</p>
+
+        <h3 style="margin-top: 40px;">六、故事大纲</h3>
+        <p>2014年，某金融公司合规经理周小白因公司老板非法集资跑路，作为签字人被迫背锅入狱。狱中，素未谋面的同乡大佬浩哥托人庇护，让他免受霸凌。2015年，周小白出狱，不仅背负巨额连带民事赔偿，且他奋斗十年买下的房产也进入了法拍倒计时。为了保住房子，周小白拼命送外卖筹钱，却被曾经的债权人雇凶暴打。</p>
+        
+        <p>走投无路的周小白投奔"浩哥帮你办有限责任公司"。周小白在随队行动中因心软放过了一位欠债的单亲母亲，遭到浩哥亲信"刀疤"的质问，因而发现浩哥所谓的帮忙实则是高利贷的围猎。不久，周小白被警方设局截获。刑侦队长赵旻迫使他要么被捕，要么作为警方的线人潜伏。周小白想起买房时对未来生活的期望，选择了成为线人。</p>
+        
+        <p>为了获得浩哥的信任，周小白利用金融专业知识纳了投名状。他在一次收帐过程中，利用P2P网贷平台的"T+1风控盲区"，通过高频并发借贷，成功将一笔高利贷的死账转化为P2P的合法坏账。浩哥大喜，为周小白举办了正式入伙仪式。受赵旻正义的触动，周小白主动拒绝了再次参与暴力收债。浩哥却主动将他发配至城中村工作室解决技术难题。周小白才发现，这里是一个利用欠债人家属进行刷脸的跑分基地。</p>
+        
+        <p>面对这种原始且残忍的洗钱模式，周小白编写了自动化脚本，暗中植入代码发送给警方的端口。随着警方精准冻结账户，浩哥开始疑神疑鬼。周小白利用外卖调度平台逻辑，开发了"黄金洗钱网"。周小白彻底成为了组织不可或缺的财务大脑。为了测试周小白的忠诚，浩哥逼迫他枪杀疑似报警的便利店主。周小白不敢扣动扳机，直接吓尿了，浩哥大笑离去。</p>
+        
+        <p>浩哥接到保护伞罗国立的紧急预警。周小白紧急协助浩哥设计复杂的离岸信托架构，实际上却布下陷阱，诱导资金触犯国际反洗钱法则。收网之夜，警方合围，刀疤落网，浩哥却在最后一刻逃离。周小白冲入地下室救出昏迷的家教，又通宵穿透浩哥的隐秘资金链，锁定了流向罗国立司机名下的空壳公司，致使罗在机场被捕。</p>
+        
+        <p>浩哥不知所踪。周小白因重大立功暂未被起诉，蛰伏为浩哥的国内管家。两年后，反诈风暴席卷全国，周小白的房子被法拍。周小白发出资产冻结预警给浩哥。浩哥在东南亚展示信托文件时，无意间激活了周小白植入的定位木马。浩哥的信息通过CRS系统向全球警方广播。中国警方联合境外警方收网，浩哥团伙覆灭。赵旻因违规操作被调离，周小白被起诉。一年后，周小白又走出看守所，孑然一身，消失在人海。</p>
+    </section>
+</div>
+
+</body>
+</html>
+
+
