@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>她</title>
+    <style>
+        body { margin: 0; background: #000; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+</script>
+
+<script type="module">
+    import * as THREE from 'three';
+    import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { MeshSurfaceSampler } from 'three/addons/math/MeshSurfaceSampler.js';
+
+    const scene = new THREE.Scene();
+    // 1. 让初始视觉“很大”：减小相机 Z 轴数值，或增大视角
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.01, 1000);
+    camera.position.set(0, 0.5, 1.2); // 离得非常近，视觉冲击力强
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+
+    // --- 自定义着色器：控制线条的“断裂”与“裂变” ---
+    const glitchVertexShader = `
+        varying vec3 vPosition;
+        void main() {
+            vPosition = position;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        }
+    `;
+
+    const glitchFragmentShader = `
+        uniform float uTime;
+        varying vec3 vPosition;
+        
+        // 伪随机函数
+        float random(vec2 st) {
+            return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+        }
+
+        void main() {
+            // 核心逻辑：基于时间和位置产生断裂感
+            float strength = step(0.5, sin(vPosition.y * 10.0 + uTime * 2.0));
+            float noise = random(vec2(vPosition.x, floor(uTime * 10.0)));
+            
+            // 如果随机值大于 0.9，产生瞬时的“裂变”亮块
+            if(noise > 0.95) {
+                gl_FragColor = vec4(0.0, 1.0, 1.0, 1.0);
+            } else {
+                // 否则，线条随机断裂（丢弃像素）
+                if(random(vPosition.xy + uTime * 0.1) > 0.6) discard;
+                gl_FragColor = vec4(0.0, 0.8, 0.8, 0.3); 
+            }
+        }
+    `;
+
+    const loader = new GLTFLoader();
+    let uniforms = { uTime: { value: 0 } };
+
+    loader.load('shao.glb', (gltf) => {
+        const mesh = gltf.scene.children[0]; // 假设第一个是 Mesh
+        
+        gltf.scene.traverse(child => {
+            if (child.isMesh) {
+                // A. 动态断裂线框
+                const wireGeom = new THREE.WireframeGeometry(child.geometry);
+                const wireMat = new THREE.ShaderMaterial({
+                    uniforms: uniforms,
+                    vertexShader: glitchVertexShader,
+                    fragmentShader: glitchFragmentShader,
+                    transparent: true,
+                    blending: THREE.AdditiveBlending
+                });
+                const lineSegments = new THREE.LineSegments(wireGeom, wireMat);
+                
+                // 让初始比例很大
+                lineSegments.scale.set(2, 2, 2); 
+                scene.add(lineSegments);
+
+                // B. 随机生成的粒子
+                const sampler = new MeshSurfaceSampler(child).build();
+                const count = 40000;
+                const pos = new Float32Array(count * 3);
+                const v = new THREE.Vector3();
+                for (let i = 0; i < count; i++) {
+                    sampler.sample(v);
+                    pos[i*3]=v.x; pos[i*3+1]=v.y; pos[i*3+2]=v.z;
+                }
+                const pGeom = new THREE.BufferGeometry();
+                pGeom.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                const pMat = new THREE.PointsMaterial({
+                    color: 0x00ffff,
+                    size: 0.005,
+                    transparent: true,
+                    opacity: 0.6,
+                    blending: THREE.AdditiveBlending
+                });
+                const points = new THREE.Points(pGeom, pMat);
+                points.scale.set(2, 2, 2);
+                scene.add(points);
+
+                // 整体居中
+                pGeom.center();
+                wireGeom.center();
+                
+                window.content = { points, lineSegments };
+            }
+        });
+    });
+
+    function animate(time) {
+        requestAnimationFrame(animate);
+        const elapsed = time * 0.001;
+        uniforms.uTime.value = elapsed; // 传递时间给 Shader
+
+        if (window.content) {
+            window.content.points.rotation.y = elapsed * 0.1;
+            window.content.lineSegments.rotation.y = elapsed * 0.1;
+            
+            // 模拟“裂变”抖动
+            window.content.lineSegments.position.x = Math.sin(elapsed * 10.0) * 0.002;
+        }
+
+        controls.update();
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+</script>
+</body>
+</html>
