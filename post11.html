@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>她 组诗</title>
+    <style>
+        /* 引入具有人文艺术感的衬线体 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #000000;
+            --text: #c0c0c0;
+            --dim: #444;
+            --highlight: #ffffff;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 200;
+            line-height: 2;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 视频：作为画布背景，低对比度，低透明度 */
+        /* 背景视频移动到右侧中央并缩小尺寸 */
+        .fixed-bg {
+            position: fixed;
+            /* 右侧垂直居中 */
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            /* 容器不占满全屏，只包裹视频 */
+            width: 50%;
+            height: auto;
+            z-index: -1;
+            opacity: 0.15;
+            filter: grayscale(1) contrast(1.1);
+            overflow: hidden;
+            /* 圆角容器，配合视频一起呈现圆角效果 */
+            border-radius: 1rem;
+        }
+        .fixed-bg video {
+            /* 缩小到容器宽度的100%即页面宽的50%，保持比例 */
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            /* 如果容器为圆角，使视频内容也遵守圆角 */
+            border-radius: inherit;
+            display: block;
+        }
+
+        /* 布局容器 */
+        .scroll-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 10vh 5vw;
+            border-left: 1px solid #111;
+            margin-left: 10vw;
+        }
+
+        /* 标题样式 */
+        .title {
+            font-size: 2.5rem;
+            color: var(--highlight);
+            letter-spacing: 0.8rem;
+            margin-bottom: 4rem;
+            font-weight: 300;
+        }
+
+        /* 诗歌正文 */
+        .poem-body {
+            font-size: 1.15rem;
+            white-space: pre-wrap;
+            letter-spacing: 0.15rem;
+            max-width: 600px;
+        }
+
+        /* 括号内容的弱化处理 */
+        .dim-text {
+            color: var(--dim);
+            font-size: 0.95rem;
+        }
+
+        /* 针对不同节的布局偏移，创造非对称感 */
+        .alt-layout {
+            align-items: flex-end;
+            text-align: right;
+            border-left: none;
+            border-right: 1px solid #111;
+            margin-left: 0;
+            margin-right: 10vw;
+        }
+
+        /* 动画逻辑 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            height: 30vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #222;
+            letter-spacing: 0.5rem;
+        }
+
+        /* 滚动条隐藏 */
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="fixed-bg">
+        <video autoplay muted loop playsinline>
+            <source src="background.mp4" type="video/mp4">
+        </video>
+    </div>
+
+    <div class="scroll-container">
+
+        <section class="fade-in">
+            <h1 class="title">谢谢你删除了我</h1>
+            <div class="poem-body">
+触感被丢进了
+马里亚纳海沟
+在下沉的过程中
+你开始倒数
+<span class="dim-text">（心脏上的划痕）</span>
+有几片碎玻璃
+潜水艇照进来
+<span class="dim-text">（你根本不在乎）</span>
+也会呕出光
+何其多，何其多的
+<span class="dim-text">（水吗？你知道我在溺水吗？）</span>
+还想看见的脸
+漂浮在深海深处
+——拒绝
+回忆里的我无处可躲
+还是无聊
+<span class="dim-text">（为了你我失去梦）</span>
+我早该后悔
+没有在陆地上多呆一会
+可是我已经跳下来了
+我的青春
+被玩弄在手中
+为了你，我再写诗no2
+            </div>
+        </section>
+
+        <section class="fade-in alt-layout">
+            <h1 class="title">延安高架上自自西向东的巨人</h1>
+            <div class="poem-body">
+我站在延安高架桥上
+监视冰川的消融
+我的脑子里满是声音
+汽车。红绿灯。火车的轰鸣
+我的身躯高达八尺
+监控把我和黄浦江相连
+和数万人的眼睛相连
+他们的眼睛流出泪水
+一节消亡的安魂曲
+灌溉在田野
+一只叫做希望的麻雀飞起
+落在我的头发上
+我的头发根根直立
+和全中国的人民一起
+看见大江东流去，天山牧马人
+看见贺兰平原的人们
+吃阿根廷牛肉
+是流离在千年黄土地上的中国人
+在万里之处凝视我的眼睛
+是难以企及的故里
+在春分时节，太阳平分地球
+所有的人被共同的日月笼罩
+四个巨人在地球上高高站起
+我看向跨越两个时区的你
+带着14亿人的苦闷烦恼和快乐
+我们能享有一样的
+等分线，景别的概念
+在眼里消肿，一切的一切都成为
+无可救药的远景
+2025年，当四个巨人站在地球
+没有人会把未来当做
+一场坐满座椅的电影
+没有人会在远处目击远景
+            </div>
+        </section>
+
+        <section class="fade-in">
+            <h1 class="title">写于2026的光来之前</h1>
+            <div class="poem-body">
+我的乌燕儿啊
+它飞在飞出
+塑料膜之前
+飞啊飞啊
+飞
+            </div>
+        </section>
+
+        <section class="fade-in alt-layout">
+            <h1 class="title">深夜忆马达</h1>
+            <div class="poem-body">
+马达马达，能到终点吗？
+心里，闸口淅淅，想起那
+没有脱网的鱼
+马达马达，喃喃细雨，而
+天上阳光泽泽，乌木沉底
+鸟，不如乘船归去，泥林
+深处失去本体
+马达淹死在失去北极早春
+我能否想你，马达？即使
+我血痕累累，鳞片光秃秃
+心不是甲烷，在水里燃起
+马达不可触碰
+鸟不停地让我归去，可是
+可是
+管道，天井
+            </div>
+        </section>
+
+        <section class="fade-in">
+            <h1 class="title">天花板上的浮士德</h1>
+            <div class="poem-body">
+就连视线也若即若离
+我害怕吗？
+连呼吸也变得尴尬
+我看见你的眼神
+失去了偿还的力气
+好像送你，你没有在场
+失语的一季又一季
+多少次想到
+下雨
+雨花淋淋落在那树
+花和塑料
+缠绵在你的头发里
+就连你的样子
+我早就忘了
+名字却
+依然出现在
+可及却不可见的他乡
+
+阮籍也会为你
+写下滴落下的纹
+在他者如烟花般灿烂的镜花水月间交织着
+盈盈之宇宙
+魄魄的我
+            </div>
+        </section>
+
+    </div>
+
+    <footer>THE VOID / 2026</footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>
