@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FBX粒子化交互装置艺术</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            overflow: hidden;
+            background: #000;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        #container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #info-panel {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #00ffcc;
+            font-size: 14px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #00ffcc;
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
+            min-width: 280px;
+        }
+        
+        #info-panel h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(0, 255, 204, 0.2);
+        }
+        
+        .info-label {
+            color: #888;
+        }
+        
+        .info-value {
+            color: #00ffcc;
+            font-weight: bold;
+        }
+        
+        #loading {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00ffcc;
+            font-size: 24px;
+            z-index: 1000;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #00ffcc;
+        }
+        
+        #loading-bar {
+            width: 300px;
+            height: 4px;
+            background: rgba(0, 255, 204, 0.2);
+            margin-top: 20px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        #loading-progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00ffcc, #00ff88);
+            transition: width 0.3s;
+            box-shadow: 0 0 10px #00ffcc;
+        }
+        
+        #status-text {
+            margin-top: 10px;
+            font-size: 12px;
+            color: #888;
+        }
+        
+        #camera-select {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #00ffcc;
+        }
+        
+        #camera-select select {
+            background: #111;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+            padding: 8px 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        #camera-preview {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 320px;
+            border: 2px solid #00ffcc;
+            border-radius: 10px;
+            z-index: 100;
+            overflow: hidden;
+        }
+        
+        #camera-preview video {
+            width: 100%;
+            display: block;
+        }
+        
+        #camera-preview canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .distance-bar {
+            width: 100%;
+            height: 15px;
+            background: rgba(0, 255, 204, 0.2);
+            border-radius: 7px;
+            margin-top: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .distance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00ffcc, #ff6600);
+            transition: width 0.2s;
+            border-radius: 7px;
+        }
+        
+        .distance-markers {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        #instructions {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #666;
+            font-size: 12px;
+            text-align: center;
+            z-index: 100;
+        }
+        
+        .model-info {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(0, 255, 204, 0.1);
+            border-radius: 5px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    
+    <div id="loading">
+        <div>🚀 初始化粒子系统...</div>
+        <div id="loading-bar">
+            <div id="loading-progress"></div>
+        </div>
+        <div id="status-text">正在连接摄像头...</div>
+    </div>
+    
+    <div id="info-panel">
+        <h2>系统状态</h2>
+        <div class="info-row">
+            <span class="info-label">距离:</span>
+            <span class="info-value" id="distance-value">--</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">粒子数量:</span>
+            <span class="info-value" id="particle-count">--</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">扩散程度:</span>
+            <span class="info-value" id="dispersion-value">--</span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">FPS:</span>
+            <span class="info-value" id="fps-value">--</span>
+        </div>
+        <div class="distance-bar">
+            <div class="distance-fill" id="distance-bar"></div>
+        </div>
+        <div class="distance-markers">
+            <span>远 (聚拢)</span>
+            <span>近 (扩散)</span>
+        </div>
+        <div class="model-info" id="model-info">
+            等待加载模型...
+        </div>
+    </div>
+    
+    <div id="camera-preview">
+        <video id="video" playsinline></video>
+        <canvas id="debug-canvas"></canvas>
+    </div>
+    
+    <div id="camera-select">
+        <select id="camera-list">
+            <option value="">选择摄像头...</option>
+        </select>
+    </div>
+    
+    <div id="instructions">
+        👤 靠近摄像头 → 粒子扩散 | 👤 远离摄像头 → 粒子聚拢
+    </div>
+
+    <!-- Three.js ES Module -->
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+
+    <!-- MediaPipe Face Detection -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/face_detection.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils@0.3/camera_utils.js" crossorigin="anonymous"></script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+        // ============================================
+        // 全局变量
+        // ============================================
+        let scene, camera, renderer;
+        let particleSystem = null;
+        let originalPositions = [];
+        let currentPositions = [];
+        
+        let videoElement;
+        let faceDetection = null;
+        
+        let currentDistance = 0.5;
+        let targetDistance = 0.5;
+        let isModelLoaded = false;
+        
+        let clock = new THREE.Clock();
+        let frameCount = 0;
+        let lastFpsTime = 0;
+        
+        // 配置参数
+        const CONFIG = {
+            particleCount: 15000,
+            maxDispersion: 2.0,
+            smoothing: 0.08,
+            modelPath: '../shao.glb'
+        };
+
+        // ============================================
+        // 初始化场景
+        // ============================================
+        async function init() {
+            console.log('🚀 开始初始化...');
+            updateStatus('初始化3D场景...', 10);
+            
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x020208);
+            scene.fog = new THREE.FogExp2(0x020208, 0.015);
+
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(0, 1.2, 4);
+            camera.lookAt(0, 1, 0);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            document.getElementById('container').appendChild(renderer.domElement);
+
+            // 添加环境光
+            const ambientLight = new THREE.AmbientLight(0x222244, 0.5);
+            scene.add(ambientLight);
+
+            const pointLight1 = new THREE.PointLight(0x00ffcc, 2, 25);
+            pointLight1.position.set(5, 5, 5);
+            scene.add(pointLight1);
+
+            const pointLight2 = new THREE.PointLight(0xff6600, 1.5, 25);
+            pointLight2.position.set(-5, 3, -5);
+            scene.add(pointLight2);
+
+            const pointLight3 = new THREE.PointLight(0x6666ff, 1, 20);
+            pointLight3.position.set(0, -2, 3);
+            scene.add(pointLight3);
+
+            updateStatus('初始化摄像头...', 20);
+            await initVideoElement();
+
+            updateStatus('启动人脸检测...', 30);
+            await initMediaPipe();
+
+            updateStatus('加载模型...', 40);
+            await loadModel();
+
+            animate();
+            window.addEventListener('resize', onWindowResize);
+            
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        // ============================================
+        // 更新加载状态
+        // ============================================
+        function updateStatus(text, percent) {
+            document.getElementById('status-text').textContent = text;
+            document.getElementById('loading-progress').style.width = percent + '%';
+        }
+
+        // ============================================
+        // 初始化视频元素
+        // ============================================
+        async function initVideoElement() {
+            videoElement = document.getElementById('video');
+            
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const select = document.getElementById('camera-list');
+            
+            const videoDevices = devices.filter(d => d.kind === 'videoinput');
+            videoDevices.forEach((device, i) => {
+                const option = document.createElement('option');
+                option.value = device.deviceId;
+                option.textContent = device.label || `摄像头 ${i + 1}`;
+                select.appendChild(option);
+            });
+            
+            const backCamera = videoDevices.find(d => 
+                d.label.toLowerCase().includes('back') || 
+                d.label.toLowerCase().includes('后')
+            );
+            
+            if (backCamera) {
+                select.value = backCamera.deviceId;
+            } else if (videoDevices.length > 0) {
+                select.value = videoDevices[0].deviceId;
+            }
+            
+            await startCamera(select.value);
+            
+            select.addEventListener('change', async (e) => {
+                if (e.target.value) {
+                    await startCamera(e.target.value);
+                }
+            });
+        }
+
+        // ============================================
+        // 启动摄像头
+        // ============================================
+        async function startCamera(deviceId) {
+            const constraints = {
+                video: {
+                    deviceId: deviceId ? { exact: deviceId } : undefined,
+                    width: { ideal: 640 },
+                    height: { ideal: 480 },
+                    facingMode: 'user'
+                }
+            };
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                videoElement.srcObject = stream;
+                
+                await new Promise(resolve => {
+                    videoElement.onloadedmetadata = () => {
+                        videoElement.play();
+                        resolve();
+                    };
+                });
+                
+                console.log('📷 摄像头已启动');
+            } catch (err) {
+                console.error('启动摄像头失败:', err);
+            }
+        }
+
+        // ============================================
+        // 初始化MediaPipe
+        // ============================================
+        async function initMediaPipe() {
+            faceDetection = new FaceDetection({
+                locateFile: (file) => {
+                    return `https://cdn.jsdelivr.net/npm/@mediapipe/face_detection@0.4/${file}`;
+                }
+            });
+
+            faceDetection.setOptions({
+                model: 'short',
+                minDetectionConfidence: 0.5
+            });
+
+            faceDetection.onResults(onFaceResults);
+            processVideoFrame();
+        }
+
+        // ============================================
+        // 处理视频帧
+        // ============================================
+        async function processVideoFrame() {
+            if (videoElement && videoElement.readyState >= 2) {
+                await faceDetection.send({ image: videoElement });
+            }
+            requestAnimationFrame(processVideoFrame);
+        }
+
+        // ============================================
+        // MediaPipe人脸检测结果处理
+        // ============================================
+        function onFaceResults(results) {
+            const debugCanvas = document.getElementById('debug-canvas');
+            const debugCtx = debugCanvas.getContext('2d');
+            
+            debugCanvas.width = videoElement.videoWidth;
+            debugCanvas.height = videoElement.videoHeight;
+            
+            debugCtx.drawImage(results.image, 0, 0, debugCanvas.width, debugCanvas.height);
+            
+            if (results.detections && results.detections.length > 0) {
+                const detection = results.detections[0];
+                const box = detection.boundingBox;
+                
+                // 绘制人脸框
+                debugCtx.strokeStyle = '#00ffcc';
+                debugCtx.lineWidth = 2;
+                const boxX = box.xCenter * debugCanvas.width - box.width * debugCanvas.width / 2;
+                const boxY = box.yCenter * debugCanvas.height - box.height * debugCanvas.height / 2;
+                const boxW = box.width * debugCanvas.width;
+                const boxH = box.height * debugCanvas.height;
+                debugCtx.strokeRect(boxX, boxY, boxW, boxH);
+                
+                // box.width 和 box.height 是归一化值 (0-1)
+                // 人脸面积越大 = 人越近 = 距离值越大 = 粒子扩散
+                // 人脸面积越小 = 人越远 = 距离值越小 = 粒子聚拢
+                const faceArea = box.width * box.height;
+                
+                // 归一化面积范围大约 0.01 - 0.5
+                // 映射到距离 0.0 - 1.0
+                // faceArea大 → distance大 → 扩散
+                // faceArea小 → distance小 → 聚拢
+                const minArea = 0.01;  // 最小的归一化人脸面积
+                const maxArea = 0.4;   // 最大的归一化人脸面积
+                
+                let distance = (faceArea - minArea) / (maxArea - minArea);
+                distance = Math.max(0, Math.min(1, distance));
+                
+                // 添加一些平滑
+                targetDistance = targetDistance * 0.7 + distance * 0.3;
+                
+                // 在画面上显示调试信息
+                debugCtx.fillStyle = '#00ffcc';
+                debugCtx.font = '16px Orbitron';
+                debugCtx.fillText(`面部: ${(faceArea * 100).toFixed(1)}%`, 10, 30);
+                debugCtx.fillText(`距离: ${targetDistance.toFixed(2)}`, 10, 50);
+                
+                console.log(`面部检测 - 面积: ${faceArea.toFixed(4)}, 距离: ${targetDistance.toFixed(2)}`);
+                
+            } else {
+                // 没有检测到人脸，渐变回中间值
+                targetDistance = targetDistance * 0.9 + 0.5 * 0.1;
+            }
+        }
+
+        // ============================================
+        // 加载模型
+        // ============================================
+        async function loadModel() {
+            console.log('📦 开始加载模型...');
+            updateStatus('加载模型...', 50);
+            
+            try {
+                const loader = new GLTFLoader();
+                
+                console.log('正在获取GLB文件:', CONFIG.modelPath);
+                updateStatus('下载模型文件...', 60);
+                
+                const gltf = await loader.loadAsync(CONFIG.modelPath);
+                
+                console.log('模型文件下载完成，开始解析...');
+                updateStatus('解析模型几何数据...', 75);
+                
+                processModelGeometry(gltf.scene);
+                
+                updateStatus('粒子系统创建完成', 95);
+                document.getElementById('model-info').textContent = '✅ GLB模型加载成功';
+                
+            } catch (error) {
+                console.error('模型加载失败:', error);
+                document.getElementById('model-info').textContent = '⚠️ 模型加载失败: ' + error.message;
+                
+                createFallbackParticles();
+            }
+            
+            updateStatus('完成', 100);
+            isModelLoaded = true;
+        }
+
+        // ============================================
+        // 从模型几何体创建粒子系统 - 只提取表面顶点
+        // ============================================
+        function processModelGeometry(object) {
+            let positions = [];
+            
+            object.traverse((child) => {
+                if (child.isMesh && child.geometry) {
+                    const geom = child.geometry;
+                    const posAttr = geom.attributes.position;
+                    const normalAttr = geom.attributes.normal;
+                    
+                    if (posAttr) {
+                        // 只使用三角面片的三个顶点（每个面片的三个不同顶点）
+                        // 如果使用所有顶点（包括共享顶点），会导致点都聚集在中心
+                        const indexAttr = geom.index;
+                        
+                        if (indexAttr) {
+                            // 有索引 - 使用索引获取不重复的顶点（面片顶点）
+                            for (let i = 0; i < indexAttr.count; i++) {
+                                const idx = indexAttr.getX(i);
+                                positions.push(new THREE.Vector3(
+                                    posAttr.getX(idx),
+                                    posAttr.getY(idx),
+                                    posAttr.getZ(idx)
+                                ));
+                            }
+                            console.log(`Mesh (有索引) 找到 ${indexAttr.count} 个面片顶点`);
+                        } else {
+                            // 无索引 - 每个三角面的三个顶点
+                            for (let i = 0; i < posAttr.count; i++) {
+                                positions.push(new THREE.Vector3(
+                                    posAttr.getX(i),
+                                    posAttr.getY(i),
+                                    posAttr.getZ(i)
+                                ));
+                            }
+                            console.log(`Mesh (无索引) 找到 ${posAttr.count} 个顶点`);
+                        }
+                    }
+                }
+            });
+            
+            console.log(`总共提取表面顶点: ${positions.length} 个`);
+            
+            if (positions.length === 0) {
+                console.log('模型没有顶点，使用备用粒子');
+                createFallbackParticles();
+                return;
+            }
+            
+            createParticleSystemFromVertices(positions);
+        }
+
+        // ============================================
+        // 从表面顶点创建粒子系统
+        // ============================================
+        function createParticleSystemFromVertices(vertices) {
+            // 使用所有表面顶点（或限制数量以提高性能）
+            const maxParticles = 50000;
+            const actualParticleCount = Math.min(maxParticles, vertices.length);
+            
+            const positions = new Float32Array(actualParticleCount * 3);
+            const colors = new Float32Array(actualParticleCount * 3);
+            const sizes = new Float32Array(actualParticleCount);
+            
+            // 随机采样顶点
+            const sampledVertices = [];
+            for (let i = 0; i < actualParticleCount; i++) {
+                const idx = Math.floor(Math.random() * vertices.length);
+                sampledVertices.push(vertices[idx].clone());
+            }
+            
+            // 计算包围盒
+            const box = new THREE.Box3().setFromPoints(sampledVertices);
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            
+            console.log(`模型包围盒:`, {
+                min: box.min,
+                max: box.max,
+                size: size,
+                center: center
+            });
+            
+            // 计算缩放因子，使模型适应视图
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const scale = 2.5 / maxDim;
+            
+            for (let i = 0; i < actualParticleCount; i++) {
+                const vert = sampledVertices[i];
+                
+                // 居中、缩放
+                const px = (vert.x - center.x) * scale;
+                const py = (vert.y - center.y) * scale;
+                const pz = (vert.z - center.z) * scale;
+                
+                positions[i * 3] = px;
+                positions[i * 3 + 1] = py;
+                positions[i * 3 + 2] = pz;
+                
+                originalPositions[i] = new THREE.Vector3(px, py, pz);
+                currentPositions[i] = new THREE.Vector3(px, py, pz);
+                
+                // 鲜艳的青蓝色 - 随机分配
+                const colorVal = Math.random();
+                if (colorVal < 0.25) {
+                    // 青色
+                    colors[i * 3] = 0.0;
+                    colors[i * 3 + 1] = 1.0;
+                    colors[i * 3 + 2] = 1.0;
+                } else if (colorVal < 0.5) {
+                    // 蓝青色
+                    colors[i * 3] = 0.0;
+                    colors[i * 3 + 1] = 0.8;
+                    colors[i * 3 + 2] = 1.0;
+                } else if (colorVal < 0.75) {
+                    // 青绿色
+                    colors[i * 3] = 0.0;
+                    colors[i * 3 + 1] = 1.0;
+                    colors[i * 3 + 2] = 0.5;
+                } else {
+                    // 白色青色
+                    colors[i * 3] = 0.3;
+                    colors[i * 3 + 1] = 1.0;
+                    colors[i * 3 + 2] = 1.0;
+                }
+                
+                sizes[i] = 5 + Math.random() * 5;
+            }
+            
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            
+            const material = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    pixelRatio: { value: renderer.getPixelRatio() }
+                },
+                vertexShader: `
+                    attribute float size;
+                    attribute vec3 color;
+                    varying vec3 vColor;
+                    uniform float time;
+                    uniform float pixelRatio;
+                    
+                    void main() {
+                        vColor = color;
+                        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                        gl_PointSize = size * pixelRatio * (350.0 / -mvPosition.z);
+                        gl_Position = projectionMatrix * mvPosition;
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vColor;
+                    void main() {
+                        vec2 center = gl_PointCoord - vec2(0.5);
+                        float dist = length(center);
+                        if (dist > 0.5) discard;
+                        float alpha = 1.0 - smoothstep(0.0, 0.5, dist);
+                        gl_FragColor = vec4(vColor * 2.5, alpha);
+                    }
+                `,
+                transparent: true,
+                vertexColors: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+            
+            particleSystem = new THREE.Points(geometry, material);
+            
+            scene.add(particleSystem);
+            
+            document.getElementById('particle-count').textContent = actualParticleCount.toLocaleString();
+            console.log(`✅ 粒子系统创建完成: ${actualParticleCount} 个表面粒子`);
+            
+            // 调试信息
+            const posAttr = particleSystem.geometry.attributes.position;
+            let minX = Infinity, maxX = -Infinity;
+            let minY = Infinity, maxY = -Infinity;
+            let minZ = Infinity, maxZ = -Infinity;
+            
+            for (let i = 0; i < Math.min(posAttr.count, 100); i++) {
+                const x = posAttr.getX(i);
+                const y = posAttr.getY(i);
+                const z = posAttr.getZ(i);
+                minX = Math.min(minX, x); maxX = Math.max(maxX, x);
+                minY = Math.min(minY, y); maxY = Math.max(maxY, y);
+                minZ = Math.min(minZ, z); maxZ = Math.max(maxZ, z);
+            }
+            
+            console.log(`粒子位置范围:`);
+            console.log(`  X: ${minX.toFixed(2)} ~ ${maxX.toFixed(2)}`);
+            console.log(`  Y: ${minY.toFixed(2)} ~ ${maxY.toFixed(2)}`);
+            console.log(`  Z: ${minZ.toFixed(2)} ~ ${maxZ.toFixed(2)}`);
+            console.log(`相机位置: (0, 1.2, 4)`);
+        }
+
+        // ============================================
+        // 创建备用粒子（人形轮廓）
+        // ============================================
+        function createFallbackParticles() {
+            console.log('🎭 创建备用人形粒子系统...');
+            
+            const count = CONFIG.particleCount;
+            const positions = new Float32Array(count * 3);
+            const colors = new Float32Array(count * 3);
+            const sizes = new Float32Array(count);
+            
+            for (let i = 0; i < count; i++) {
+                let x, y, z;
+                const r = Math.random();
+                
+                if (r < 0.12) {
+                    const theta = Math.random() * Math.PI * 2;
+                    const phi = Math.acos(2 * Math.random() - 1);
+                    const radius = 0.15 * (0.8 + Math.random() * 0.4);
+                    x = radius * Math.sin(phi) * Math.cos(theta);
+                    y = 1.5 + radius * Math.cos(phi);
+                    z = radius * Math.sin(phi) * Math.sin(theta);
+                } else if (r < 0.4) {
+                    const t = (r - 0.12) / 0.28;
+                    x = (Math.random() - 0.5) * 0.35;
+                    y = 0.2 + t * 1.2;
+                    z = (Math.random() - 0.5) * 0.2;
+                } else if (r < 0.55) {
+                    const t = (r - 0.4) / 0.15;
+                    x = -0.25 - t * 0.25;
+                    y = 1.1 - t * 0.3 + Math.random() * 0.1;
+                    z = (Math.random() - 0.5) * 0.1;
+                } else if (r < 0.7) {
+                    const t = (r - 0.55) / 0.15;
+                    x = 0.25 + t * 0.25;
+                    y = 1.1 - t * 0.3 + Math.random() * 0.1;
+                    z = (Math.random() - 0.5) * 0.1;
+                } else if (r < 0.85) {
+                    const t = (r - 0.7) / 0.15;
+                    x = -0.1 - Math.random() * 0.08;
+                    y = 0.2 - t * 0.2;
+                    z = (Math.random() - 0.5) * 0.12;
+                } else {
+                    const t = (r - 0.85) / 0.15;
+                    x = 0.1 + Math.random() * 0.08;
+                    y = 0.2 - t * 0.2;
+                    z = (Math.random() - 0.5) * 0.12;
+                }
+                
+                positions[i * 3] = x;
+                positions[i * 3 + 1] = y;
+                positions[i * 3 + 2] = z;
+                
+                originalPositions[i] = new THREE.Vector3(x, y, z);
+                currentPositions[i] = new THREE.Vector3(x, y, z);
+                
+                const colorChoice = Math.random();
+                if (colorChoice < 0.33) {
+                    colors[i * 3] = 0.0;
+                    colors[i * 3 + 1] = 1.0;
+                    colors[i * 3 + 2] = 0.8;
+                } else if (colorChoice < 0.66) {
+                    colors[i * 3] = 0.2;
+                    colors[i * 3 + 1] = 0.6;
+                    colors[i * 3 + 2] = 1.0;
+                } else {
+                    colors[i * 3] = 0.0;
+                    colors[i * 3 + 1] = 0.8;
+                    colors[i * 3 + 2] = 1.0;
+                }
+                
+                sizes[i] = 3 + Math.random() * 4;
+            }
+            
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            
+            const material = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    pixelRatio: { value: renderer.getPixelRatio() }
+                },
+                vertexShader: `
+                    attribute float size;
+                    attribute vec3 color;
+                    varying vec3 vColor;
+                    uniform float time;
+                    uniform float pixelRatio;
+                    
+                    void main() {
+                        vColor = color;
+                        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+                        gl_PointSize = size * pixelRatio * (200.0 / -mvPosition.z);
+                        gl_Position = projectionMatrix * mvPosition;
+                    }
+                `,
+                fragmentShader: `
+                    varying vec3 vColor;
+                    void main() {
+                        float dist = length(gl_PointCoord - vec2(0.5));
+                        if (dist > 0.5) discard;
+                        float alpha = 1.0 - smoothstep(0.2, 0.5, dist);
+                        gl_FragColor = vec4(vColor * 1.3, alpha * 0.85);
+                    }
+                `,
+                transparent: true,
+                vertexColors: true,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false
+            });
+            
+            particleSystem = new THREE.Points(geometry, material);
+            scene.add(particleSystem);
+            
+            document.getElementById('particle-count').textContent = count.toLocaleString();
+            console.log('✅ 备用粒子系统创建完成');
+        }
+
+        // ============================================
+        // 动画循环
+        // ============================================
+        let frameIndex = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const time = clock.getElapsedTime();
+
+            currentDistance += (targetDistance - currentDistance) * CONFIG.smoothing;
+
+            if (particleSystem) {
+                updateParticles(time);
+                particleSystem.lookAt(camera.position);
+                
+                // 每60帧输出一次调试信息
+                frameIndex++;
+                if (frameIndex % 60 === 0) {
+                    const pos = particleSystem.geometry.attributes.position;
+                    const firstX = pos.getX(0);
+                    const firstY = pos.getY(0);
+                    const firstZ = pos.getZ(0);
+                    console.log(`粒子位置 [0]: X=${firstX.toFixed(2)}, Y=${firstY.toFixed(2)}, Z=${firstZ.toFixed(2)}`);
+                    console.log(`相机位置: X=${camera.position.x.toFixed(2)}, Y=${camera.position.y.toFixed(2)}, Z=${camera.position.z.toFixed(2)}`);
+                }
+            }
+
+            updateInfoPanel(time);
+
+            renderer.render(scene, camera);
+        }
+
+        // ============================================
+        // 更新粒子状态
+        // ============================================
+        function updateParticles(time) {
+            if (!particleSystem) return;
+            
+            const positions = particleSystem.geometry.attributes.position.array;
+            const colors = particleSystem.geometry.attributes.color.array;
+            const count = originalPositions.length;
+            
+            const dispersion = currentDistance * CONFIG.maxDispersion;
+            const noiseSpeed = 0.5;
+            
+            for (let i = 0; i < count; i++) {
+                const orig = originalPositions[i];
+                
+                const noiseX = Math.sin(time * noiseSpeed + i * 0.05 + orig.y * 2) * 
+                              Math.cos(time * 0.3 + i * 0.03);
+                const noiseY = Math.cos(time * noiseSpeed * 0.8 + i * 0.04 + orig.x * 2) * 
+                              Math.sin(time * 0.4 + i * 0.02);
+                const noiseZ = Math.sin(time * noiseSpeed * 1.2 + i * 0.06 + orig.z * 2) * 
+                              Math.cos(time * 0.5 + i * 0.01);
+                
+                const targetX = orig.x + noiseX * dispersion * 0.5;
+                const targetY = orig.y + noiseY * dispersion * 0.5;
+                const targetZ = orig.z + noiseZ * dispersion * 0.5;
+                
+                const lerpFactor = 0.08;
+                currentPositions[i].x += (targetX - currentPositions[i].x) * lerpFactor;
+                currentPositions[i].y += (targetY - currentPositions[i].y) * lerpFactor;
+                currentPositions[i].z += (targetZ - currentPositions[i].z) * lerpFactor;
+                
+                positions[i * 3] = currentPositions[i].x;
+                positions[i * 3 + 1] = currentPositions[i].y;
+                positions[i * 3 + 2] = currentPositions[i].z;
+                
+                const colorIntensity = currentDistance;
+                
+                if (colorIntensity > 0.6) {
+                    colors[i * 3] = 1.0;
+                    colors[i * 3 + 1] = 0.3 + (1 - colorIntensity) * 0.5;
+                    colors[i * 3 + 2] = 0.1;
+                } else if (colorIntensity > 0.3) {
+                    colors[i * 3] = 0.2 + colorIntensity * 0.5;
+                    colors[i * 3 + 1] = 0.6 + colorIntensity * 0.3;
+                    colors[i * 3 + 2] = 1.0 - colorIntensity * 0.3;
+                } else {
+                    colors[i * 3] = 0.1;
+                    colors[i * 3 + 1] = 0.7;
+                    colors[i * 3 + 2] = 1.0;
+                }
+            }
+            
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+            particleSystem.geometry.attributes.color.needsUpdate = true;
+            particleSystem.material.uniforms.time.value = time;
+        }
+
+        // ============================================
+        // 更新信息面板
+        // ============================================
+        function updateInfoPanel(time) {
+            frameCount++;
+            
+            if (time - lastFpsTime >= 1) {
+                document.getElementById('fps-value').textContent = frameCount;
+                frameCount = 0;
+                lastFpsTime = time;
+            }
+            
+            document.getElementById('distance-value').textContent = currentDistance.toFixed(2);
+            document.getElementById('dispersion-value').textContent = (currentDistance * CONFIG.maxDispersion).toFixed(2);
+            document.getElementById('distance-bar').style.width = (currentDistance * 100) + '%';
+            
+            const bar = document.getElementById('distance-bar');
+            if (currentDistance > 0.6) {
+                bar.style.background = 'linear-gradient(90deg, #ff6600, #ff3300)';
+            } else if (currentDistance > 0.3) {
+                bar.style.background = 'linear-gradient(90deg, #00ffcc, #ffaa00)';
+            } else {
+                bar.style.background = 'linear-gradient(90deg, #00aaff, #00ffcc)';
+            }
+        }
+
+        // ============================================
+        // 窗口大小变化
+        // ============================================
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        // ============================================
+        // 启动
+        // ============================================
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>迷恋日记</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #000000;
+            --text: #b0b0b0;
+            --dim: #3a3a3a;
+            --highlight: #ffffff;
+            --accent: #555;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 200;
+            line-height: 2;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .scroll-container {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* 封面 */
+        .cover {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 15vh 10vw;
+        }
+
+        .cover-title {
+            font-size: 3.5rem;
+            font-weight: 200;
+            color: var(--highlight);
+            letter-spacing: 1.2rem;
+            margin-bottom: 2rem;
+        }
+
+        .cover-sub {
+            font-size: 0.75rem;
+            letter-spacing: 0.6rem;
+            color: var(--accent);
+        }
+
+        /* 日记条目 */
+        section {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 12vh 5vw;
+            border-left: 1px solid #0f0f0f;
+            margin-left: 10vw;
+        }
+
+        section.alt-layout {
+            align-items: flex-end;
+            text-align: right;
+            border-left: none;
+            border-right: 1px solid #0f0f0f;
+            margin-left: 0;
+            margin-right: 10vw;
+        }
+
+        .entry-date {
+            font-size: 0.7rem;
+            letter-spacing: 0.5rem;
+            color: var(--dim);
+            margin-bottom: 2.5rem;
+            text-transform: uppercase;
+        }
+
+        .entry-body {
+            font-size: 1.05rem;
+            white-space: pre-wrap;
+            letter-spacing: 0.12rem;
+            max-width: 580px;
+            line-height: 2.2;
+        }
+
+        .poem-body {
+            font-size: 1.1rem;
+            white-space: pre-wrap;
+            letter-spacing: 0.18rem;
+            max-width: 560px;
+            line-height: 2.4;
+        }
+
+        .dim-text {
+            color: var(--dim);
+            font-size: 0.9rem;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            letter-spacing: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+
+        /* 分隔线 */
+        .divider {
+            width: 40px;
+            height: 1px;
+            background: #1a1a1a;
+            margin: 3rem 0;
+        }
+
+        /* 淡入动画 */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        footer {
+            height: 25vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: #1a1a1a;
+            letter-spacing: 0.6rem;
+        }
+
+        ::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="scroll-container">
+
+    <!-- 封面 -->
+    <div class="cover fade-in">
+        <h1 class="cover-title">迷恋日记</h1>
+        <p class="cover-sub">私语 / 幻想 / 木刻</p>
+    </div>
+
+    <!-- 条目一：燥热 -->
+    <section class="fade-in">
+        <p class="entry-date">一</p>
+        <div class="entry-body">我的迷恋让我浑身燥热，难受，痛苦。
+我开始幻想，眼神飘离，我渴望吗？
+还是隐藏自己的踪迹、身份、一切的一切呢？
+
+我坐立难安，混乱旋转。
+拥有比得到更好，
+离开的痛苦，害羞，羞涩的情感，
+无与伦比，酸涩清爽，
+就像是冰镇雪碧。</div>
+    </section>
+
+    <!-- 条目二：梦 -->
+    <section class="fade-in alt-layout">
+        <p class="entry-date">二 · 梦</p>
+        <div class="entry-body">大学是在一个巨大的火车上，卧铺，
+在晚上行，早上到了苏北，淮海阅读集团。
+
+她抓鬼是天师，会飞，
+我假装不会，让她带我抓鬼。</div>
+    </section>
+
+    <!-- 条目三：ins -->
+    <section class="fade-in">
+        <p class="entry-date">三</p>
+        <div class="entry-body">今天又看了她的 ins 账号。
+她的摄影技术很高超，黑标胶片，很亚。
+
+一个人在不同的自媒体竟然有如此多不同的样态，
+非常让人着迷。
+
+朋友说，她本科学设计学，而后逃离向非主流。
+这种非主流本身是社会化的，圈层化的。
+她关心故事，或不是作品之类的。
+我觉得有道理。
+
+但是与人交流的恐惧还是可怕。
+我当然可以大张旗鼓作虎皮，
+但是交流本身这件事显得更加诡异。
+
+我承认我迷恋她，很不健康。</div>
+    </section>
+
+    <!-- 条目四：凌晨 -->
+    <section class="fade-in alt-layout">
+        <p class="entry-date">四 · 凌晨一点</p>
+        <div class="entry-body">我又看了她的豆瓣。
+其实也挺庸俗，
+于是这种思考转向了艺术本身的思考。
+
+窥淫癖是不错的，因为是内化的，
+这很符合中国精神，于是是非科学的。
+
+日常生活本就平庸，
+有怪人看看挺有意思的，
+但是怪人刻意营造的景观和怪人的肉身有何关联？
+
+<span class="dim-text">如果世界存有一套理解的泛式，那么……</span>
+
+我似乎应该读读《存在与时间》。
+
+现象学能发展到电影，
+也能发展到曲艺——
+相声快板、二人转、莲花落、皮影戏等腐朽艺术。</div>
+    </section>
+
+    <!-- 条目五：梦境 -->
+    <section class="fade-in">
+        <p class="entry-date">五 · 又一梦</p>
+        <div class="entry-body">她卖了我一堆东西，还有衣服，
+包括内裤——造成我在起床前寻找，
+室友问我干啥，我说找衣服，
+实质上是怕丢了她的内裤。
+
+迟到了，早上要值日，
+班主任要来惩罚我——
+还好我是闪电侠，穿越时空，
+回到上课前。
+
+我试图去买烟，
+一个人尾随我不让我买。</div>
+    </section>
+
+    <!-- 诗：木刻 -->
+    <section class="fade-in alt-layout">
+        <p class="section-title">木刻</p>
+        <div class="poem-body">我是一个
+被大地剥离出皮肤的男子
+
+我赤裸着生命
+就像种子也不是非此即彼
+我渴望着泥土，我渴望——
+
+打胚，蓬勃的世界再次回到我的心脏
+
+你的刀随处畅游
+好似我的兄弟葬送在河流
+你无与伦比的脸庞
+倒在我的纹理
+
+然后给我涂上黑色胭脂
+让你反复榨取我
+成为一个数字
+按压我的黑色乳汁
+
+再也不见，离开我
+我变得湿漉漉
+死亡如期而来</div>
+    </section>
+
+</div>
+
+<footer>迷恋日记 · 私稿</footer>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.fade-in').forEach(el => {
+        observer.observe(el);
+    });
+</script>
+
+</body>
+</html>

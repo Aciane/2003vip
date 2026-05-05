@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Black Poodle Chaos - No Dependecy Physics</title>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #333; font-family: sans-serif; }
+        #loading {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: white; font-size: 24px; font-weight: bold;
+            z-index: 999;
+        }
+        #ui {
+            position: absolute; top: 20px; left: 20px;
+            color: #333; background: rgba(255,255,255,0.8);
+            padding: 15px; border-radius: 8px;
+            font-weight: bold; pointer-events: none;
+            display: none; /* 加载完成后显示 */
+        }
+    </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <div id="loading">正在加载资源... (若长时间无反应请刷新)</div>
+    <div id="ui">
+        操作指南：<br>
+        [W, A, S, D] 移动<br>
+        [空格] 跳跃<br>
+        目标：把所有箱子撞飞！
+    </div>
+
+    <script>
+        // --- 0. 错误处理与加载检测 ---
+        window.addEventListener('load', init);
+        
+        function init() {
+            if (typeof THREE === 'undefined') {
+                document.getElementById('loading').innerHTML = "加载失败：Three.js 库未能下载，请检查网络。";
+                return;
+            }
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('ui').style.display = 'block';
+            main();
+        }
+
+        function main() {
+            // --- 1. 场景设置 ---
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x87CEEB); // 天空蓝
+            scene.fog = new THREE.Fog(0x87CEEB, 10, 60);
+
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
+            camera.position.set(0, 15, 20); // 俯视视角
+            camera.lookAt(0, 0, 0);
+
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.shadowMap.enabled = true;
+            document.body.appendChild(renderer.domElement);
+
+            // 灯光
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(10, 20, 10);
+            dirLight.castShadow = true;
+            dirLight.shadow.mapSize.width = 2048;
+            dirLight.shadow.mapSize.height = 2048;
+            scene.add(dirLight);
+
+            // --- 2. 简易物理引擎 (Custom Physics) ---
+            const physicsObjects = []; // 存储所有可碰撞物体
+            const gravity = 0.5;
+            const friction = 0.92; // 地面摩擦力
+            const bounce = 0.5; // 弹性
+
+            class PhysicsBody {
+                constructor(mesh, radius, mass) {
+                    this.mesh = mesh;
+                    this.radius = radius; // 简化为球体碰撞
+                    this.mass = mass;
+                    this.velocity = new THREE.Vector3(0, 0, 0);
+                    this.isGrounded = false;
+                }
+
+                update() {
+                    // 应用重力
+                    this.velocity.y -= gravity * 0.1;
+                    
+                    // 应用速度
+                    this.mesh.position.add(this.velocity);
+
+                    // 地面碰撞检测
+                    if (this.mesh.position.y < this.radius) {
+                        this.mesh.position.y = this.radius;
+                        this.velocity.y = 0;
+                        this.isGrounded = true;
+                        
+                        // 地面摩擦
+                        this.velocity.x *= friction;
+                        this.velocity.z *= friction;
+                    } else {
+                        this.isGrounded = false;
+                    }
+
+                    // 边界检测 (防止跑出世界)
+                    const limit = 40;
+                    if (this.mesh.position.x > limit) { this.mesh.position.x = limit; this.velocity.x *= -1; }
+                    if (this.mesh.position.x < -limit) { this.mesh.position.x = -limit; this.velocity.x *= -1; }
+                    if (this.mesh.position.z > limit) { this.mesh.position.z = limit; this.velocity.z *= -1; }
+                    if (this.mesh.position.z < -limit) { this.mesh.position.z = -limit; this.velocity.z *= -1; }
+                }
+            }
+
+            // --- 3. 构建场景物体 ---
+            
+            // 地面
+            const ground = new THREE.Mesh(
+                new THREE.PlaneGeometry(100, 100),
+                new THREE.MeshStandardMaterial({ color: 0x7CFC00 }) // 草地绿
+            );
+            ground.rotation.x = -Math.PI / 2;
+            ground.receiveShadow = true;
+            scene.add(ground);
+
+            // 装饰：树木 (无物理)
+            function createTree(x, z) {
+                const group = new THREE.Group();
+                const trunk = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.5, 0.8, 2, 8),
+                    new THREE.MeshStandardMaterial({ color: 0x8B4513 })
+                );
+                trunk.position.y = 1;
+                trunk.castShadow = true;
+                
+                const leaves = new THREE.Mesh(
+                    new THREE.ConeGeometry(2.5, 5, 8),
+                    new THREE.MeshStandardMaterial({ color: 0x228B22 })
+                );
+                leaves.position.y = 3.5;
+                leaves.castShadow = true;
+
+                group.add(trunk);
+                group.add(leaves);
+                group.position.set(x, 0, z);
+                scene.add(group);
+            }
+            createTree(-10, -10);
+            createTree(15, -5);
+            createTree(-8, 12);
+
+            // 互动物体：箱子 (有物理)
+            const boxGeo = new THREE.BoxGeometry(2, 2, 2);
+            const boxMat = new THREE.MeshStandardMaterial({ color: 0xffa500 });
+            
+            function createPhysicsBox(x, z) {
+                const mesh = new THREE.Mesh(boxGeo, boxMat);
+                mesh.position.set(x, 5, z); // 从空中掉落
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                scene.add(mesh);
+                
+                // 注册到物理系统 (半径约等于1.2)
+                physicsObjects.push(new PhysicsBody(mesh, 1.2, 1.0));
+            }
+
+            // 生成一堆箱子金字塔
+            for(let i=0; i<3; i++) {
+                for(let j=0; j<3; j++) {
+                    createPhysicsBox(-5 + i*2.5, -5 + j*2.5);
+                }
+            }
+
+            // --- 4. 主角：黑色泰迪 (Player) ---
+            const playerGroup = new THREE.Group();
+            
+            // 身体
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0x111111 }); // 近乎纯黑
+            const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.5, 0.8, 4, 8), bodyMat);
+            body.rotation.z = Math.PI / 2;
+            body.castShadow = true;
+            playerGroup.add(body);
+            
+            // 头
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.45, 16, 16), bodyMat);
+            head.position.set(0.6, 0.5, 0);
+            playerGroup.add(head);
+
+            // 耳朵 (泰迪的大耳朵)
+            const earGeo = new THREE.SphereGeometry(0.2, 8, 8);
+            earGeo.scale(1, 2, 1);
+            const earL = new THREE.Mesh(earGeo, bodyMat);
+            earL.position.set(0.6, 0.5, 0.35);
+            playerGroup.add(earL);
+            const earR = new THREE.Mesh(earGeo, bodyMat);
+            earR.position.set(0.6, 0.5, -0.35);
+            playerGroup.add(earR);
+
+            // 红项圈
+            const collar = new THREE.Mesh(new THREE.TorusGeometry(0.3, 0.05, 8, 16), new THREE.MeshStandardMaterial({color: 0xff0000}));
+            collar.rotation.y = Math.PI/2;
+            collar.position.set(0.3, 0.4, 0);
+            playerGroup.add(collar);
+
+            // 腿 (视觉)
+            const legGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.6);
+            const legs = [];
+            const legPos = [[0.4, 0.2], [0.4, -0.2], [-0.4, 0.2], [-0.4, -0.2]];
+            legPos.forEach(pos => {
+                const leg = new THREE.Mesh(legGeo, bodyMat);
+                leg.position.set(pos[0], -0.4, pos[1]);
+                playerGroup.add(leg);
+                legs.push(leg);
+            });
+
+            scene.add(playerGroup);
+
+            // 主角物理属性
+            const playerPhysics = new PhysicsBody(playerGroup, 0.8, 2.0); // 质量大一点
+            
+            // --- 5. 交互控制 ---
+            const keys = { w: false, a: false, s: false, d: false };
+            
+            document.addEventListener('keydown', (e) => {
+                const key = e.key.toLowerCase();
+                if (keys.hasOwnProperty(key)) keys[key] = true;
+                if (key === ' ' && playerPhysics.isGrounded) {
+                    playerPhysics.velocity.y = 0.8; // 跳跃力度
+                }
+            });
+            document.addEventListener('keyup', (e) => {
+                const key = e.key.toLowerCase();
+                if (keys.hasOwnProperty(key)) keys[key] = false;
+            });
+
+            // --- 6. 游戏循环 (核心逻辑) ---
+            function animate() {
+                requestAnimationFrame(animate);
+
+                // A. 玩家移动逻辑
+                const speed = 0.03;
+                const input = new THREE.Vector3(0, 0, 0);
+                if (keys.w) input.z -= 1;
+                if (keys.s) input.z += 1;
+                if (keys.a) input.x -= 1;
+                if (keys.d) input.x += 1;
+
+                if (input.length() > 0) {
+                    input.normalize().multiplyScalar(speed);
+                    playerPhysics.velocity.x += input.x;
+                    playerPhysics.velocity.z += input.z;
+
+                    // 旋转模型朝向
+                    const angle = Math.atan2(playerPhysics.velocity.x, playerPhysics.velocity.z);
+                    playerGroup.rotation.y = angle + Math.PI / 2;
+
+                    // 腿部动画
+                    const time = Date.now() * 0.01;
+                    legs.forEach((leg, i) => {
+                        leg.rotation.z = Math.sin(time + (i%2)*Math.PI) * 0.5;
+                    });
+                } else {
+                    legs.forEach(leg => leg.rotation.z = 0);
+                }
+
+                // B. 物理更新
+                playerPhysics.update();
+                physicsObjects.forEach(obj => obj.update());
+
+                // C. 碰撞处理 (Player vs Boxes)
+                // 简单的弹性碰撞：当球体距离小于半径之和时，交换动量
+                for (let box of physicsObjects) {
+                    const dx = box.mesh.position.x - playerGroup.position.x;
+                    const dz = box.mesh.position.z - playerGroup.position.z;
+                    const dist = Math.sqrt(dx*dx + dz*dz);
+                    const minDist = playerPhysics.radius + box.radius;
+
+                    if (dist < minDist) {
+                        // 撞击！
+                        const angle = Math.atan2(dz, dx);
+                        const force = 0.4; // 撞击力度
+
+                        // 箱子飞出去
+                        box.velocity.x += Math.cos(angle) * force;
+                        box.velocity.z += Math.sin(angle) * force;
+                        box.velocity.y += 0.2; // 稍微弹起
+
+                        // 狗稍微反弹 (反馈感)
+                        playerPhysics.velocity.x -= Math.cos(angle) * force * 0.5;
+                        playerPhysics.velocity.z -= Math.sin(angle) * force * 0.5;
+                    }
+                }
+
+                // D. 相机跟随
+                const targetPos = playerGroup.position.clone();
+                camera.position.x += (targetPos.x - camera.position.x) * 0.1;
+                camera.position.z += (targetPos.z + 15 - camera.position.z) * 0.1;
+                camera.position.y = 10;
+                camera.lookAt(targetPos);
+
+                renderer.render(scene, camera);
+            }
+
+            animate();
+            
+            // 窗口自适应
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+    </script>
+</body>
+</html>
