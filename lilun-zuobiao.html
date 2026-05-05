@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>理论坐标 · 二十七系 / 发刊词</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&family=JetBrains+Mono:wght@300;400&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --bg: #05060a;
+            --text: #a8a8b0;
+            --dim: #35363e;
+            --highlight: #e8e8ee;
+            --red: #c0392b;
+            --border: #111218;
+            --table-head: #0d0e14;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 200;
+            line-height: 2;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* ── 顶部导航 ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            padding: 18px 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            background: linear-gradient(to bottom, var(--bg) 60%, transparent);
+        }
+        nav a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--red);
+            text-decoration: none;
+            letter-spacing: 0.3rem;
+            border-bottom: 1px solid var(--red);
+        }
+        nav span {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--dim);
+            letter-spacing: 0.3rem;
+        }
+
+        /* ── 主布局 ── */
+        main {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 5vw;
+        }
+
+        /* ── 封面 ── */
+        .cover {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding-bottom: 15vh;
+        }
+        .cover-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.5rem;
+            color: var(--red);
+            margin-bottom: 2rem;
+        }
+        .cover-title {
+            font-size: clamp(2.2rem, 5vw, 3.8rem);
+            font-weight: 300;
+            color: var(--highlight);
+            letter-spacing: 0.4rem;
+            line-height: 1.4;
+            margin-bottom: 1.5rem;
+        }
+        .cover-sub {
+            font-size: 0.9rem;
+            color: var(--dim);
+            letter-spacing: 0.3rem;
+            max-width: 520px;
+        }
+
+        /* ── 章节分隔 ── */
+        .chapter-marker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: var(--red);
+            letter-spacing: 0.5rem;
+            padding: 8vh 0 3rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ── 正文散文 ── */
+        .prose {
+            font-size: 1rem;
+            line-height: 2.4;
+            letter-spacing: 0.08rem;
+            max-width: 640px;
+            margin-bottom: 3rem;
+        }
+        .prose p {
+            margin-bottom: 1.8em;
+        }
+        .prose p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ── 摘要框 ── */
+        .abstract {
+            border-left: 2px solid var(--dim);
+            padding: 1.5rem 2rem;
+            margin: 3rem 0;
+            background: rgba(255,255,255,0.015);
+        }
+        .abstract-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.4rem;
+            color: var(--red);
+            margin-bottom: 1rem;
+        }
+        .abstract p {
+            font-size: 0.9rem;
+            line-height: 2;
+            color: var(--text);
+        }
+
+        /* ── 章节标题 ── */
+        h2 {
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--highlight);
+            letter-spacing: 0.5rem;
+            margin: 5rem 0 2rem;
+        }
+        h3 {
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--text);
+            letter-spacing: 0.4rem;
+            margin: 3rem 0 1.5rem;
+        }
+
+        /* ── 速览表格 ── */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0 4rem;
+            -webkit-overflow-scrolling: touch;
+        }
+        table {
+            width: 100%;
+            min-width: 700px;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 200;
+        }
+        thead tr {
+            background: var(--table-head);
+        }
+        th {
+            padding: 12px 14px;
+            text-align: left;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            font-weight: 400;
+            letter-spacing: 0.3rem;
+            color: var(--red);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+        td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            color: var(--text);
+            line-height: 1.7;
+            vertical-align: top;
+        }
+        td:first-child {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--dim);
+            white-space: nowrap;
+        }
+        td:nth-child(2) {
+            color: var(--highlight);
+            font-weight: 300;
+            white-space: nowrap;
+        }
+        tr:hover td {
+            background: rgba(255,255,255,0.02);
+        }
+
+        /* ── 三层架构表格 ── */
+        .level-table table {
+            min-width: 500px;
+        }
+        .level-table th {
+            color: var(--dim);
+        }
+
+        /* ── 警告框 ── */
+        .warning {
+            border-left: 2px solid var(--red);
+            padding: 1.2rem 1.8rem;
+            margin: 2rem 0;
+            background: rgba(192,57,43,0.05);
+        }
+        .warning-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.35rem;
+            color: var(--red);
+            margin-bottom: 0.8rem;
+        }
+        .warning p {
+            font-size: 0.88rem;
+            line-height: 1.9;
+        }
+
+        /* ── 注释框 ── */
+        .note {
+            border-left: 2px solid var(--dim);
+            padding: 1.2rem 1.8rem;
+            margin: 2rem 0;
+            background: rgba(255,255,255,0.015);
+        }
+        .note-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            letter-spacing: 0.35rem;
+            color: var(--dim);
+            margin-bottom: 0.8rem;
+        }
+        .note p {
+            font-size: 0.88rem;
+            line-height: 1.9;
+        }
+
+        /* ── 淡入 ── */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: all 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ── 页脚 ── */
+        footer {
+            padding: 8vh 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            color: var(--dim);
+            letter-spacing: 0.5rem;
+            border-top: 1px solid var(--border);
+            margin-top: 6vh;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        ::-webkit-scrollbar { width: 2px; }
+        ::-webkit-scrollbar-thumb { background: var(--dim); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="2.html">← RETURN</a>
+    <span>INDEX_10</span>
+</nav>
+
+<main>
+
+    <!-- 封面 -->
+    <div class="cover fade-in">
+        <div class="cover-label">THEORY NODE / 2026</div>
+        <h1 class="cover-title">理论坐标<br>二十七系<br>/ 发刊词</h1>
+        <p class="cover-sub">文艺理论判断工具 · 元框架索引 · 内部笔记</p>
+    </div>
+
+    <!-- 一、发刊词 -->
+    <section>
+        <div class="chapter-marker fade-in">PART I · 发刊词</div>
+
+        <div class="prose fade-in">
+            <p>今天最诡异的事情是我翻开了五年前的聊天记录，然后询问，发现我依然在别人记忆中。我早就忘记了我在他人记忆里的我，此人和我关系如何？似乎一切越来越和世界同质了。神圣的至高同一让我忘记了我。</p>
+
+            <p>差异化的排他律的是：我在此处，是因为我不在别处。我不在别处，是因为我时时刻刻可能在任何一个别处，但是我在此处。读研以后，脑海里"艺术"两个字经常蹦跶。巧合的是，中文里，技艺（古希腊的艺术即技艺）和记忆是一个同音词。抛开语言和文字的问题，实际上关于记忆术的讨论与文化、叙事、身份等词在西方早早勾连起来，而记忆里艺的部分则被一些理论剥离了人的本身，另一些理论以更激进的方式回到人自身——我在此处，是因为我不在别处。赘述，我不在别处，是因为我时时刻刻可能在任何一个别处，但是我在此处。排他性说明了间隔。</p>
+
+            <p>艺术两个字时常在我脑子里打转。中文里，技艺和记忆是一个同音词，抛开语言和文字的问题，实际上关于记忆术的讨论与文化、叙事、身份等词在西方早早勾连起来，技术哲学乃至赛博格就来自这里，当然他们把技上升了。记忆里艺的部分则被一些理论剥离了人的本身，即诗。——这也是一切分类学的发生机制：争论，或曰排他，或曰斗争。另一些以更激进的方式回到了自身，进而推论记忆之艺的主体性迷思让一些人试图回到康德，回到斯宾塞。一些人义无反顾朝着后而去。</p>
+
+            <p>这样的二元与发生构成得了分类吗？不能。这似乎是人口学的工作。理论似乎发展出的理论间性实际上是哲学家的主体间性，可惜这是不可还原的。文艺界持之已久的作者与作品的关系或许可以类比之。除去不可证伪的神话逻辑，分类学事业下，理论有许多空间（场）的差异。当然，有些理论反对本体论或认识论或美或道德或一切其他。当然，理论间性依然必须接受形式逻辑与实证结果的严格约束。但是，也有一些政治性的意向突破了科学，一些战斗性的宣言试图以反身性来造反，科学和这些不科学之间又开始二元了（吗？）。</p>
+
+            <p>一种分类学的假说能够试图回答一些基本的问题。而反对这个分类学的理论本身又构成了分类的要素。这样的自指性或递归性，元理论的建立不能成为。认识论视野下的分类学则会被认为是概率。任何复杂的形式系统都面临不完备性的困境，当然，哥德尔早就证明系统无法在其内部自证完备。元理论的构建是逻辑系统向外寻求一致性框架的必然要求。这种元理论似乎是同一的，但是也是差异的，因此也是不完备的，为了避免语义递增，只能画休止符。我的这种试图一方面是为了自己理解理论，另一方面是回应未明子的主义主义。</p>
+        </div>
+    </section>
+
+    <!-- 二、坐标总图 -->
+    <section>
+        <div class="chapter-marker fade-in">PART II · 理论坐标总图 · 二十七系</div>
+
+        <div class="abstract fade-in">
+            <div class="abstract-label">ABSTRACT</div>
+            <p>把与<strong style="color:var(--highlight)">电影—身体—影像—创作—文化—事物</strong>相关的二十七条理论主线，以「血统 / 核心问题 / 边界 / 争论 / 焊接」理清。不是百科，是<strong style="color:var(--highlight)">判断工具</strong>：读到一篇论文、一个概念，能迅速定位它在哪个系里、和哪个系有张力。</p>
+        </div>
+
+        <h2 class="fade-in">〇 · 二十七系速览</h2>
+
+        <div class="table-wrapper fade-in">
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>理论系</th>
+                        <th>核心问题</th>
+                        <th>母体</th>
+                        <th>身体观</th>
+                        <th>对意义的主张</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>01</td><td>现象学</td><td>意义如何在肉身感知中发生？</td><td>胡塞尔—梅洛-庞蒂</td><td>核心（活的身体）</td><td>先于符号已有意义</td></tr>
+                    <tr><td>02</td><td>符号学</td><td>意义如何由差异编码产生？</td><td>Saussure / Peirce</td><td>⚪（索绪尔系）/ 被符号化（皮尔斯系）</td><td>意义=系统差异</td></tr>
+                    <tr><td>03</td><td>图像学</td><td>图像有自己独立于语言的逻辑吗？</td><td>Warburg / 图像转向</td><td>图像—身体—媒介</td><td>图像≠语言</td></tr>
+                    <tr><td>04</td><td>解释学</td><td>理解如何在历史语境中完成？</td><td>海德格尔—Gadamer—Ricoeur</td><td>此在在世</td><td>意义=历史性理解</td></tr>
+                    <tr><td>05</td><td>叙事学</td><td>叙事能否形式化为语法？</td><td>俄国形式主义—结构主义</td><td>⚪（经典期纯形式系统）</td><td>意义=结构位置</td></tr>
+                    <tr><td>06</td><td>美学</td><td>感性经验本身的逻辑是什么？</td><td>Baumgarten—康德—黑格尔</td><td>感性主体</td><td>意义=判断力</td></tr>
+                    <tr><td>07</td><td>精神分析</td><td>欲望/无意识如何结构主体与影像？</td><td>弗洛伊德—拉康</td><td>驱力/欲望对象</td><td>意义=症状/幻象</td></tr>
+                    <tr><td>08</td><td>批判理论</td><td>文化工业/意识形态如何宰制感性？</td><td>法兰克福学派</td><td>被商品化的身体</td><td>意义=意识形态效果</td></tr>
+                    <tr><td>09</td><td>情动理论</td><td>前意识的情动能量如何流通？</td><td>斯宾诺莎—德勒兹—马苏米</td><td>情动强度的场所</td><td>意义之前的强度</td></tr>
+                    <tr><td>10</td><td>德勒兹主义</td><td>影像如何思考？差异如何生成？</td><td>柏格森—斯宾诺莎—尼采</td><td>身体=能力集合</td><td>意义=差异生成</td></tr>
+                    <tr><td>11</td><td>技术哲学</td><td>技术如何中介人与世界的关系？</td><td>海德格尔—斯蒂格勒—西蒙东</td><td>技术具身</td><td>意义=技术座架/记忆</td></tr>
+                    <tr><td>12</td><td>媒介理论</td><td>媒介本身如何塑造感知？</td><td>麦克卢汉—基特勒—媒介生态</td><td>被媒介延伸 / 被参数化</td><td>媒介即讯息</td></tr>
+                    <tr><td>13</td><td>媒介考古学</td><td>历史中被遗忘的媒介潜力是什么？</td><td>齐林斯基—帕里卡—福柯谱系学</td><td>考古式身体—机器</td><td>意义=潜在性的挖掘</td></tr>
+                    <tr><td>14</td><td>系统论/控制论</td><td>信息、反馈、自组织如何运作？</td><td>维纳—贝特森—卢曼</td><td>⚪（功能节点，非身体）</td><td>意义=系统内区分</td></tr>
+                    <tr><td>15</td><td>4E 认知科学</td><td>认知如何在具身-环境中发生？</td><td>瓦雷拉—扎哈维—克拉克</td><td>具身认知的承体</td><td>意义=行动耦合</td></tr>
+                    <tr><td>16</td><td>新物质主义</td><td>物质本身有能动性吗？</td><td>斯宾诺莎—巴拉德—本尼特</td><td>物质-情动的聚合</td><td>意义=内在切割</td></tr>
+                    <tr><td>17</td><td>后人类主义</td><td>人类中心主义之后，主体是什么？</td><td>哈拉维—海勒斯—布拉伊多蒂</td><td>赛博格/后人类身体</td><td>意义=配置关系</td></tr>
+                    <tr><td>18</td><td>文化研究/女性主义</td><td>权力、身份、差异如何结构文化？</td><td>伯明翰学派—巴特勒—穆尔维</td><td>被权力铭写的身体</td><td>意义=话语-权力效果</td></tr>
+                    <tr><td>19</td><td>装置/配置理论</td><td>权力—知识如何通过异质配置运作？</td><td>福柯—阿甘本—德勒兹</td><td>被装置捕获的身体</td><td>意义=权力技术的效果</td></tr>
+                    <tr><td>20</td><td>生命政治</td><td>权力如何作用于生命/身体/人口？</td><td>福柯—阿甘本—埃斯波西托</td><td>裸命/驯服身体</td><td>意义=生死管理</td></tr>
+                    <tr><td>21</td><td>球域学</td><td>人如何通过共居创造保护性空间？</td><td>海德格尔—斯洛特戴克—巴什拉</td><td>共鸣的空间性身体</td><td>意义=球域内共存</td></tr>
+                    <tr><td>22</td><td>OOO / 思辨实在论</td><td>对象在关系之外有自己的实在吗？</td><td>哈曼—梅亚苏—布拉西耶</td><td>⚪（平面本体论，拒绝人类中心）</td><td>超越关联主义</td></tr>
+                    <tr><td>23</td><td>ANT / 行动者网络理论</td><td>人与非人如何共同组建异质网络？</td><td>拉图尔—卡隆—劳</td><td>网络中的行动者节点</td><td>意义=翻译/转录</td></tr>
+                    <tr><td>24</td><td>加速主义 / Nick Land</td><td>应加速还是减速资本主义的解域化？</td><td>德勒兹-加塔利—尼克·兰德—CCRU</td><td>被资本流解码的身体</td><td>意义=速度的强度</td></tr>
+                    <tr><td>25</td><td>空间理论</td><td>空间如何被社会生产？权力如何空间化？</td><td>列斐伏尔—索亚—德·塞托</td><td>实践空间中的身体</td><td>意义=空间实践</td></tr>
+                    <tr><td>26</td><td>表演性理论</td><td>身份/性别/身体如何通过重复表演被构成？</td><td>巴特勒—谢克纳—费舍尔-利希特</td><td>表演中生成的身体</td><td>意义=事件/行动</td></tr>
+                    <tr><td>27</td><td>后殖民/解殖民理论</td><td>殖民性如何结构知识、身体与视觉？</td><td>法农—斯皮瓦克—巴巴—基哈诺</td><td>被殖民铭写的种族化身体</td><td>意义=他者化/杂糅</td></tr>
+                    <tr><td>28</td><td>分析美学 / 认知主义电影理论</td><td>艺术在概念上是什么？观众如何认知性处理影像？</td><td>Goodman—Danto—Carroll—Bordwell</td><td>认知处理的信息对象（⚪ 非现象学身体）</td><td>意义=认知建构 / 制度认定</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 三层架构 -->
+        <h2 class="fade-in">〇.五 · 三层架构 · 读懂二十七系的元框架</h2>
+
+        <div class="abstract fade-in">
+            <div class="abstract-label">WHY THIS LAYER</div>
+            <p>二十七系<strong style="color:var(--highlight)">不是同一平面上的二十七个工具</strong>。它们在本体论、认识论、应用域三个层级上各有位置。跨层调用而不声明兼容逻辑，是理论误用的主要来源。</p>
+        </div>
+
+        <h3 class="fade-in">Level 1 · 第一哲学与底层本体论</h3>
+        <p style="font-size:0.8rem;color:var(--dim);letter-spacing:0.2rem;margin-bottom:1.5rem;" class="fade-in">回答：世界的基本构成是什么？意义的最终起源在哪里？</p>
+
+        <div class="table-wrapper level-table fade-in">
+            <table>
+                <thead>
+                    <tr><th>编号</th><th>本体论类型</th><th>代表理论系</th><th>核心主张</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>L1-A</td><td>主体感知本体论</td><td>现象学 / 4E 认知 / 解释学</td><td>肉身感知的意向性是意义的绝对起点。内部三分：胡塞尔（先验自我）/ 海德格尔（此在在世）/ 梅洛-庞蒂（活的身体）。</td></tr>
+                    <tr><td>L1-B</td><td>结构差异本体论</td><td>符号学（索绪尔系）/ 叙事学（经典期）/ 结构主义</td><td>意义只存在于形式化的系统差异中，无预设主体实体。</td></tr>
+                    <tr><td>L1-C</td><td>内在性流变本体论</td><td>德勒兹主义 / 情动理论</td><td>废除先验主体，物质与强度的差异化生成是唯一实在；内在性平面。</td></tr>
+                    <tr><td>L1-D</td><td>对象撤退本体论</td><td>OOO（哈曼为核心）</td><td>客体独立于一切感知或关系，具有不可穷尽的撤退内核；关联主义是哲学的囚笼。</td></tr>
+                    <tr><td>L1-E</td><td>社会物质实践本体论</td><td>历史唯物主义（马克思—列斐伏尔—阿尔都塞）</td><td>生产方式与社会关系是意义和文化的物质基底；实践先于理论。</td></tr>
+                    <tr><td>L1-G†</td><td>媒介装置本体论</td><td>基特勒</td><td>媒介决定我们的处境——媒介装置是存在的技术先天条件，优先于任何感知主体。（†暂列，待确认）</td></tr>
+                    <tr><td>L1-F†</td><td>概率拓扑本体论</td><td>AI 扩散模型哲学基底</td><td>现实的基本形态=高维连续概率分布；任何存在物=从潜在流形的随机采样实例。（†尚无成熟哲学体系）</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="fade-in">Level 2 · 认识论与方法论路径</h3>
+        <p style="font-size:0.8rem;color:var(--dim);letter-spacing:0.2rem;margin-bottom:1.5rem;" class="fade-in">回答：我们如何获取知识？论证逻辑的运作方式是什么？</p>
+
+        <div class="table-wrapper level-table fade-in">
+            <table>
+                <thead>
+                    <tr><th>方法论类型</th><th>代表理论系</th><th>操作特征</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>L2-α 现象学还原</td><td>现象学 / 解释学 / 气氛美学（Böhme）</td><td>悬置预设，回归"事物本身"的直接显现与理解。</td></tr>
+                    <tr><td>L2-β 谱系学/考古学</td><td>媒介考古学 / 福柯系装置理论 / 生命政治</td><td>拒绝目的论，挖掘话语形成的历史断裂与偶然性。</td></tr>
+                    <tr><td>L2-γ 拓扑网络追踪</td><td>ANT / 系统论</td><td>不预设宏观结构，实时追踪人类与非人类实体的实际纠缠。</td></tr>
+                    <tr><td>L2-δ 症状阅读/揭露</td><td>精神分析 / 批判理论 / 意识形态批评</td><td>穿透表象，定位被压抑的无意识结构或意识形态机制。</td></tr>
+                    <tr><td>L2-ε 概念分析/认知建构</td><td>分析美学 / 认知主义电影理论（Carroll / Bordwell）</td><td>精确定义、必要且充分条件、思想实验、可证伪命题；拒绝不可证伪的症状阅读。</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h3 class="fade-in">Level 3 · 区域研究与应用透镜</h3>
+        <p style="font-size:0.8rem;color:var(--dim);letter-spacing:0.2rem;margin-bottom:1.5rem;" class="fade-in">回答：针对具体客体（影像 / 身体 / 空间 / 算法）的操作策略是什么？</p>
+
+        <div class="table-wrapper level-table fade-in">
+            <table>
+                <thead>
+                    <tr><th>域维度（L3）</th><th>代表理论系</th><th>对应 L1 根基</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>α · 身体/感知/空间</td><td>球域学 / 空间理论（列斐伏尔）/ 气氛美学 / 表演研究（谢克纳）/ 触感视觉（Marks）</td><td>L1-A 主体感知 / L1-E（列斐伏尔须声明）</td></tr>
+                    <tr><td>β1 · 社会霸权/话语权力</td><td>文化研究（伯明翰）/ 后殖民（法农—斯皮瓦克—巴巴）/ 生命政治（福柯—阿甘本）</td><td>L1-E + L2-β 谱系学</td></tr>
+                    <tr><td>β2 · 象征秩序/主体化</td><td>精神分析女性主义（穆尔维）/ 意识形态批评（阿尔都塞—Baudry）/ 表演性理论（巴特勒）</td><td>L1-B/C 断裂线 ⚠️</td></tr>
+                    <tr><td>γ · 界面/物质/算法</td><td>媒介理论 / 新物质主义 / 后人类主义 / 技术哲学 / 加速主义 / 数字本体论</td><td>L1-C/D ⚠️</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 关键警告 -->
+        <div class="warning fade-in">
+            <div class="warning-label">CRITICAL · 强制性声明原则</div>
+            <p>当你写「后人类主义 AI 影像」时，<strong style="color:var(--highlight)">必须先声明本体论基底</strong>：德勒兹式内在性流变（影像是强度流动）/ OOO 对象撤退（AI 有不可穷尽的撤退内核）/ Level 2 症状阅读（AI 作为意识形态装置）。三种后人类的分析结论截然不同。同理适用于「装置理论」：鲍德里的 apparatus（拉康系）与福柯的 dispositif（内在性 + 谱系学）不可互换。</p>
+        </div>
+
+        <div class="warning fade-in">
+            <div class="warning-label">CRITICAL · 认识论断裂</div>
+            <p>符号学/叙事学（结构差异本体论 L1-B）与德勒兹主义/情动理论/装置理论（内在性流变本体论 L1-C）之间存在<strong style="color:var(--highlight)">认识论上的根本断裂</strong>——后结构主义不是对结构主义的「修正」，而是对其基础的拆解。在同一分析里不说明兼容逻辑地并用两者，会产生逻辑矛盾。</p>
+        </div>
+
+        <div class="note fade-in">
+            <div class="note-label">NOTE · 谢克纳 vs 巴特勒</div>
+            <p><strong style="color:var(--highlight)">谢克纳</strong>（表演研究）：现象学身体为基础，关注具身的现场空间实践 → 归 L3-α，根在 L1-A。<strong style="color:var(--highlight)">巴特勒</strong>（表演性 / Performativity）：德里达引用性为基础，性别在话语的重复引用中偏移生成 → 归 L3-β2，根在 L1-C。两者共享「performance」词根，本体论根基和分析逻辑不可混用。</p>
+        </div>
+
+    </section>
+
+    <footer>
+        <span>THEORY NODE · INDEX_10</span>
+        <span>TZ-2026</span>
+    </footer>
+
+</main>
+
+<script>
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+    }, { threshold: 0.08 });
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
