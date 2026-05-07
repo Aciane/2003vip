@@ -4,3 +4,7 @@ test_*.html
 test_*.md
 *.md
 whats thi
+.claude/
+.DS_Store
+*.glb
+*.mp4
