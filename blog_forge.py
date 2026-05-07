@@ -613,8 +613,27 @@ class BlogForge:
         self._field(ff, "DATE / 日期",       self.v_date)
         self._field(ff, "FOOTER TAG",        self.v_footer)
 
+        # ── Category ──
+        self._sec(left, "03", "CATEGORY / 发布归类")
+
+        cf = tk.Frame(left, bg=PANEL)
+        cf.pack(fill=tk.X, padx=14, pady=4)
+
+        self.v_category = tk.StringVar(value="2")
+        for val, label in [
+            ("2", "2.html  ·  理论 / 影评"),
+            ("3", "3.html  ·  创作 / 其他"),
+            ("0", "不归类  /  Skip index"),
+        ]:
+            tk.Radiobutton(
+                cf, text=label, variable=self.v_category, value=val,
+                bg=PANEL, fg=TEXT, selectcolor=INPUT,
+                activebackground=PANEL, activeforeground=GOLD,
+                font=F_SM
+            ).pack(anchor=tk.W, pady=3)
+
         # ── Actions ──
-        self._sec(left, "03", "ACTION / 操作")
+        self._sec(left, "04", "ACTION / 操作")
 
         af = tk.Frame(left, bg=PANEL)
         af.pack(fill=tk.X, padx=14, pady=6)
@@ -914,13 +933,52 @@ class BlogForge:
         webbrowser.open(f"file://{tmp}")
         self._set_status(f"BROWSER  ◆  已在浏览器打开预览  ✓")
 
+    # ── Index injection ───────────────────────────────────────────────────────
+
+    @staticmethod
+    def _inject_index(index_path, href, title, date_str):
+        """Insert a new list-item into 2.html or 3.html before the footer."""
+        with open(index_path, 'r', encoding='utf-8') as f:
+            html = f.read()
+
+        # Next INDEX number
+        nums = re.findall(r'INDEX_(\d+)', html)
+        next_n = max(int(n) for n in nums) + 1 if nums else 1
+        idx   = f'INDEX_{next_n:02d}'
+
+        # Date format: 2026.05.07 → 2026/05/07
+        date_fmt = date_str.replace('.', '/')
+
+        entry = (
+            f'\n            <a href="{href}" class="list-item">\n'
+            f'                <div class="item-meta">'
+            f'<span>{idx}</span><span>{date_fmt}</span></div>\n'
+            f'                <div class="item-title">{title}</div>\n'
+            f'            </a>'
+        )
+
+        # Inject just before the closing of list-container
+        html = html.replace(
+            '\n        </div>\n\n        <div class="footer">',
+            entry + '\n        </div>\n\n        <div class="footer">'
+        )
+
+        with open(index_path, 'w', encoding='utf-8') as f:
+            f.write(html)
+
+        return idx
+
+    # ── Publish ───────────────────────────────────────────────────────────────
+
     def _publish(self):
         if not self.generated:
             messagebox.showwarning("Blog Forge", "请先点击 GENERATE 生成 HTML！")
             return
 
-        title   = self.meta.get('title', 'article')
-        default = re.sub(r'[^\w一-龥]', '_', title)[:40] + '.html'
+        title    = self.meta.get('title', 'article')
+        date_str = self.meta.get('date', datetime.now().strftime('%Y.%m.%d'))
+        default  = re.sub(r'[^\w一-龥]', '_', title)[:40] + '.html'
+        category = self.v_category.get()  # "2", "3", or "0"
 
         path = filedialog.asksaveasfilename(
             title="保存到仓库并发布",
@@ -931,37 +989,59 @@ class BlogForge:
         if not path:
             return
 
+        # Save article HTML
         with open(path, 'w', encoding='utf-8') as f:
             f.write(self.generated)
 
-        fname = os.path.basename(path)
-        self._set_status(f"PUBLISHING  ◆  {fname}  →  pushing to GitHub...")
+        fname      = os.path.basename(path)
+        to_add     = [fname]
+        index_note = ""
+
+        # Inject into 2.html or 3.html
+        if category in ('2', '3'):
+            index_path = os.path.join(REPO_DIR, f'{category}.html')
+            try:
+                idx = self._inject_index(index_path, fname, title, date_str)
+                to_add.append(f'{category}.html')
+                index_note = f" + {category}.html ({idx})"
+            except Exception as ex:
+                messagebox.showerror("Index Error",
+                    f"无法写入 {category}.html：\n{ex}")
+                return
+
+        self._set_status(f"PUBLISHING  ◆  {fname}{index_note}  →  pushing...")
         self.info_lbl.configure(text="pushing...", fg=GOLD)
+
+        # Capture for thread closure
+        _to_add    = list(to_add)
+        _note      = index_note
+        _fname     = fname
 
         def _git_push():
             try:
-                subprocess.run(['git', 'add', fname],
-                               cwd=REPO_DIR, check=True,
-                               capture_output=True)
-                subprocess.run(['git', 'commit', '-m', f'publish: {title}'],
-                               cwd=REPO_DIR, check=True,
-                               capture_output=True)
-                result = subprocess.run(['git', 'push', 'origin', 'main'],
-                                        cwd=REPO_DIR,
-                                        capture_output=True, text=True)
-                if result.returncode == 0:
+                subprocess.run(['git', 'add'] + _to_add,
+                               cwd=REPO_DIR, check=True, capture_output=True)
+                subprocess.run(
+                    ['git', 'commit', '-m', f'publish: {title}'],
+                    cwd=REPO_DIR, check=True, capture_output=True)
+                r = subprocess.run(
+                    ['git', 'push', 'origin', 'main'],
+                    cwd=REPO_DIR, capture_output=True, text=True)
+
+                if r.returncode == 0:
                     self.root.after(0, lambda: self._set_status(
-                        f"PUBLISHED  ◆  {fname}  →  GitHub  →  Cloudflare Pages  ✓"))
+                        f"PUBLISHED  ◆  {_fname}{_note}  →  GitHub  →  CF Pages  ✓"))
                     self.root.after(0, lambda: self.info_lbl.configure(
                         text="✓ published", fg=GREEN))
                 else:
-                    err = (result.stderr or result.stdout).strip()[:100]
+                    err = (r.stderr or r.stdout).strip()[:120]
                     self.root.after(0, lambda: self._set_status(
                         f"PUSH FAILED  ◆  {err}"))
                     self.root.after(0, lambda: self.info_lbl.configure(
                         text="push failed", fg=RED))
+
             except subprocess.CalledProcessError as ex:
-                msg = str(ex)[:100]
+                msg = str(ex)[:120]
                 self.root.after(0, lambda: self._set_status(
                     f"GIT ERROR  ◆  {msg}"))
                 self.root.after(0, lambda: self.info_lbl.configure(
