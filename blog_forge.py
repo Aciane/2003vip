@@ -75,6 +75,16 @@ def inline_md(text):
     return text
 
 
+def inline_poem(text):
+    """Like inline_md, plus auto-dim full-width / ASCII parentheticals for poetry."""
+    text = inline_md(text)
+    # 全角括号  （...）→ dim-text
+    text = re.sub(r'（([^）]+)）', r'<span class="dim-text">（\1）</span>', text)
+    # 半角括号  (...)  → dim-text
+    text = re.sub(r'\(([^)]+)\)',  r'<span class="dim-text">(\1)</span>',   text)
+    return text
+
+
 # ── Block parsers ─────────────────────────────────────────────────────────────
 
 def _parse_table(lines):
@@ -263,6 +273,62 @@ def parse_md(text):
                            'content': inline_md(' '.join(para))})
 
     return meta, blocks
+
+
+# ── Poem Markdown parser ──────────────────────────────────────────────────────
+
+def parse_poem_md(text):
+    """Parse a Markdown file structured as a poem collection.
+
+    Convention:
+      # 诗题        →  new poem section
+      body text     →  poem lines (newlines preserved verbatim)
+      （dim text）  →  auto-converted to dim span by inline_poem()
+    """
+    meta = {
+        'title': '', 'author': 'TANG ZE ZHEN',
+        'date':  datetime.now().strftime('%Y.%m.%d'),
+        'footer_tag': 'THE VOID / 2026',
+    }
+
+    # YAML frontmatter
+    fm = re.match(r'^---\s*\n(.*?)\n---\s*\n', text, re.DOTALL)
+    if fm:
+        for line in fm.group(1).splitlines():
+            m = re.match(r'(\w+):\s*(.*)', line)
+            if m:
+                k, v = m.group(1).lower(), m.group(2).strip().strip("\"'")
+                if k in meta:
+                    meta[k] = v
+        text = text[fm.end():]
+
+    sections       = []
+    current_title  = None
+    current_lines  = []
+
+    for line in text.splitlines():
+        h1 = re.match(r'^#\s+(.*)', line)
+        if h1:
+            if current_title is not None:
+                sections.append({
+                    'title': current_title,
+                    'body':  '\n'.join(current_lines).strip(),
+                })
+            current_title = h1.group(1).strip()
+            current_lines = []
+        elif current_title is not None:
+            current_lines.append(line)
+
+    if current_title is not None:
+        sections.append({
+            'title': current_title,
+            'body':  '\n'.join(current_lines).strip(),
+        })
+
+    if not meta['title'] and sections:
+        meta['title'] = sections[0]['title']
+
+    return meta, sections
 
 
 # ── HTML builder ─────────────────────────────────────────────────────────────
@@ -472,6 +538,72 @@ del{{color:#999;}}
 </html>"""
 
 
+# ── Poem HTML builder ────────────────────────────────────────────────────────
+
+def build_poem_html(meta, sections):
+    """Render a poem collection — matches ta-zuoshi.html aesthetic:
+    black BG, Noto Serif SC, full-page sections, alternating L/R layout,
+    fade-in animations, parenthetical dim spans.
+    """
+    e = htmllib.escape
+    title      = e(meta.get('title', '组诗'))
+    author     = e(meta.get('author', 'TANG ZE ZHEN'))
+    date       = e(meta.get('date', ''))
+    footer_tag = e(meta.get('footer_tag', 'THE VOID / 2026'))
+
+    secs_html = ''
+    for i, sec in enumerate(sections):
+        cls    = ' alt-layout' if i % 2 == 1 else ''
+        stitle = e(sec['title'])
+        # Apply inline_poem line-by-line to keep pre-wrap newlines
+        lines_out = [inline_poem(ln) for ln in sec['body'].split('\n')]
+        body_html = '\n'.join(lines_out)
+        secs_html += (
+            f'\n        <section class="fade-in{cls}">'
+            f'\n            <h1 class="poem-title">{stitle}</h1>'
+            f'\n            <div class="poem-body">{body_html}</div>'
+            f'\n        </section>'
+        )
+
+    return f"""<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{title}</title>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200;300;400&display=swap');
+*{{margin:0;padding:0;box-sizing:border-box;}}
+:root{{--bg:#000000;--text:#c0c0c0;--dim:#444;--highlight:#ffffff;}}
+body{{background-color:var(--bg);color:var(--text);font-family:'Noto Serif SC',serif;font-weight:200;line-height:2;overflow-x:hidden;-webkit-font-smoothing:antialiased;}}
+.scroll-container{{width:100%;max-width:1200px;margin:0 auto;position:relative;}}
+section{{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:10vh 5vw;border-left:1px solid #111;margin-left:10vw;}}
+.alt-layout{{align-items:flex-end;text-align:right;border-left:none;border-right:1px solid #111;margin-left:0;margin-right:10vw;}}
+.poem-title{{font-size:2.5rem;color:var(--highlight);letter-spacing:0.8rem;margin-bottom:4rem;font-weight:300;}}
+.poem-body{{font-size:1.15rem;white-space:pre-wrap;letter-spacing:0.15rem;max-width:600px;line-height:2.2;}}
+.dim-text{{color:var(--dim);font-size:0.95rem;}}
+.fade-in{{opacity:0;transform:translateY(30px);transition:all 1.8s cubic-bezier(0.16,1,0.3,1);}}
+.fade-in.active{{opacity:1;transform:translateY(0);}}
+footer{{height:30vh;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:#222;letter-spacing:0.5rem;}}
+::-webkit-scrollbar{{display:none;}}
+    </style>
+</head>
+<body>
+<div class="scroll-container">
+{secs_html}
+</div>
+<footer>{footer_tag} · {author} · {date}</footer>
+<script>
+const obs=new IntersectionObserver(
+  (entries)=>{{entries.forEach(e=>{{if(e.isIntersecting)e.target.classList.add('active');}});}},
+  {{threshold:0.1}}
+);
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>"""
+
+
 # ── GUI ──────────────────────────────────────────────────────────────────────
 
 class BlogForge:
@@ -494,8 +626,10 @@ class BlogForge:
         self.root.minsize(860, 560)
 
         self.md_path      = ""
+        self.raw_md       = ""
         self.meta         = {}
         self.blocks       = []
+        self.poem_sections = []
         self.generated    = ""
         self._blink_state = True
         self._star_idx    = 0
@@ -543,13 +677,38 @@ class BlogForge:
         left.pack(side=tk.LEFT, fill=tk.Y)
         left.pack_propagate(False)
 
+        # Scrollable canvas wrapper
+        _canvas = tk.Canvas(left, bg=PANEL, bd=0, highlightthickness=0)
+        _vsb = tk.Scrollbar(left, orient=tk.VERTICAL, command=_canvas.yview,
+                            bg=RAISED, troughcolor=PANEL, activebackground=GOLD)
+        _vsb.pack(side=tk.RIGHT, fill=tk.Y)
+        _canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        inner = tk.Frame(_canvas, bg=PANEL)
+        _win = _canvas.create_window((0, 0), window=inner, anchor=tk.NW)
+
+        def _on_frame_configure(_e):
+            _canvas.configure(scrollregion=_canvas.bbox("all"))
+        inner.bind("<Configure>", _on_frame_configure)
+
+        def _on_canvas_configure(e):
+            _canvas.itemconfig(_win, width=e.width)
+        _canvas.configure(yscrollcommand=_vsb.set)
+        _canvas.bind("<Configure>", _on_canvas_configure)
+
+        def _on_mousewheel(e):
+            _canvas.yview_scroll(int(-1 * (e.delta / 120)), "units")
+        inner.bind_all("<MouseWheel>", _on_mousewheel)
+
+        # All content goes into `inner` (was `left`)
+        left = inner
+
         # ── Drop zone ──
         self._sec(left, "01", "INPUT / 输入 MD 文件")
 
         drop_outer = tk.Frame(left, bg=BORDER, padx=2, pady=2)
         drop_outer.pack(fill=tk.X, padx=14, pady=(0, 6))
 
-        self.drop_frame = tk.Frame(drop_outer, bg=DROP_BG, height=150)
+        self.drop_frame = tk.Frame(drop_outer, bg=DROP_BG, height=110)
         self.drop_frame.pack(fill=tk.BOTH)
         self.drop_frame.pack_propagate(False)
 
@@ -613,8 +772,26 @@ class BlogForge:
         self._field(ff, "DATE / 日期",       self.v_date)
         self._field(ff, "FOOTER TAG",        self.v_footer)
 
+        # ── Template ──
+        self._sec(left, "03", "TEMPLATE / 输出样式")
+
+        tf2 = tk.Frame(left, bg=PANEL)
+        tf2.pack(fill=tk.X, padx=14, pady=4)
+
+        self.v_template = tk.StringVar(value="article")
+        for val, label in [
+            ("article", "ARTICLE  ·  博客文章（默认）"),
+            ("poem",    "POEM     ·  她组诗 / 诗集样式"),
+        ]:
+            tk.Radiobutton(
+                tf2, text=label, variable=self.v_template, value=val,
+                bg=PANEL, fg=TEXT, selectcolor=INPUT,
+                activebackground=PANEL, activeforeground=GOLD,
+                font=F_SM
+            ).pack(anchor=tk.W, pady=3)
+
         # ── Category ──
-        self._sec(left, "03", "CATEGORY / 发布归类")
+        self._sec(left, "04", "CATEGORY / 发布归类")
 
         cf = tk.Frame(left, bg=PANEL)
         cf.pack(fill=tk.X, padx=14, pady=4)
@@ -633,7 +810,7 @@ class BlogForge:
             ).pack(anchor=tk.W, pady=3)
 
         # ── Actions ──
-        self._sec(left, "04", "ACTION / 操作")
+        self._sec(left, "05", "ACTION / 操作")
 
         af = tk.Frame(left, bg=PANEL)
         af.pack(fill=tk.X, padx=14, pady=6)
@@ -825,9 +1002,11 @@ class BlogForge:
             return
 
         self.md_path = path
+        self.raw_md  = raw          # keep original for poem re-parse
         fname = os.path.basename(path)
 
         self.meta, self.blocks = parse_md(raw)
+        _, self.poem_sections  = parse_poem_md(raw)  # pre-parse poem view too
 
         # Update fields
         self.v_title.set(self.meta.get("title", ""))
@@ -843,7 +1022,8 @@ class BlogForge:
         self.file_lbl.configure(text=f"◆ {fname}", fg=TEAL)
 
         n = len(self.blocks)
-        self._set_status(f"LOADED  ◆  {fname}  |  {n} 块  |  标题: {self.meta.get('title', '无')}")
+        p = len(self.poem_sections)
+        self._set_status(f"LOADED  ◆  {fname}  |  {n} 块 / {p} 诗节  |  标题: {self.meta.get('title', '无')}")
 
         preview_lines = [
             "╔══ 文件加载成功 ════════════════════════════════════╗",
@@ -870,25 +1050,55 @@ class BlogForge:
     # ── Generate ──────────────────────────────────────────────────────────────
 
     def _generate(self):
-        if not self.blocks and not self.v_title.get().strip():
-            messagebox.showwarning("Blog Forge", "请先加载 .md 文件，或填写标题！")
-            return
+        template = self.v_template.get()   # 'article' or 'poem'
 
-        self.meta["title"]     = self.v_title.get()
-        self.meta["subtitle"]  = self.v_subtitle.get()
-        self.meta["author"]    = self.v_author.get()
-        self.meta["date"]      = self.v_date.get()
-        self.meta["footer_tag"] = self.v_footer.get()
+        if template == 'poem':
+            if not self.poem_sections and not self.v_title.get().strip():
+                messagebox.showwarning("Blog Forge",
+                    "请先加载包含 # 诗题 的 .md 文件！")
+                return
 
-        self.generated = build_html(self.meta, self.blocks)
-        self._write_out(self.generated)
+            # Re-parse with latest raw_md in case it changed
+            pmeta, psecs = parse_poem_md(self.raw_md) if self.raw_md else ({}, [])
 
-        lines = self.generated.count("\n")
-        chars = len(self.generated)
-        self._set_status(
-            f"GENERATED  ◆  {lines} 行  |  {chars:,} 字符  |  可保存 / 复制 / 预览")
-        self.info_lbl.configure(text=f"✓ {chars:,} chars", fg=GREEN)
-        self.dot.configure(fg=GOLD)
+            # Apply GUI field overrides
+            if self.v_title.get():  pmeta['title']      = self.v_title.get()
+            if self.v_author.get(): pmeta['author']     = self.v_author.get()
+            if self.v_date.get():   pmeta['date']       = self.v_date.get()
+            if self.v_footer.get(): pmeta['footer_tag'] = self.v_footer.get()
+
+            self.meta  = pmeta
+            self.generated = build_poem_html(pmeta, psecs)
+
+            n_sec = len(psecs)
+            self._write_out(self.generated)
+            chars = len(self.generated)
+            self._set_status(
+                f"GENERATED [POEM]  ◆  {n_sec} 诗节  |  {chars:,} 字符  |  可保存/预览")
+            self.info_lbl.configure(
+                text=f"✓ {n_sec} poems · {chars:,} chars", fg=TEAL)
+            self.dot.configure(fg=TEAL)
+
+        else:  # article (default)
+            if not self.blocks and not self.v_title.get().strip():
+                messagebox.showwarning("Blog Forge", "请先加载 .md 文件，或填写标题！")
+                return
+
+            self.meta["title"]      = self.v_title.get()
+            self.meta["subtitle"]   = self.v_subtitle.get()
+            self.meta["author"]     = self.v_author.get()
+            self.meta["date"]       = self.v_date.get()
+            self.meta["footer_tag"] = self.v_footer.get()
+
+            self.generated = build_html(self.meta, self.blocks)
+            self._write_out(self.generated)
+
+            lines = self.generated.count("\n")
+            chars = len(self.generated)
+            self._set_status(
+                f"GENERATED  ◆  {lines} 行  |  {chars:,} 字符  |  可保存 / 复制 / 预览")
+            self.info_lbl.configure(text=f"✓ {chars:,} chars", fg=GREEN)
+            self.dot.configure(fg=GOLD)
 
     # ── Export ────────────────────────────────────────────────────────────────
 
