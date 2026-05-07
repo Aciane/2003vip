@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>未命名文章</title>
+    <style>
+:root{--red:#ff3b30;--paper:#f5f5f7;--dark:#1d1d1f;--dim:#86868b;--bg:#0a0b10;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--dark);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.8;overflow-x:hidden;}
+.particles{position:fixed;width:100%;height:100%;pointer-events:none;z-index:0;}
+.dot{position:absolute;background:#fff;border-radius:50%;opacity:.2;animation:tw var(--duration) infinite ease-in-out;}
+@keyframes tw{0%,100%{opacity:.1;transform:scale(.8);}50%{opacity:.6;transform:scale(1.2);}}
+.top-nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(245,245,247,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.07);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;}
+.back-link{font-size:12px;font-weight:800;color:var(--red);text-decoration:none;letter-spacing:1px;}
+.nav-info{font-size:10px;color:var(--dim);font-family:monospace;}
+.wrap{position:relative;z-index:10;margin:80px auto 40px;width:92%;max-width:800px;background:var(--paper);box-shadow:0 40px 100px rgba(0,0,0,.5);padding:40px 30px;min-height:100vh;transition:transform .4s cubic-bezier(.2,0,.2,1);}
+@media(max-width:600px){.wrap{width:100%;margin:60px 0 0;padding:30px 20px;box-shadow:none;}h1.at{font-size:24px!important;}}
+/* Header */
+.ah{border-bottom:2px solid var(--red);padding-bottom:20px;margin-bottom:30px;}
+h1.at{font-size:28px;font-weight:900;line-height:1.3;margin-bottom:10px;color:#000;}
+.article-subtitle{font-size:18px;color:#444;margin-bottom:15px;font-weight:600;}
+.abstract-box{background:#eee;padding:15px;margin-bottom:30px;font-size:14px;color:#555;border-left:3px solid var(--red);}
+.abstract-label{font-weight:800;color:var(--dark);display:block;margin-bottom:5px;font-size:12px;}
+/* Body */
+.ab{font-size:16px;text-align:justify;}
+.ab p{margin-bottom:22px;}
+.ab h2{font-size:20px;font-weight:800;margin:40px 0 18px;display:flex;align-items:center;}
+.ab h2::before{content:"";width:12px;height:12px;background:var(--red);margin-right:10px;display:inline-block;flex-shrink:0;}
+.ab h3{font-size:17px;font-weight:700;margin:28px 0 14px;color:#333;}
+.ab hr{border:none;border-top:1px dashed #ccc;margin:28px 0;}
+/* Tables */
+.table-wrap{overflow-x:auto;margin:20px 0;}
+.ab table{width:100%;border-collapse:collapse;font-size:15px;}
+.ab th{background:#f0f0f0;font-weight:800;padding:10px 14px;text-align:left;border-bottom:2px solid var(--red);white-space:nowrap;}
+.ab td{padding:8px 14px;border-bottom:1px solid #ddd;}
+.ab tr:last-child td{border-bottom:none;}
+.ab tr:nth-child(even) td{background:#f9f9f9;}
+/* Code */
+.ab pre{background:#1e1e2e;color:#cdd6f4;padding:16px 18px;overflow-x:auto;margin:20px 0;font-family:"Courier New",monospace;font-size:13px;line-height:1.65;border-left:3px solid var(--red);}
+.code-lang{font-size:10px;color:var(--red);letter-spacing:1px;display:block;margin-bottom:8px;font-family:monospace;}
+.ab code.ic{background:#f0f0f2;color:#c44030;padding:2px 5px;font-size:.88em;font-family:"Courier New",monospace;}
+/* Blockquote */
+.ab blockquote{border-left:3px solid var(--red);padding:8px 16px;margin:20px 0;color:#555;font-style:italic;background:#f5f5f5;}
+/* Callout */
+.callout{margin:20px 0;padding:14px 18px;border-left:4px solid;}
+.callout .ct{font-weight:800;font-size:13px;letter-spacing:.5px;margin-bottom:6px;}
+.callout .cb{font-size:15px;line-height:1.7;}
+/* Lists */
+.ab ul,.ab ol{margin:12px 0 16px 26px;}
+.ab li{margin-bottom:5px;line-height:1.7;}
+.task-item{list-style:none;margin-left:-18px;}
+.task-item input{margin-right:7px;cursor:default;}
+.task-item .done{text-decoration:line-through;color:#999;}
+/* Obsidian inline */
+mark{background:#ffe066;padding:1px 3px;}
+del{color:#999;}
+.wl{color:var(--red);font-style:italic;border-bottom:1px dashed var(--red);cursor:default;}
+.tag{background:#eee;color:#666;font-size:12px;padding:1px 6px;border-radius:3px;font-family:monospace;}
+.obs-img{max-width:100%;height:auto;margin:16px 0;display:block;}
+.obs-embed{color:#aaa;font-style:italic;}
+/* Footer */
+.footer-tag{margin-top:40px;text-align:center;font-family:monospace;font-size:10px;color:var(--red);opacity:.6;}
+.bottom-actions{display:flex;justify-content:space-between;margin-top:40px;padding:20px 0;border-top:1px dashed #ccc;flex-wrap:wrap;gap:8px;}
+.action-btn{font-size:12px;color:var(--dark);text-decoration:none;font-weight:bold;}
+.action-btn:hover{color:var(--red);}
+    </style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav class="top-nav">
+    <a href="javascript:history.back()" class="back-link">&#8592; INDEX</a>
+    <div class="nav-info" id="time-code">00:00:00</div>
+</nav>
+<div class="wrap" id="poster">
+    <header class="ah">
+        <h1 class="at">未命名文章</h1>
+        
+        <div style="font-size:12px;color:var(--dim);font-weight:bold;letter-spacing:2px;">TANG ZE ZHEN / 2026.05.07</div>
+    </header>
+    
+    <article class="ab">
+
+<p><strong>摘要</strong>：电视剧《山海情》独特的视听语言构建了极具张力的叙事时空。本文以叙事空间为核心切入点，探讨该剧如何通过物理、社会与心理三个维度的空间建构，完成“家国同构”的空间表达。在物理空间层面，本文引入景观理论，分析剧集如何对景观进行编码；其次，在社会空间层面，借用列斐伏尔的空间生产理论，论证了闽宁村从无到有的建设过程，实质上是国家意志通过空间实践与空间表征向基层社会进行生产的过程；最后，在心理空间层面，文章运用认同理论，分析了移民主体从恋地情结到安居乐业的情感流变，揭示了乡土认同如何在新的地理坐标中完成向国家认同的转化。由此，《山海情》通过多重空间的互动，成功为现实题材电视剧的家国叙事提供了新的空间范式。</p>
+<p>关键词：《山海情》；家国叙事；叙事空间；空间生产</p>
+<p>2021 年，《山海情》作为建党百年献礼剧目，凭借其扎实的现实主义笔触和浓郁的乡土气息，迅速引发广泛热议，并被视为新时代脱贫攻坚题材影视作品的标杆。该剧的核心叙事线索“吊庄移民”，本质上是一场深刻的空间重构，成功地将涌泉村马家、李家等个体家庭的命运与国家扶贫搬迁的宏大叙事融为一体，实现了家国同构。</p>
+<p>在此叙事中，空间不再是单纯的故事背景或容器，而是参与叙事进程、建构家国认同的核心要素。《山海情》的叙事空间以物理、社会和心理三个维度，将个体情感与国家的政治理想和宏大目标相统一。本文在叙事空间的框架下，通过对这多维叙事空间的解读，旨在揭示新时代现实题材电视剧如何利用空间美学，将宏大的国家话语转化为具象的个体生命体验。</p>
+<h2>**一、物理空间：景观的符号化**</h2>
+<p>物理空间作为叙事最直观的载体，在《山海情》中不再是中立的背景，而是具有强烈指向性的符号。景观并非自然或客观的存在，而是文化、意识形态与权力关系通过视觉符号的编码、建构和再现的产物。“景观的实意符号则揭示了景观符号的更深层意义。包括人们在景观元素中所感知、观察、领悟到的意识形态的信息。”[1]《山海情》中的物理空间被编码成为了一种具有视觉修辞作用的符号系统，通过对《山海情》景观的解读，可以揭示物理空间在家国叙事中承担的符号功能和逻辑作用。</p>
+<h3>**（一）自然景观：生存环境的视觉呈现**</h3>
+<p>自然景观在影视文本中并非中立的背景，而是具有强烈说服力的符号。剧集通过特定的色彩、光线、景别和构图对景观进行处理。《山海情》开篇用一种极具压迫感的视觉修辞，确立了西海固的地理特质。剧集大量运用高饱和度的暖黄色调、大景深的广角镜头对自然特写，构建了一种独特的“黄土”自然景观。</p>
+<p>在这个物理空间中，黄不仅是环境的主色调，更是生存困境的直接能指。沟壑纵横的黄土、干涸龟裂的土地以及遮天蔽日的沙尘，物理空间的苍凉与匮乏，反衬出人受制于极端的地理环境的无力。这种无力在李水花一家的迁徙情节中，成为了人与自然搏斗的悲壮缩影。当她拉着架子车，载着年幼的女儿和残疾的丈夫，在七天七夜里徒步穿越无垠的戈壁滩时，自然环境的达到顶峰。天地化为一片混沌，狂风卷携着沙砾无情地抽打着推车，迫使她在原地扎营。镜头先给到全景，而后聚焦于水花因汗水和尘土而凝结的面孔、深深勒入肩膀的绳索以及在沙砾中反复磨损的车轮。这一情节直接将生存困境转化为可见的生命抗争，淋漓尽致地展现了人对自然环境的屈从与对抗。</p>
+<p>通过这种极致的景观呈现，剧集成功地将面对自然限制的现实困境视觉化，让观众在生理层面感受到“苦”。正是这样的物理空间，构成了家国叙事中空间的客体。</p>
+<h3>**（二）景观对立：区域差异的地理隐喻**</h3>
+<p>《山海情》物理空间的差异导致“空间的错位置换”[2]。剧集并置了“山”（西海固）的封闭、荒芜景象与“海”（福建）的开放、富饶景观，形成了强烈的二元对立。这种极具张力的景观反差，不仅是地理差异的直观呈现，更作为一种空间符号，有力地推动了家国叙事中关于差距与帮扶的情节发展和意义建构。</p>
+<p>这种错置通过宁夏女工前往福建莆田工厂务工的经历展开。女工们进入一系列有别于宁夏的现代空间。福建工厂宽敞明亮的现代化食堂、整洁的员工宿舍、乃至娱乐场所歌舞厅。这些空间是工业化、娱乐化和高度物质文明的象征，它们与西海固的景观形成了巨大的视觉冲击和符号落差。大海作为福建最显著的景观符号，象征着流动性、未知与无限的机遇。它与内陆黄土高原的封闭性形成地理上的终极对立。女工们第一次看到大海时的惊叹与嬉戏，不仅是对自然奇观的反应，将海编码成为了广阔的现代化世界和新的生活可能性。</p>
+<p>“山”的空间特征是封闭、干旱与静止，代表着内陆的贫困；而“海”的空间特征则是开放与流动，代表着沿海的富庶与现代。剧集并没有孤立地展现这两者，而是通过对口帮扶这一政策纽带，将原本物理距离遥远的两个空间并置于同一种叙事中，这种物理空间的蒙太奇切换，直观地展现了当时中国社会内部巨大的差距。物理空间的对立与互补，成为了“先富带动后富”这一国家宏大叙事的空间注脚。</p>
+<h3>（三）景观重塑：环境改造的奋斗精神</h3>
+<p>物理环境的改造体现了景观的动态性。在《山海情》中，物理空间并非一成不变的死寂之物，而是充满了对抗性的叙事动力。特别是早期的闽宁村（玉泉营），作为一片尚未被驯化的荒滩，它是人与自然搏斗的战场。</p>
+<p>剧中大量镜头描写了狂风卷走屋顶、沙尘暴摧毁蘑菇棚的场景，这里的物理空间是以反派的角色出现的，它不断挑战着移民的生存意志。然而，正是这种物理阻力的存在，赋予了空间改造以英雄主义色彩。从遍地飞沙的“干沙滩”变为寸土寸金的“金沙滩”，物理环境的改善过程，直接对应着家国叙事中“奋斗”的主题。</p>
+<p>正如“中国的广大农村是中国文化的聚居地，是承载中华文明的依托”[3]所指出的，中国人民的奋斗精神在景观的彻底蜕变中得到了集中体现。剧集最终通过多年后故地重游的情节，完成了对黄土景观的彻底符号置换。当马得福、马得宝等人再次回到涌泉村时，曾经的村庄和泥土路已经被茫茫林海覆盖，生态得到了极大恢复，变成了一片郁郁葱葱的景象。这种景观的彻底蜕变，与村民搬离时的荒芜景象形成了鲜明对比，有力地印证了当初整村搬迁兼顾民生与生态的深远意义。曾经作为“贫困景观”的黄土高原，最终被改造为“生态景观”。这种环境的巨大变化，不仅是自然意义上的恢复，更成为了家国叙事中奋斗实践与政策远见的可视化成就符号。</p>
+<h2>**二、社会空间：国家在场与秩序的生产**</h2>
+<p>社会空间是国家意志与基层社会互动的场域，也是社会关系和权力秩序得以重构的核心空间。列斐伏尔的空间生产理论批判了将空间视为中立容器的传统观念，强调空间并非自然存在，而是由社会关系、政治权力与经济实践共同生产出来的产物。列斐伏尔将空间生产分为相互关联的三个辩证向度：即空间实践、空间表征和表征空间。[4]这三个向度，是国家力量如何系统性地生产出一种新的社会秩序的关键。</p>
+<h3>**（一）物质实践：基础设施与空间功能重构**</h3>
+<p>空间实践关注空间是如何通过物质生产和日常的再生产活动被实际建构和使用的。在《山海情》中，基础设施，诸如通电、修路、引水绝非简单的建筑工程，而是国家意志在物质层面的具体介入。这种实践彻底改变了闽宁村原有的空间功能，实是国家在场的最直观体现。</p>
+<p>在荒滩上建立新家园，首先面临的是社会功能的缺失。剧中用了大量篇幅描绘通电、灌溉和修路的艰难过程。以通电这一情节为例，当马得福为了变电站指标在多部门间奔走时，他所争取的实际上是让这片飞地进入国家主流行政体系的入场券。当最后成功达到 40 户的指标，电灯的亮起，是国家“在场”的最直观体现，个体家庭接入了统一的现代化能源网络。同样，扬水站将黄河水引上旱塬，不仅解决了生存危机，更是国家力量对自然资源的宏观调配能力。通过这些基础设施的建设，国家意志不再是抽象，而转化为了村民日常生活中可感知的温度与光亮。</p>
+<h3>**（二）理性规划：蘑菇棚与新型生产模式**</h3>
+<p>空间表征是规划师、技术专家和权力结构所构想的、具有理性逻辑和科学依据的概念空间。蘑菇棚和工厂是剧中出现的两种经济模式和生产场所，正是劳动力输出政策与技术指导等理性力量规划的产物。它们代表了现代市场经济和科技思维，是国家意志在经济模式上的概念化落实。</p>
+<p>在剧中，“蘑菇棚”构成了最重要的微观社会空间，它不仅是生产场所，更是新旧观念碰撞与社会关系重组的试验田。菌菇专家凌一农的到来，则以科学技术和市场规则取代了宰杀“扶贫鸡”靠天吃饭的小农意识。然而，新旧模式的碰撞异常激烈。当蘑菇丰收却面临滞销时，村民对理性规划产生了巨大的怀疑和反抗，这在李大有因为亏损而烧掉自家菇棚的情节中达到高潮。李大有的行为是对市场规则的情绪化反噬，面对领导的视察，基层干部马得福并没有采用掩饰措施，而是放弃了通过讲稿来宣扬光辉，转而向杨书记汇报实情，通过更高层级的行政协调和凌教授自费补贴，迅速处理了滞销问题，并引导村民接触更广阔的市场。这一过程表明，理性规划的落地，需要多方力量的协调。空间表征让村民从传统思维向现代市场规则的适应，成为具有现代市场意识的生产者，表面国家战略的现实意义。</p>
+<p>对于远赴福建的移民女工而言，她们在工厂空间中经历的社会关系重组更为彻底。工厂作为高度理性的生产场所，其社会关系不再围绕宗族伦理，而是围绕雇佣契约、生产规训。社会空间变成了以“速度第一，效率最高”的口号为支撑的工业空间，标志着一种现代社会关系的实践。这种转变对个体而言，是一种从传统人情社会向现代法理社会的适应性转型。女工们不仅学习了标准化、流水线式的生产技能，更重要的是，她们必须适应严格的考勤制度、计件工资体系以及清晰的权责划分。在工厂这一新的社会空间中她们通过自身劳动获取经济独立性和主体性意识。这一历程，体现了国家通过劳动力输出这一空间表征，使基层社会的个体迅速接轨现代化工业文明，加速了其从乡土伦理向市场规则的过渡。</p>
+<h3>**（三）符号置换：基层治理与社会秩序生成**</h3>
+<p>“表征空间”是居住者在日常生活中体验、感受、想象和反抗的空间，是“生活空间”。闽宁村新旧秩序的摩擦体现了权力符号的置换，旧秩序的权威在陌生人社会中瓦解，取而代之的是以基层党组织为代表的现代治理逻辑。这种符号置换促使居民在新的生活空间中重新建立社会关系与秩序认同。</p>
+<p>剧集敏锐地捕捉到了移民过程中“旧秩序”与“新秩序”的摩擦。在涌泉村，社会秩序的维护主要依靠马喊水这样的宗族长辈和乡土礼俗，具有浓厚的伦理色彩。而到了闽宁村，旧有的宗族权威逐渐失效，取而代之的是以马得福为代表的基层党组织的行政管理。在“旧秩序”的涌泉村，由于没有规范的行政记录，学生的年龄无从考证，父母的口头约定即可决定子女的劳务行为。然而，现代化的新秩序要求劳务输出必须符合《劳动法》的年龄限制。正是为了适应这种要求，基层干部为村民补办出生证和结婚证。</p>
+<p>这个过程揭示了国家的现代化治理并非只是建设新房，更是对人和关系的重新定义，在这个全新的社会空间里，人与人的关系和生产行为必须被纳入现代法治国家的建设体系中，学生不能仅仅因为父母的要求就被允许外出打工。宏观地看，从无序到规范的建设过程，实质上是国家权力对基层社会进行现代化改造的过程，最终实现了现代基层治理逻辑对传统宗族礼俗的胜利。</p>
+<h2>**三、心理空间：乡土重构与认同的生成**</h2>
+<p>心理空间是家国认同能否最终落地的精神内核，关注个体的情感归属与精神流变。认同指对共同的东西进行确认。[5]心理空间的认同强调个体对特定空间的情感依恋、归属感和精神根基。它探讨了当个人地理位置发生巨大变动时，自我身份的认同如何随之发生撕裂、重构与转化。在《山海情》中，这种心理空间发生了明显的迁移，对“乡土”的认同随着家国叙事的进程而变迁，完成了“家国同构”的精神建构。</p>
+<h3>**（一）恋地情结：传统乡土的心理阻滞**</h3>
+<p>“恋地情结”，意指个体建构的地点与个体之间深度的情感连接。[6]剧集对老一辈村民的描绘，展现了这种心理空间的滞后性，即便物理空间已无法生存，但情感和精神仍固守旧土。这种“离土”的阵痛，是家国叙事在基层推行时必须面对和解决的内在情感阻力。</p>
+<p>中国传统的乡土社会具有深厚的安土重迁文化基因，土地不仅是生产资料，更是家族记忆和精神根基的载体。剧集中，以涌泉村老一辈村民为代表的群体，展现出了强烈的心理空间滞后性。整村搬迁动员遇阻的情节，集中展现了这种心理空间的滞后性。村民们担心房子、土地没人管，李老太爷带头离场，都源于对旧空间依恋带来的认同焦虑。马得福的妹妹马得花虽然怒斥村民“只顾先人不顾后人”，但真正打动人心并破除阻力的，却是马得福那句“人有两头根，一头在老先人手里，一头在后人手里”的深情喊话。这句台词通过对“根”的重新定义，将对祖先的尊重与对后代的责任结合起来，用伦理呼唤解决了心理阻滞。</p>
+<p>这种对传统乡土伦理的巧妙运用，最终成功化解了集体离土的阵痛，为国家宏观政策的顺利推行清除了内在的情感障碍，标志着家国叙事在个体心理层面的首次关键突破。</p>
+<h3>（二）代际冲突：心理空间的精神重构</h3>
+<p>代际冲突在心理空间的重构中起着核心作用，尤其体现在地方认同与发展观念的碰撞。这种冲突既非单纯的对立，也不只是否定，而是通过冲突与和解，推动个体精神坐标的重塑，最终实现对新家园的认同。</p>
+<p>《山海情》中的代际冲突，首先体现在生存路径和发展观念的对立上。李大有等老一辈因固守传统地方认同，抵触吊庄移民，而马得宝、白麦苗等年轻人则渴望通过“出走”打破困境，追求现代化机遇。李大有坚持烧菇棚的传统方式，反映了老一辈对风险的恐惧，而年轻人则敢于接受新事物，展现出进取精神。</p>
+<p>代际冲突也体现在观念与情感层面，尤其在教育与家庭资源分配上。例如，白校长坚持“教育优先”的传统观念，与白麦苗更注重实用价值发生冲突。马得福与马得宝兄弟间的隔阂则揭示了贫困家庭资源分配中的不平等，马得宝感到被忽视，反映了地方认同与家庭价值的双重失落。</p>
+<p>这些冲突并非简单对立，而是辩证转化。白麦苗带着现代化知识和投资理念回乡，促进了个人与家乡的共同发展。马得福与马得宝的隔阂也通过对往事的理解得以化解。最终，剧集通过代际冲突的刻画，将情感张力转化为推动社会变革的力量，帮助个体实现对新家园的认同。这种和解不仅是家庭伦理的回归，更标志着新一代移民在精神上完成了对现代发展路径的接纳，将个体情感的位移与国家的脱贫攻坚目标相耦合，为心理空间最终向“安居乐业”的家国认同转化奠定了坚实基础。</p>
+<h3>（三）安居乐业：新旧认同的转化</h3>
+<p>新一代移民对闽宁村的认同，不再建立在血缘或传统的“恋地情结”上，而是建立在奋斗实践和改善生活的经验之上。这种认同是主动的、生成的。剧集通过将个体的努力和幸福与国家脱贫攻坚的宏大相连接，实现了乡土认同向国家认同的转化，从而在心理层面完成了“家国同构”的心理建构。</p>
+<p>在最终的转化完成前，剧集设置了极具感染力的告别百家宴。李老太爷提议恢复多年未办的百家宴，以及搬迁前夜马喊水在村委会忍不住大哭、马得宝等人用油漆留下提示等细节，都充分展现了村民对故土的复杂眷恋和感伤。这种告别仪式是旧认同的终结。这种对故土情感的深刻呈现，最终使得村民们在闽宁村的“安居乐业”更具现实意义和情感价值。</p>
+<p>心理空间的最终形态，是个体命运与国家命运的同频共振。在《山海情》的结尾，我们看到了心理空间的重塑结果：一种基于“希望”和“奋斗”的新型家国认同。</p>
+<h2>**结语**</h2>
+<p>《山海情》的成功，不仅在于其题材的时代性，更在于其叙事策略的创新性。通过对叙事空间的深耕，该剧成功打破了以往主旋律影视作品中“家”与“国”二元分离的僵局，构建了一个多维互动、层层递进的表意系统。</p>
+<p>本文通过物理、社会、心理三个维度的考察发现，空间在《山海情》中扮演了至关重要的角色。物理空间的视觉修辞，以“苦”的自然景观为逻辑起点，赋予了国家扶贫政策历史的必然性；社会空间的生产实践，通过基础设施建设与产业模式创新，将抽象的国家意志转化为具体的民生福祉；心理空间的情感重构，则通过对乡愁的尊重与引导，完成了移民主体从“安土重迁”到“开拓进取”的精神蜕变，书写新时代的奋斗篇章。</p>
+<p>综上所述，以空间为视角的解读，不仅有助于我们深刻理解《山海情》独特的空间魅力。只有扎根于具体的土地，关注空间中人的生存状态与精神流变，家国叙事才能真正拥有打动人心的力量，书写出属于这个时代的史诗。</p>
+<h3>**参考文献**</h3>
+<p>[1] 邓位. 景观的感知: 走向景观符号学[J]. 世界建筑,2006, (07): 47-50.</p>
+<p>[2] 邹贤尧. 电影的空间修辞格分析[J]. 浙江师范大学学报 (社会科学版), 2025,50 (05): 62-71.</p>
+<p>[3] 周斌. 中国乡土影视文学创作回顾、反思与前瞻[M]. 北京: 中国电影出版社, 2017:7.</p>
+<p>[4] 李春敏. 列斐伏尔的空间生产理论探析[J]. 人文杂志,2011, (01): 62-68.</p>
+<p>[5] 崔新建. 文化认同及其根源[J]. 北京师范大学学报 (社会科学版), 2004, (04): 102-104+107.</p>
+<p>[6] TUAN Y. Space and Place: Humanistic Perspective[J]. Progress in Human Geography,1974 (6): 233-246.</p>
+    </article>
+    <div class="bottom-actions">
+        <a href="#" class="action-btn">PREV: </a>
+        <a href="javascript:window.scrollTo({top:0,behavior:'smooth'})" class="action-btn">BACK TO TOP &#8593;</a>
+        <a href="#" class="action-btn">NEXT: </a>
+    </div>
+    <div class="footer-tag">END OF DOCUMENT / NODE_01_SUCCESS</div>
+</div>
+<script>var poster=document.getElementById('poster');var tx=0,ty=0,cx=0,cy=0;if(window.innerWidth>1024){window.addEventListener('mousemove',function(e){tx=(e.clientX/window.innerWidth-0.5)*15;ty=(e.clientY/window.innerHeight-0.5)*15;});}function raf(){cx+=(tx-cx)*0.1;cy+=(ty-cy)*0.1;poster.style.transform='rotateY('+cx+'deg) rotateX('+(-cy)+'deg)';requestAnimationFrame(raf);}raf();setInterval(function(){var n=new Date();document.getElementById('time-code').textContent=n.toLocaleTimeString('en-GB')+':'+('0'+Math.floor(n.getMilliseconds()/10)).slice(-2);},40);var pc=document.getElementById('particles');for(var i=0;i<40;i++){var d=document.createElement('div');d.className='dot';var s=Math.random()*2;d.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--z:'+(Math.random()*1000-500)+'px;--duration:'+(2+Math.random()*3)+'s;';pc.appendChild(d);}</script>
+</body>
+</html>
