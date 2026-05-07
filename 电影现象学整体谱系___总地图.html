@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>电影现象学整体谱系 · 总地图</title>
+    <style>
+:root{--red:#ff3b30;--paper:#f5f5f7;--dark:#1d1d1f;--dim:#86868b;--bg:#0a0b10;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--dark);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.8;overflow-x:hidden;}
+.particles{position:fixed;width:100%;height:100%;pointer-events:none;z-index:0;}
+.dot{position:absolute;background:#fff;border-radius:50%;opacity:.2;animation:tw var(--duration) infinite ease-in-out;}
+@keyframes tw{0%,100%{opacity:.1;transform:scale(.8);}50%{opacity:.6;transform:scale(1.2);}}
+.top-nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(245,245,247,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.07);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;}
+.back-link{font-size:12px;font-weight:800;color:var(--red);text-decoration:none;letter-spacing:1px;}
+.nav-info{font-size:10px;color:var(--dim);font-family:monospace;}
+.wrap{position:relative;z-index:10;margin:80px auto 40px;width:92%;max-width:800px;background:var(--paper);box-shadow:0 40px 100px rgba(0,0,0,.5);padding:40px 30px;min-height:100vh;transition:transform .4s cubic-bezier(.2,0,.2,1);}
+@media(max-width:600px){.wrap{width:100%;margin:60px 0 0;padding:30px 20px;box-shadow:none;}h1.at{font-size:24px!important;}}
+/* Header */
+.ah{border-bottom:2px solid var(--red);padding-bottom:20px;margin-bottom:30px;}
+h1.at{font-size:28px;font-weight:900;line-height:1.3;margin-bottom:10px;color:#000;}
+.article-subtitle{font-size:18px;color:#444;margin-bottom:15px;font-weight:600;}
+.abstract-box{background:#eee;padding:15px;margin-bottom:30px;font-size:14px;color:#555;border-left:3px solid var(--red);}
+.abstract-label{font-weight:800;color:var(--dark);display:block;margin-bottom:5px;font-size:12px;}
+/* Body */
+.ab{font-size:16px;text-align:justify;}
+.ab p{margin-bottom:22px;}
+.ab h2{font-size:20px;font-weight:800;margin:40px 0 18px;display:flex;align-items:center;}
+.ab h2::before{content:"";width:12px;height:12px;background:var(--red);margin-right:10px;display:inline-block;flex-shrink:0;}
+.ab h3{font-size:17px;font-weight:700;margin:28px 0 14px;color:#333;}
+.ab hr{border:none;border-top:1px dashed #ccc;margin:28px 0;}
+/* Tables */
+.table-wrap{overflow-x:auto;margin:20px 0;}
+.ab table{width:100%;border-collapse:collapse;font-size:15px;}
+.ab th{background:#f0f0f0;font-weight:800;padding:10px 14px;text-align:left;border-bottom:2px solid var(--red);white-space:nowrap;}
+.ab td{padding:8px 14px;border-bottom:1px solid #ddd;}
+.ab tr:last-child td{border-bottom:none;}
+.ab tr:nth-child(even) td{background:#f9f9f9;}
+/* Code */
+.ab pre{background:#1e1e2e;color:#cdd6f4;padding:16px 18px;overflow-x:auto;margin:20px 0;font-family:"Courier New",monospace;font-size:13px;line-height:1.65;border-left:3px solid var(--red);}
+.code-lang{font-size:10px;color:var(--red);letter-spacing:1px;display:block;margin-bottom:8px;font-family:monospace;}
+.ab code.ic{background:#f0f0f2;color:#c44030;padding:2px 5px;font-size:.88em;font-family:"Courier New",monospace;}
+/* Blockquote */
+.ab blockquote{border-left:3px solid var(--red);padding:8px 16px;margin:20px 0;color:#555;font-style:italic;background:#f5f5f5;}
+/* Callout */
+.callout{margin:20px 0;padding:14px 18px;border-left:4px solid;}
+.callout .ct{font-weight:800;font-size:13px;letter-spacing:.5px;margin-bottom:6px;}
+.callout .cb{font-size:15px;line-height:1.7;}
+/* Lists */
+.ab ul,.ab ol{margin:12px 0 16px 26px;}
+.ab li{margin-bottom:5px;line-height:1.7;}
+.task-item{list-style:none;margin-left:-18px;}
+.task-item input{margin-right:7px;cursor:default;}
+.task-item .done{text-decoration:line-through;color:#999;}
+/* Obsidian inline */
+mark{background:#ffe066;padding:1px 3px;}
+del{color:#999;}
+.wl{color:var(--red);font-style:italic;border-bottom:1px dashed var(--red);cursor:default;}
+.tag{background:#eee;color:#666;font-size:12px;padding:1px 6px;border-radius:3px;font-family:monospace;}
+.obs-img{max-width:100%;height:auto;margin:16px 0;display:block;}
+.obs-embed{color:#aaa;font-style:italic;}
+/* Footer */
+.footer-tag{margin-top:40px;text-align:center;font-family:monospace;font-size:10px;color:var(--red);opacity:.6;}
+.bottom-actions{display:flex;justify-content:space-between;margin-top:40px;padding:20px 0;border-top:1px dashed #ccc;flex-wrap:wrap;gap:8px;}
+.action-btn{font-size:12px;color:var(--dark);text-decoration:none;font-weight:bold;}
+.action-btn:hover{color:var(--red);}
+    </style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav class="top-nav">
+    <a href="javascript:history.back()" class="back-link">&#8592; INDEX</a>
+    <div class="nav-info" id="time-code">00:00:00</div>
+</nav>
+<div class="wrap" id="poster">
+    <header class="ah">
+        <h1 class="at">电影现象学整体谱系 · 总地图</h1>
+        
+        <div style="font-size:12px;color:var(--dim);font-weight:bold;letter-spacing:2px;">TANG ZE ZHEN / 2026-04-17</div>
+    </header>
+    
+    <article class="ab">
+
+<div class="callout" style="border-color:#00bcd4;background:#e0f7fa"><div class="ct" style="color:#00bcd4">本笔记的定位</div><div class="cb">这是"电影现象学"整体谱系的<strong>总地图</strong>。<br>它的姊妹篇 <span class="wl">薇薇安索布恰克电影身体研究知识谱系</span> 只是本图中"英语第二波 + 其全球回流"的一条支线。<br>本笔记的核心修正：<strong>法国不是 Sobchack 的"迟到接受者"，而是电影现象学本来的原点</strong>——只是它的第一波被 1968 后的符号学-精神分析浪潮擦除了，21 世纪才有二次接受。</div></div>
+<hr>
+<h2>〇、史前 · 原现象学土壤（1910s–1930s）</h2>
+<p>还没有"电影现象学"之名，但感官—知觉—影像的思考已经在场：</p>
+<ul><li><strong>Hugo Münsterberg</strong>《照相剧》(1916) —— 知觉心理学式的电影分析</li><li><strong>Jean Epstein</strong>"photogénie"—— 影像本身具主体性</li><li><strong>Béla Balázs</strong> —— 面孔的面相学、特写的肉身</li><li><strong>Germaine Dulac / Louis Delluc</strong> —— 纯电影</li></ul>
+<blockquote>法国先锋派 × 德奥早期电影美学，共同孕育的前现象学土壤。</blockquote>
+<hr>
+<h2>一、第一波 · 法国原版电影现象学（1945–1965）</h2>
+<p><strong>"电影现象学"这个概念本就是法国的。</strong></p>
+<ul><li><strong>Merleau-Ponty</strong>《电影与新心理学》(1945, IDHEC 演讲) —— <strong>奠基时刻</strong></li><li><strong>André Bazin</strong>《电影是什么？》(1958–62) —— 影像本体论，公认"巴赞式现象学"</li><li><strong>Amédée Ayfre</strong>《电影与玄秘》(1964) —— 最早自觉以 <em>phénoménologie du cinéma</em> 为名写作</li><li><strong>Henri Agel</strong>《电影美学》(1957) —— 延续 Ayfre 的基督教-现象学评论</li><li><strong>Roger Munier</strong>《反对影像》(1963) —— 影像存在论</li><li><strong>Edgar Morin</strong>《电影或想象的人》(1956) —— 人类学-现象学</li><li><strong>Jean Mitry</strong>《电影美学与心理学》(1963–65) —— 格式塔-现象学集大成</li></ul>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">为什么这一层常被遗忘</div><div class="cb">Ayfre、Agel、Munier 带浓厚天主教神学色彩，1968 后被左翼擦除；Mitry 体量太大被束之高阁；Bazin 被改造成"写实主义者"。1970s 的符号学-精神分析浪潮整体覆盖了这一层。<strong>中文学界几乎未译介</strong>——是明显的学术空白。</div></div>
+<hr>
+<h2>二、中断期 · 符号学—精神分析接管（1965–1985）</h2>
+<ul><li><strong>Christian Metz</strong>（符号学）、<strong>Jean-Louis Baudry</strong>（装置论）、<strong>Comolli / Cahiers du cinéma</strong>（阿尔都塞—拉康）</li><li>现象学被视为"过时的意识哲学"</li><li>例外：<strong>Gilles Deleuze</strong><span class="wl">德勒兹</span> 《电影 1／2》(1983/85) —— 柏格森主义而非现象学，但为"影像作为思想"保留了非符号学路径</li><li><strong>Stanley Cavell</strong>《看见的世界》(1971) 在美国走另一条路（奥斯汀日常语言 × 现象学）</li></ul>
+<hr>
+<h2>三、第二波 · 英语学界的现象学复兴（1990s）</h2>
+<ul><li><strong>Allan Casebier</strong>《Film and Phenomenology》(1991) —— 胡塞尔路径</li><li><strong>Vivian Sobchack</strong>《The Address of the Eye》(1992) —— 梅洛-庞蒂路径，<strong>取胜</strong></li><li><strong>Frank Tomasulo</strong> —— 若干论文</li><li><strong>Dudley Andrew</strong> —— 重估 Bazin</li><li><strong>Stanley Cavell</strong> 持续写作并被重新接受</li></ul>
+<blockquote>Sobchack 成标杆的原因：Casebier 太古典胡塞尔、Cavell 太哲学不够"电影研究"，Sobchack 把 <em>film's body</em> 做成了可直接使用的分析工具。</blockquote>
+<p>详见 <span class="wl">薇薇安索布恰克电影身体研究知识谱系</span>。</p>
+<hr>
+<h2>四、第三波 · 感官／触感／情动转向（2000–2015）</h2>
+<p>三条并行语脉：</p>
+<h3>A. 英语线（Sobchack 的"孩子们"）</h3>
+<ul><li>Laura Marks、Jennifer Barker、Martine Beugnet、Elena del Río、Julian Hanich、Jane Stadler</li><li><strong>Thomas Elsaesser & Malte Hagener</strong>《Film Theory: An Introduction through the Senses》(2010) —— 把感官变成电影理论通史的骨架</li><li><strong>Steven Shaviro</strong>《The Cinematic Body》(1993) —— 比 Sobchack 更德勒兹</li></ul>
+<h3>B. 德语线（被中英文读者严重低估的第三极）</h3>
+<ul><li><strong>Gernot Böhme</strong> —— 气氛美学</li><li><strong>Hermann Schmitz</strong> —— 新现象学</li><li><strong>Lambert Wiesing</strong>《人造在场》—— 图像现象学</li><li><strong>Dieter Mersch</strong> —— 媒介美学</li><li><strong>Martin Seel</strong> —— 显现美学</li></ul>
+<h3>C. 意大利线（当代电影现象学的枢纽）</h3>
+<ul><li><strong>Mauro Carbone</strong>《影像的肉》《屏幕的哲学》—— Merleau-Ponty 直系，屏幕现象学</li><li><strong>Andrea Pinotti</strong>《无框影像》—— 图像人类学 × 现象学</li><li><strong>Pietro Montani</strong> —— 想象力与技术</li><li><strong>Francesco Casetti</strong>《Lumière Galaxy》—— post-cinema 现象学</li><li><strong>Ruggero Eugeni</strong> —— 媒介经验</li></ul>
+<blockquote>意大利人实际上是当代电影现象学的<strong>神经中枢</strong>：既读法语源头、又读英语前沿，是把法—德—英三头拼回来的主要中介。Dalmasso 就出自这个圈子。</blockquote>
+<hr>
+<h2>五、第四波 · 后电影 / 技术 / 屏幕现象学（2015— ）</h2>
+<ul><li><strong>Bernard Stiegler</strong>《技术与时间 III：电影的时间与存在之痛》(2001) —— 技术现象学</li><li><strong>Francesco Casetti</strong> "relocation of cinema"</li><li><strong>Shane Denson / Julia Leyda</strong> 编《Post-Cinema》(2016)</li><li><strong>Mauro Carbone</strong> 屏幕系列</li><li><strong>Anna Caterina Dalmasso / Alice Lenay</strong> —— 把 Sobchack 引回法语</li><li><strong>Miriam De Rosa / Wanda Strauven</strong> —— 装置、媒介考古 × 现象学</li><li>VR／AIGC 具身议题：Grant Bollmer、William Brown 等</li></ul>
+<hr>
+<h2>六、平行但被主线遮蔽的分支</h2>
+<h3>A. 其他平行线（简表）</h3>
+<ul><li><strong>认知电影研究</strong>（Bordwell、Carroll、Plantinga）与现象学之争 → 2000 后渐融合</li><li>Plantinga <em>Moving Viewers</em> (2009) 是和解姿态</li><li><strong>神经现象学</strong>：Francisco Varela → <strong>Torben Grodal</strong></li><li><strong>生态现象学</strong>：<strong>Adrian Ivakhiv</strong>《Ecologies of the Moving Image》(2013)</li><li><strong>女性主义现象学</strong>：Iris Marion Young → Jenny Chamarette、Kelli Fuery</li><li><strong>后殖民／种族化身体</strong>：Laura Marks、Jackie Stacey、Richard Dyer</li></ul>
+<hr>
+<h3>B. 解释学岔路 · 保罗·利科的叙事现象学</h3>
+<div class="callout" style="border-color:#607d8b;background:#f5f5f5"><div class="ct" style="color:#607d8b">定位说明</div><div class="cb">利科（Paul Ricoeur, 1913–2005）是<strong>现象学与叙事学之间的枢纽人物</strong>，但他不是从电影出发写作的。他的角色类似 Merleau-Ponty 之于电影身体论：奠定了理论装置，电影学者（尤其 Baracco 2017）在后来做了"应用转换"。<br><br>时间位置：《时间与叙事》三卷（1983–85）写于"符号学-精神分析中断期"晚段，是<strong>沉默中的平行工作</strong>，1990 年代才进入英语电影研究视野。</div></div>
+<p><strong>思想坐标：</strong></p>
+<div class="table-wrap"><table><thead><tr><th>维度</th><th>内容</th></tr></thead><tbody><tr><td>哲学谱系</td><td>胡塞尔（内时间意识）→ [[plan to future claude work/电影空间理论/海德格尔\</td><td>海德格尔]]（此在时间性）→ 伽达默尔（诠释学视域融合）→ <strong>利科</strong>（叙事调解）</td></tr><tr><td>核心问题</td><td>时间经验如何在叙事中被"人性化"（humanized）？宇宙时间与心理时间之间的鸿沟如何被填平？</td></tr><tr><td>关键著作</td><td>《时间与叙事》三卷（<em>Temps et récit</em>, 1983–85）、《自我作为他者》(<em>Soi-même comme un autre</em>, 1990)</td></tr><tr><td>与电影现象学的关系</td><td>叙事现象学（hermeneutic phenomenology）：不止步于"回到事物本身"，还追问叙事赋予时间经验以意义的中介机制；<strong>现象学描述＋解释学诠释</strong></td></tr></tbody></table></div>
+<p><strong>三重摹仿（Threefold Mimesis）· 电影应用版：</strong></p>
+<div class="table-wrap"><table><thead><tr><th>层级</th><th>利科原概念</th><th>电影场景对应</th></tr></thead><tbody><tr><td><strong>M₁ 前摹仿</strong> (prefiguration)</td><td>观者进入文本前已有的实践智慧、时间图式与文化能力；行动的语义先结构</td><td>观影前对类型惯例、镜头语法、叙事预期的先行理解——"前理解视域"</td></tr><tr><td><strong>M₂ 构形</strong> (configuration / emplotment)</td><td>情节（<em>mythos</em>）将异质元素——行动、角色、偶然事件——综合为有机整体；亚里士多德"谋篇"的再诠释</td><td>剪辑节奏、因果链条、角色弧线将观看时间组织为"有情节的时间"；蒙太奇是 M₂ 的最激烈形态</td></tr><tr><td><strong>M₃ 再摹仿</strong> (refiguration)</td><td>"文本世界与读者世界的交汇处"；阅读/观看改变读者/观者的时间经验与自我理解</td><td>走出电影院后的情感余震、世界观重塑；塔可夫斯基或德勒兹时间影像在记忆里持续"再加工"生活时间</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">M₃ 与现象学身体的焊接点</div><div class="cb">Sobchack 强调<strong>影院内</strong>的感知身体与银幕的即时互动；利科的 M₃ 补充了<strong>离开影院后</strong>叙事在时间里持续重构自我的机制。两者互补：Sobchack = 共时触感；利科 = 历时解释。把二者接起来，才能同时解释为什么德勒兹的时间影像既让人当下迷失方向、又在事后持续改变观者对时间的感受。</div></div>
+<p><strong>叙事身份（Narrative Identity）：</strong></p>
+<ul><li><strong>idem 同一性</strong>（sameness-identity）：不随时间变化的实体同一性（身份证上的名字，档案影像的定格）</li><li><strong>ipse 自身性</strong>（selfhood-identity）：通过时间、承诺与叙事保持的"谁是我"——可以包容变化与矛盾</li><li>对电影的意义：</li><li><strong>虚构叙事</strong>：观者通过认同角色的 ipse 轨迹暂时"借用"另一种自我叙述；角色成长弧 = ipse 的叙事演练</li><li><strong>纪录片</strong>：被摄者的 idem（档案影像将面孔永久定格）与 ipse（生命仍在继续改变）之间的伦理张力</li><li><strong>自传电影 / 家族影像</strong>：典型 ipse 媒介——"记录下来的正是'我如何理解我成为了谁'"</li></ul>
+<p><strong>国际电影学术的利科接受：</strong></p>
+<div class="table-wrap"><table><thead><tr><th>学者</th><th>著作／文章</th><th>核心贡献</th></tr></thead><tbody><tr><td><strong>Alberto Baracco</strong></td><td><em>Hermeneutics of the Film World</em> (Palgrave Macmillan, 2017)</td><td>最系统的利科电影应用；结合 Merleau-Ponty＋利科＋古德曼"世界构建"；案例：<em>曼哈顿</em>、<em>喜剧之王</em>、<em>漂亮女人</em>；M₁/M₂/M₃ 作为完整解释框架</td></tr><tr><td><strong>Dudley Andrew</strong></td><td><em>What Cinema Is!</em> (2010) 及多篇文章</td><td>用利科解释学论证"电影是历史力量"；影像的 M₃ 改变社会集体的时间理解</td></tr><tr><td><strong>William Pamerleau</strong></td><td>"Narrative Identity and Film Realism" (<em>Film and Philosophy</em>, 2007)</td><td>将利科 idem／ipse 叙事身份论应用于电影写实主义争论</td></tr><tr><td><strong>互动纪录片研究</strong></td><td><em>Studies in Documentary Film</em> (2020) 专题</td><td>利科 M₃ 框架分析参与式／互动纪录片的再摹仿机制；M₃ 在观者主动介入时的重构</td></tr><tr><td><strong>Alain Boillat</strong>（法语）</td><td>若干文章</td><td>利科与电影陈述论（film enunciation）的连接；法语语境内利科与麦茨的对话</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">中文学界的空白</div><div class="cb">利科叙事理论进入中国主要经由<strong>文艺学、文学叙事学</strong>渠道（王宁、申丹方向），尚未系统迁移至电影研究。中国电影理论的主导线路（写实主义→装置论→德勒兹→索布恰克身体论）与利科的解释学路径<strong>相邻但未交汇</strong>。<br><br>可见学术机会：<strong>利科 M₃ × 中国电影观众研究</strong>（"走出影院后"的文化再造型）；<strong>利科叙事身份 × 第五、第六代导演的历史-个人叙事</strong>（idem 档案影像 vs ipse 个人记忆）均是有待开垦的领域。</div></div>
+<p><strong>利科在电影现象学谱系中的内部位置：</strong></p>
+<pre>法国现象学传统（梅洛-庞蒂 1945）
+        │
+        ├─── 感知-身体路线 ───▶ Bazin / Ayfre / Mitry（第一波，1945–65）
+        │                              │
+        │                      被符号学-精神分析中断（1968 后）
+        │                              │
+        │                       1990s 英语复兴（Sobchack）
+        │
+        └─── 解释学路线 ────▶ 利科 *Temps et récit*（1983–85）
+                                       │
+                 ┌─────────────────────┼──────────────────────┐
+                 ▼                     ▼                      ▼
+          Dudley Andrew        Baracco 2017             互动纪录片研究
+        （历史力量论）     （电影诠释学专著）           （M₃ 参与式媒介）
+                 │
+                 └── 与 Sobchack 身体论的对话：共时感知（Sobchack）+ 历时叙事（利科）</pre>
+<hr>
+<h2>七、中文学界的接受（2010— ）</h2>
+<p>跳过了法国原版第一波，直接从 Sobchack / Shaviro / Stiegler 进入：</p>
+<ul><li>早期：<strong>韩连庆</strong>（Stiegler）、游飞、傅守祥</li><li>中期：<strong>姜宇辉</strong>、王雪璞、冯庆</li><li>近期：<strong>赵斌</strong>（系统做身体现象学）、<strong>姜雨昕</strong>（AIGC 具身）、<strong>王飞</strong>（回到梅洛-庞蒂）、<strong>苏杭</strong>（电影身体 × 剧场）</li></ul>
+<div class="callout" style="border-color:#4caf50;background:#e8f5e9"><div class="ct" style="color:#4caf50">学术空白与机会</div><div class="cb">中文学界对 <strong>Ayfre / Agel / Munier / Mitry</strong> 现象学阶段几乎没有译介——这是一个明显的空白，也是可做的学术工作。</div></div>
+<hr>
+<h2>八、整体谱系图（修正版）</h2>
+<pre>    Husserl ─────── Merleau-Ponty ─────────── Henry / Levinas / Marion
+       │                  │    \                      │
+       │     ┌────────────┼─────────────┐            │
+       ▼     ▼            ▼             ▼            ▼
+   Casebier Ayfre/Agel   Bazin        Mitry       (不走电影)
+   (胡塞尔) (1950s 神学)  (本体论)     (格式塔)
+       │       │            │             │
+       │       └──被 1968 后法国擦除───────┘
+       │
+       │    海德格尔 ──── 伽达默尔 ──── 利科 Ricoeur (1983–85)
+       │                               │  《时间与叙事》M₁/M₂/M₃
+       │                               │  叙事身份 idem/ipse
+       │                               ↓
+       │                    Dudley Andrew / Baracco 2017 / 互动纪录片研究
+       │
+       │                    ↓
+       │          符号学-精神分析中断 (Metz/Baudry)
+       │                    ↓
+       │              Deleuze《电影》(非现象学但保留路径)
+       ▼
+   Sobchack 1992 ──────────┐
+       │                   │
+       ├─ Marks/Barker     ├─ Shaviro ──── post-cinematic affect
+       ├─ Beugnet          │
+       │                   ▼
+       │            德国:  Böhme / Schmitz / Wiesing / Mersch
+       │                   │
+       │            意大利: Carbone / Pinotti / Casetti ← 关键枢纽
+       │                   │
+       ▼                   ▼
+   Chamarette/Fuery   Dalmasso/Lenay ── 法语二次回流 (2015 后)
+       │
+       ▼
+   VR / AIGC / 屏幕现象学 (当代)
+
+   [解释学线] 利科 M₃ ←──→ Sobchack 身体论：历时叙事 ↔ 共时感知（当代可对话）
+
+   中文: 姜宇辉 / 赵斌 / 姜雨昕 / 王飞 (2015 后, 主要走 Sobchack 线)
+   中文空白: 利科电影叙事学方向几乎无人开垦</pre>
+<hr>
+<h2>九、与 [[薇薇安索布恰克电影身体研究知识谱系]] 的修正关系</h2>
+<div class="table-wrap"><table><thead><tr><th>原 Sobchack 谱系的说法</th><th>总地图的修正</th></tr></thead><tbody><tr><td>Sobchack 之前只有 Merleau-Ponty + Don Ihde 作前驱</td><td>还有 Ayfre、Agel、Mitry、Munier、Morin 这条<strong>法国第一波</strong>，时间早 40 年</td></tr><tr><td>"法语学界迟到的接受"</td><td>应该说"法国<strong>第一波被本国结构主义-精神分析擦除</strong>，21 世纪是<strong>二次接受</strong>"</td></tr><tr><td>意大利学派只是边缘</td><td>意大利是<strong>当代电影现象学的枢纽</strong>，Carbone / Casetti / Pinotti 才是把法德英三头接起来的人</td></tr><tr><td>德语线几乎没提</td><td>Böhme 气氛美学、Wiesing 图像现象学、Schmitz 新现象学是<strong>独立于 Sobchack 的第三极</strong></td></tr></tbody></table></div>
+<hr>
+<h2>十、创作者取水口（给做 AI 动画短片的自己）</h2>
+<p>对你最直接可用的三个入口：</p>
+<ol><li><strong>Merleau-Ponty《电影与新心理学》(1945)</strong> —— 短、好读、有中译；感官设计的直接思想源</li><li><strong>Mauro Carbone《屏幕的哲学》／《影像的肉》</strong> —— 最贴近 AI／界面／屏幕议题</li><li><strong>Elsaesser & Hagener《电影理论：通过感官》(2010)</strong> —— 把电影史重讲成感官器官史，做构思非常好用</li></ol>
+<div class="callout" style="border-color:#607d8b;background:#f5f5f5"><div class="ct" style="color:#607d8b">创作可操作化方向</div><div class="cb">从"眼—耳—皮肤—肌肉—内脏"五层感官进行分镜／动作／声音设计——Barker 的三层触觉（skin / musculature / viscera）是最直接可用的分析与创作共用工具。</div></div>
+<hr>
+<h2>十一、To-Do（延伸计划）</h2>
+<ul><li class="task-item"><input type="checkbox" disabled><span>单独补一张 <span class="wl">电影现象学谱系.canvas</span> 可视化</span></li><li class="task-item"><input type="checkbox" disabled><span>写一篇 <span class="wl">法国原版电影现象学-被遗忘的第一波</span>，专论 Ayfre / Agel / Mitry / Munier</span></li><li class="task-item"><input type="checkbox" disabled><span>写一篇 <span class="wl">意大利学派-当代电影现象学的枢纽</span>，专论 Carbone / Casetti / Pinotti</span></li><li class="task-item"><input type="checkbox" disabled><span>建立 <span class="wl">Merleau-Ponty《电影与新心理学》读书笔记</span></span></li><li class="task-item"><input type="checkbox" disabled><span>Zotero 按"Ayfre / Agel / Mitry / Carbone / Böhme / Wiesing / Elsaesser Hagener"七关键词补充检索</span></li><li class="task-item"><input type="checkbox" disabled><span>Zotero 检索 Baracco 2017 <em>Hermeneutics of the Film World</em> 并入库</span></li><li class="task-item"><input type="checkbox" disabled><span>写一篇 <span class="wl">保罗利科-叙事现象学与电影解释学</span>，深化 M₁/M₂/M₃ 电影应用，连接 Baracco / Dudley Andrew / Pamerleau</span></li><li class="task-item"><input type="checkbox" disabled><span>建立利科 M₃ × 课程精读文本的对应清单（巴赞写实主义 / 德勒兹时间影像 / Mulvey 凝视论各自在 M₃ 层产生什么效果？）</span></li><li class="task-item"><input type="checkbox" disabled><span>把本图里的"感官—身体—屏幕"三层转成"AI 动画短片"创作的操作清单</span></li></ul>
+<hr>
+<h2>十二、参考与延伸（与姊妹篇不重复的新入口）</h2>
+<ul><li><strong>Elsaesser, Thomas & Malte Hagener</strong>, <em>Film Theory: An Introduction through the Senses</em> (Routledge, 2010; 2nd ed. 2015)</li><li><strong>Mauro Carbone</strong>, <em>The Flesh of Images: Merleau-Ponty Between Painting and Cinema</em> (2015)；<em>Philosophy-Screens: From Cinema to the Digital Revolution</em> (2019)</li><li><strong>Andrea Pinotti</strong>, <em>Alla soglia dell'immagine. Da Narciso alla realtà virtuale</em> (2021)</li><li><strong>Francesco Casetti</strong>, <em>The Lumière Galaxy</em> (2015)</li><li><strong>Bernard Stiegler</strong>, <em>La technique et le temps III</em> (2001)</li><li><strong>Allan Casebier</strong>, <em>Film and Phenomenology</em> (Cambridge, 1991)</li><li><strong>Amédée Ayfre</strong>, <em>Le cinéma et le mystère</em> (1964) —— 中文完全未译介</li><li><strong>Henri Agel</strong>, <em>Esthétique du cinéma</em> (1957)</li><li><strong>Jean Mitry</strong>, <em>Esthétique et psychologie du cinéma</em>, 2 vols. (1963–65)</li><li><strong>Edgar Morin</strong>, <em>Le cinéma ou l'homme imaginaire</em> (1956)</li><li><strong>Merleau-Ponty</strong>, "Le cinéma et la nouvelle psychologie" (1945), in <em>Sens et non-sens</em></li><li><strong>Ricoeur, Paul</strong>, <em>Temps et récit</em>, 3 vols. (Seuil, 1983–85)；英译 <em>Time and Narrative</em>, tr. McLaughlin & Pellauer (University of Chicago Press, 1984–88) —— M₁/M₂/M₃ 三重摹仿原典</li><li><strong>Ricoeur, Paul</strong>, <em>Soi-même comme un autre</em> (Seuil, 1990)；英译 <em>Oneself as Another</em> —— idem／ipse 叙事身份</li><li><strong>Baracco, Alberto</strong>, <em>Hermeneutics of the Film World: A Ricœurian Method for Film Interpretation</em> (Palgrave Macmillan, 2017) —— 最系统的利科电影应用专著</li><li><strong>Pamerleau, William</strong>, "Narrative Identity and Film Realism," <em>Film and Philosophy</em> 11 (2007) —— 利科身份论 × 电影写实主义</li><li><strong>Andrew, Dudley</strong>, <em>What Cinema Is!</em> (Wiley-Blackwell, 2010) —— 利科解释学进入电影史研究</li></ul>
+<hr>
+<h2>相关笔记</h2>
+<ul><li><span class="wl">薇薇安索布恰克电影身体研究知识谱系</span> —— Sobchack 专论（本图的一条支线）</li><li><span class="wl">MOC-电影身体研究</span> —— 文件夹索引</li></ul>
+    </article>
+    <div class="bottom-actions">
+        <a href="#" class="action-btn">PREV: </a>
+        <a href="javascript:window.scrollTo({top:0,behavior:'smooth'})" class="action-btn">BACK TO TOP &#8593;</a>
+        <a href="#" class="action-btn">NEXT: </a>
+    </div>
+    <div class="footer-tag">END OF DOCUMENT / NODE_01_SUCCESS</div>
+</div>
+<script>var poster=document.getElementById('poster');var tx=0,ty=0,cx=0,cy=0;if(window.innerWidth>1024){window.addEventListener('mousemove',function(e){tx=(e.clientX/window.innerWidth-0.5)*15;ty=(e.clientY/window.innerHeight-0.5)*15;});}function raf(){cx+=(tx-cx)*0.1;cy+=(ty-cy)*0.1;poster.style.transform='rotateY('+cx+'deg) rotateX('+(-cy)+'deg)';requestAnimationFrame(raf);}raf();setInterval(function(){var n=new Date();document.getElementById('time-code').textContent=n.toLocaleTimeString('en-GB')+':'+('0'+Math.floor(n.getMilliseconds()/10)).slice(-2);},40);var pc=document.getElementById('particles');for(var i=0;i<40;i++){var d=document.createElement('div');d.className='dot';var s=Math.random()*2;d.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--z:'+(Math.random()*1000-500)+'px;--duration:'+(2+Math.random()*3)+'s;';pc.appendChild(d);}</script>
+</body>
+</html>
