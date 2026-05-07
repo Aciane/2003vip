@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>无法外化的回响——《记忆》的具身感知问题</title>
+    <style>
+:root{--red:#ff3b30;--paper:#f5f5f7;--dark:#1d1d1f;--dim:#86868b;--bg:#0a0b10;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--dark);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.8;overflow-x:hidden;}
+.particles{position:fixed;width:100%;height:100%;pointer-events:none;z-index:0;}
+.dot{position:absolute;background:#fff;border-radius:50%;opacity:.2;animation:tw var(--duration) infinite ease-in-out;}
+@keyframes tw{0%,100%{opacity:.1;transform:scale(.8);}50%{opacity:.6;transform:scale(1.2);}}
+.top-nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(245,245,247,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.07);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;}
+.back-link{font-size:12px;font-weight:800;color:var(--red);text-decoration:none;letter-spacing:1px;}
+.nav-info{font-size:10px;color:var(--dim);font-family:monospace;}
+.wrap{position:relative;z-index:10;margin:80px auto 40px;width:92%;max-width:800px;background:var(--paper);box-shadow:0 40px 100px rgba(0,0,0,.5);padding:40px 30px;min-height:100vh;transition:transform .4s cubic-bezier(.2,0,.2,1);}
+@media(max-width:600px){.wrap{width:100%;margin:60px 0 0;padding:30px 20px;box-shadow:none;}h1.at{font-size:24px!important;}}
+/* Header */
+.ah{border-bottom:2px solid var(--red);padding-bottom:20px;margin-bottom:30px;}
+h1.at{font-size:28px;font-weight:900;line-height:1.3;margin-bottom:10px;color:#000;}
+.article-subtitle{font-size:18px;color:#444;margin-bottom:15px;font-weight:600;}
+.abstract-box{background:#eee;padding:15px;margin-bottom:30px;font-size:14px;color:#555;border-left:3px solid var(--red);}
+.abstract-label{font-weight:800;color:var(--dark);display:block;margin-bottom:5px;font-size:12px;}
+/* Body */
+.ab{font-size:16px;text-align:justify;}
+.ab p{margin-bottom:22px;}
+.ab h2{font-size:20px;font-weight:800;margin:40px 0 18px;display:flex;align-items:center;}
+.ab h2::before{content:"";width:12px;height:12px;background:var(--red);margin-right:10px;display:inline-block;flex-shrink:0;}
+.ab h3{font-size:17px;font-weight:700;margin:28px 0 14px;color:#333;}
+.ab hr{border:none;border-top:1px dashed #ccc;margin:28px 0;}
+/* Tables */
+.table-wrap{overflow-x:auto;margin:20px 0;}
+.ab table{width:100%;border-collapse:collapse;font-size:15px;}
+.ab th{background:#f0f0f0;font-weight:800;padding:10px 14px;text-align:left;border-bottom:2px solid var(--red);white-space:nowrap;}
+.ab td{padding:8px 14px;border-bottom:1px solid #ddd;}
+.ab tr:last-child td{border-bottom:none;}
+.ab tr:nth-child(even) td{background:#f9f9f9;}
+/* Code */
+.ab pre{background:#1e1e2e;color:#cdd6f4;padding:16px 18px;overflow-x:auto;margin:20px 0;font-family:"Courier New",monospace;font-size:13px;line-height:1.65;border-left:3px solid var(--red);}
+.code-lang{font-size:10px;color:var(--red);letter-spacing:1px;display:block;margin-bottom:8px;font-family:monospace;}
+.ab code.ic{background:#f0f0f2;color:#c44030;padding:2px 5px;font-size:.88em;font-family:"Courier New",monospace;}
+/* Blockquote */
+.ab blockquote{border-left:3px solid var(--red);padding:8px 16px;margin:20px 0;color:#555;font-style:italic;background:#f5f5f5;}
+/* Callout */
+.callout{margin:20px 0;padding:14px 18px;border-left:4px solid;}
+.callout .ct{font-weight:800;font-size:13px;letter-spacing:.5px;margin-bottom:6px;}
+.callout .cb{font-size:15px;line-height:1.7;}
+/* Lists */
+.ab ul,.ab ol{margin:12px 0 16px 26px;}
+.ab li{margin-bottom:5px;line-height:1.7;}
+.task-item{list-style:none;margin-left:-18px;}
+.task-item input{margin-right:7px;cursor:default;}
+.task-item .done{text-decoration:line-through;color:#999;}
+/* Obsidian inline */
+mark{background:#ffe066;padding:1px 3px;}
+del{color:#999;}
+.wl{color:var(--red);font-style:italic;border-bottom:1px dashed var(--red);cursor:default;}
+.tag{background:#eee;color:#666;font-size:12px;padding:1px 6px;border-radius:3px;font-family:monospace;}
+.obs-img{max-width:100%;height:auto;margin:16px 0;display:block;}
+.obs-embed{color:#aaa;font-style:italic;}
+/* Footer */
+.footer-tag{margin-top:40px;text-align:center;font-family:monospace;font-size:10px;color:var(--red);opacity:.6;}
+.bottom-actions{display:flex;justify-content:space-between;margin-top:40px;padding:20px 0;border-top:1px dashed #ccc;flex-wrap:wrap;gap:8px;}
+.action-btn{font-size:12px;color:var(--dark);text-decoration:none;font-weight:bold;}
+.action-btn:hover{color:var(--red);}
+    </style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav class="top-nav">
+    <a href="javascript:history.back()" class="back-link">&#8592; INDEX</a>
+    <div class="nav-info" id="time-code">00:00:00</div>
+</nav>
+<div class="wrap" id="poster">
+    <header class="ah">
+        <h1 class="at">无法外化的回响——《记忆》的具身感知问题</h1>
+        
+        <div style="font-size:12px;color:var(--dim);font-weight:bold;letter-spacing:2px;">TANG ZE ZHEN / 2026-04-22</div>
+    </header>
+    
+    <article class="ab">
+
+<p>阿彼察邦·韦拉斯哈古的《记忆》（<em>Memoria</em>，2021）以一个简单却难以回避的事件开始：杰西卡（蒂尔达·斯文顿饰）听到了一声巨响，其他人没有听到，她无法定位它。<strong>这个接收而无法定位的事件，对于感知理论意味着什么？</strong></p>
+<p>我们通常将感知理解为一个方向性行为：一个有位置的意识将自身投向外部对象，接收来自对象的信息，并将其整合进一个可描述的共享空间——这个过程就是感知的"外化"（externalization）：将所接收的东西赋予一个在自身之外的坐标。《记忆》的巨响使这个过程失效：接收发生了，但没有可以接受坐标的外部对象。感知的另一端空了，但感知本身继续发生，以一种无处可去的力量留在身体内部。影片的形式选择，无配乐、极长的固定镜头、对视点镜头的彻底回避。将这同一个结构系统性地施加在观众身上，接收持续开放，外化路径持续关闭。</p>
+<hr>
+<h2>一、电影身体的问题：可逆性与它的极限</h2>
+<p>索布恰克（Vivian Sobchack）在《眼睛的地址》（<em>The Address of the Eye</em>，1992）中提出，电影是一个活的媒介身体，它不是工具，而是有着自身意向性的存在，以"指涉着一个'身体'的'正在看的看/被看的看'的方式而实存"[^1]。这个双重性承袭自梅洛-庞蒂（Maurice Merleau-Ponty）的可逆性（reversibility）学说，后者在《可见者与不可见者》（<em>Le Visible et l'Invisible</em>，1968）中以"手触摸自身"为例描述了感知的根本结构：触摸者与被触摸者在同一个身体中相互转换，"看者被他所看的东西所抓住，触者被他所触之物所触"[^2]，主客体的边界是一个持续向内折叠的"交织"（chiasme），而非稳定的对立。重要的是，梅洛-庞蒂强调这种交织从不完全实现：可逆性永远只是渐近的，感知主体总在与其对象的临界处颤动，却无法彻底化约为其中一端。</p>
+<p>索布恰克将这个结构移植到电影经验中，其结果是一种双向的感知场：电影身体向外表达意向（摄影机的投射、剪辑的组织、声音的设计），同时也被观众的身体感知。更关键的是，她进一步提出"电影美觉主体"（cinesthetic subject）的概念：观众不只是以视听方式接收影片，而是通过联觉（synaesthesia）将影片的运动、质感、时间压力内化为自己身体的整体感知状态——"要看电影，我们必须将我们对可见事物的活生生的直接观看，与我们对视觉的主体行为的反身性认识相匹配"[^3]。这意味着电影观看本质上是具身的：身体以全部感知能力参与，而不仅仅是眼睛和耳朵。</p>
+<p>要理解这种匹配的理论条件，需要进一步追究可逆性所依赖的基础。梅洛-庞蒂将使可逆性成为可能的东西称为"肉身"（la chair）。一种使双向感知得以发生的共同性，但它对自身永远是不透明的。"肉身"的奇特之处在于，它是感知双方所共享的，却无法被任何一方从外部完整把握——看者看到了被看者，但他看不到"看本身所凭借的那种肉身"，就像眼睛永远无法在自身看到自己的看一样[^9]。正是这种结构性的不透明性使可逆性成为渐近而非完全的：双向流动持续发生，但两端之间始终保有一个无法被跨越的缝隙，感知在其中颤动而不合并。"交织"维系于这个缝隙——它不是障碍，而是感知的持续性条件。</p>
+<p>这个结构对于理解电影美觉主体的运作方式至关重要。匹配过程得以发生，正是因为观众的身体与电影身体共享"肉身"意义上的感知质料。摄影机的运动被观众身体识别为一种有意向的姿态，剪辑的节奏被识别为时间经验的形式，音乐的方向性被识别为情感定向的信号。观众的身体不是被动地接收这些信息，而是将其认领为自己感知活动的延伸——在这个认领的过程中，"交织"的双向性得以维持，感知流在两个身体之间循环。</p>
+<p>《记忆》系统性地拒绝提供任何可以被认领的主体性行为信号：摄影机不移动，不提供视点；声音轨道几乎被清空，没有任何音乐为情感定向；角色的内心状态不被展示，共情机制无处着力。电影美觉主体在这里持续尝试"匹配"，但发现没有任何东西可以匹配。这不是无聊——无聊来自内容的匮乏；而这是一种更奇特的状态：感知被激活（那声巨响确实到来、固定镜头的重量确实压迫身体、空气的质感确实存在），但激活的感知能量无法完成其匹配过程，无法被送回到可以接受它的电影身体的另一端。"肉身"的循环在这里被单向截断了：接收持续发生，但肉身的对应面——能够接受并回应这种接收的"被感知者"——撤出了。感知能量在被迫的单向性中沉入身体内部，找不到出路。</p>
+<p>这个框架在《记忆》面前遭遇了它自身的裂缝。索布恰克的可逆性预设是感知能够在主体与对象之间来回流动，双向的可及性保持开放。《记忆》的形式策略系统性地封闭了这种双向性的一端，影片拒绝向外投射任何可以被观众握住情感信号或视点锚点，它只接收，不表达；只开放，不指向。可逆性在此被推到了它的渐近极限——但不是在两端之间颤动，而是永久偏向了接收端。当感知的外化方向持续关闭，"交织"就不再折叠出一个客体，而是折叠回到感知者自身。</p>
+<p>杰西卡去录音室重现那声巨响，是试图为无法外化的感知建立一个客体坐标的努力。这个努力在录音室失败后并没有终止——影片后半段她与埃尔南的接触看似完成了一次真正的外化：通过握手，那声巨响的来历以某种方式被"传递"了。但这个看似完成的外化恰恰是影片最精密的叙事设计：埃尔南本人也是一个接收着无法外化之物的身体，他积存着哥伦比亚大地几千年的地质记忆，却无处可送，他不是一个能够接受坐标的外部客体，而是另一个被困在同一个不可能性中的零点。杰西卡外化到的地方，是外化不可能性的另一个实例。感知没有抵达对象，只是抵达了另一个同样无法抵达对象的身体。</p>
+<h2>二、声音的问题：包裹性、无源性，以及感知的零点</h2>
+<p>索布恰克的理论裂缝打开了一个问题：为什么是声音承担了这个封闭外化的功能？这不是偶然的形式选择——声音的现象学结构本身就具有一种天然的"抗外化"性质，正是这种性质使《记忆》的感知论赌注得以实现。</p>
+<p>伊德（Don Ihde）在《聆听与声音》（<em>Listening and Voice</em>，2007）中指出，声音与视觉在现象学结构上存在根本差异。视觉赋予主体方向性（directionality）：视觉对象始终是"在那里"的某物，我可以转移视线、调整距离，始终在自身与对象之间保持一种空间间距，这个间距正是外化所需要的"出口"。声音则是全向的（omnidirectional）：它不指向某处，而是包裹（envelope）身体，在意识尚未形成任何有方向的意向活动之前，就已经处理了身体[^4]。更根本的是，这种包裹性具有时间优先性：声音在主体完成"这是什么"的反思判断之前就已经侵入了身体，肾上腺素的激活、肌肉的收缩、注意力的强制重置——这些都是前意向性的身体反应，不是感知主体的决定，而是身体的遭遇。这就是为什么那声巨响对杰西卡而言首先不是被"理解"的，而是被"击中"的：声音在主体—客体关系形成之前就已经进入了身体，使外化在其发生之前就已经无法实现。</p>
+<p>希翁（Michel Chion）关于"无源之声"（acousmatic sound）的分析则从另一角度揭示了同一结构。在希翁的框架中，当声音失去可见来源，它获得一种特殊的弥散性权威——"无处不在的声音存在"（acousmêtre）弥漫于整个画面空间，持续作用于感知场而没有可定位的位置[^5]。无源之声的常规力量来自"来源尚未揭示"的期待结构：观众期待声音被驯化，被赋予一个可见位置，而正是这种期待的张力赋予了声音持续膨胀的权威——一旦来源被揭示（"de-acousmaticization"），声音就失去其神秘力量。然而《记忆》的巨响破坏了这个常规机制：渔夫给出的"来源"——"来自地球开口的时候"——不是一个可被指认的位置，而是将定位的问题本身溶解进地质时间的深度。这个"来源"不驯化声音，它使外化的问题本身失效：不存在一个"被揭示之后声音就会缩小"的坐标，只有感知对象不断退隐的深渊。</p>
+<p>在这里有必要直接回应一个针对上述论点的可能反驳：影片结尾出现的不明光源或飞行物，是否构成希翁意义上的"去无源化"——即声音的来源终于以可见客体的形式被揭示，使无源之声的力量消解？这个反驳的问题正在于它对希翁的误用。去无源化的逻辑要求的不只是"出现了一个可见对象"，而是这个对象的出现使观众得以"放下"那个持续膨胀的期待——谜被解开，声音缩小回一个普通的物理来源。但《记忆》结尾出现的任何不明视觉现象，其本身的性质与来源同样是未知的：一个同样无法解释的可见物无法为声音提供坐标，它只是将谜题平移到了可见性领域，并在那里留下了同样的深渊。声音没有被驯化，巨响的神秘性被提升到了另一个量级，而不是被收编进任何因果链。希翁的框架在此不是被颠覆，而是被影片极端地推进：无源之声的终点不是来源被揭示，而是"可见来源"本身也成为了无源之声的又一种形式。</p>
+<p>将伊德与希翁并置，一个共同的感知论结构浮现出来：无论是包裹性（声音在意向活动之前处理身体）还是无源性（声音没有可供指向的客体位置），两者描述的都是同一状态——<strong>身体无法将所接收的东西外化为一个具有坐标的客体</strong>。胡塞尔在分析知觉空间时指出，身体始终是感知定向的"零点"（Nullpunkt）——所有空间坐标都从身体这个零点出发被组织起来[^6]。当外化路径被封闭，当感知无法抵达任何外部对象，感知就必然返回到它的零点：身体本身成为了所接收之物的唯一落脚点。这也正是索布恰克可逆性在此处的命运——可逆性预设感知能够找到一个"另一端"来完成折叠；当这个另一端不存在，折叠就只能折回零点。</p>
+<p>在《记忆》中，声音的包裹性与无源性恰恰是使这种折回成为可能的感知论条件。索布恰克的电影身体理论与伊德的声音现象学，在这里从两个方向描述了同一件事：感知无法外化，零点是唯一的落脚点，身体成为回响的唯一居所。</p>
+<h2>三、睡眠的问题：匿名身体与外化悬置之后</h2>
+<p>影片给这个无法外化的感知状态提供了一个身体形象：渔夫"睁着眼睛睡着了"。要理解这个形象的含义，必须首先厘清它与另一种电影睡眠叙述的根本差异。</p>
+<p>梅茨（Christian Metz）在《想象的能指》（<em>The Imaginary Signifier</em>，1982）中将电影观影描述为一种"清醒状态下的类梦境"（état de veille proche du rêve）：电影院的黑暗、银幕的光、叙事的封闭性，共同制造一种退行性的催眠状态，使观众放松自我边界，进入一种安全的依赖性情境[^7]。梅茨借用克莱因（Melanie Klein）的"好客体"（bon objet）概念来描述这种结构：影片充当"好母亲"的角色，在观众退行时继续在场并提供稳定的认同位置——观众在影院中"舒适地做梦"，正是因为有这个好客体在维持意义的稳定供给。</p>
+<p>《记忆》拒绝成为这种意义上的好客体。影片没有提供任何可以认同的主观视点，没有情感操控性的配乐，没有任何角色内心的充分展示。观众在影院中想睡觉——这种催眠效果是真实且几乎是物理性的——但没有任何东西可以认同。梅茨的框架在此失效：它预设催眠状态服务于认同，将退行理解为通向"缝合"（suture）这个更高目的的手段；而《记忆》的催眠状态没有指向任何识别，它似乎就是目的本身。</p>
+<p>理解这个"目的本身"需要梅洛-庞蒂对身体的另一个描述。在《知觉现象学》中，他写道身体是"表演的明亮所必需的剧场的黑暗"[^8]——在个人意识的自我表演之下，始终存在一个"匿名身体"（le corps anonyme）：一个在"我"醒来之前就已经在感知、在维持生命的身体，它不需要个人意识在场就能继续运作。这个匿名身体不是退行性的（它不是回到更早的发展阶段），而是构成性的——它是意识得以运作的黑暗基底，是感知在反思性自我监控形成之前就已经存在的状态。匿名身体的感知方式恰恰是"全向接收而不外化"的：它不将所接收的东西整理成"关于某对象的信息"，而是开放于一切抵达它的东西，不做分类，不做定位。</p>
+<p>渔夫的睡眠是匿名身体的极端显现：个人意识退位，但感知持续开放——他"睁着眼睛"正是这种持续开放的形象。他的身体直接是那个接收回路，而不再有一个站在回路外部、试图将感知送回某处的主体。</p>
+<p>这里必须厘清一个可能的误解："匿名身体"的感知方式并不意味着内容的模糊或不清晰。埃尔南可以以惊人的精确度描述特定地层的记忆、特定地震的震感、特定时代植物的气息——他的记忆是精确的存档。但梅洛-庞蒂所说的"匿名"描述的是持有内容的<strong>方式</strong>，而非内容本身的颗粒度：匿名身体中没有一个能够调遣档案、决定何时何地以何种目的使用它的"我"。他的精确性是存档者的精确性，他的匿名性是存档者对档案没有意图的匿名性——他能描述那些记忆，却无法对这种知道做任何事。这恰恰是外化不可能性在个人意识层面的完成形态：内容在那里，极为清晰，但没有任何主体能够将它派发到一个外部坐标。</p>
+<p>阿彼察邦对观众制造的"好睡"效果，是试图将他们的感知结构带到渔夫的位置——不是让他们进入梅茨式的安全认同梦境，而是让清醒意识放弃外化的努力，让匿名身体浮现出来，成为那声无处可送的回响的落脚点。</p>
+<h2>结语</h2>
+<p>《记忆》的问题不是"那声巨响来自哪里"，而是"当一个感知无法被外化时，感知者的身体是什么"。索布恰克的可逆性在此遭遇极限：当外化路径封闭，感知折回身体这个零点；伊德和希翁的声音现象学揭示，声音的包裹性与无源性恰恰是使这种封闭成为可能的感知论条件；梅洛-庞蒂的匿名身体则提供了这种状态的正面描述——不是缺席，不是退行，而是感知在匿名层面的持续开放。渔夫的睡眠是这个感知形式的完成形象。《记忆》想对观众做的，就是这件事：不是让他们理解一个故事，而是让他们的匿名身体成为那声回响的唯一可能的居所。</p>
+<hr>
+<p>[^1]: Vivian Sobchack, <em>The Address of the Eye: A Phenomenology of Film Experience</em> (Princeton: Princeton University Press, 1992), p. 133. 转引自林梓豪，《影像递归与"屏中之屏"——电影现象学中的具身媒介问题》，《北京电影学院学报》2023年第8期，第60页。</p>
+<p>[^2]: Maurice Merleau-Ponty, <em>Le Visible et l'Invisible</em>, texte établi par Claude Lefort (Paris: Gallimard, 1968), p. 175.</p>
+<p>[^3]: Vivian Sobchack, "What My Fingers Knew: The Cinesthetic Subject, or Vision in the Flesh," in <em>Carnal Thoughts: Embodiment and Moving Image Culture</em> (Berkeley: University of California Press, 2004), p. 60. 转引自严芳芳，《"触感视觉"：一种重新认识电影的理论路径》，《文艺理论与批评》2020年第3期，第116页。</p>
+<p>[^4]: Don Ihde, <em>Listening and Voice: Phenomenologies of Sound</em>, 2nd ed. (Albany: SUNY Press, 2007), pp. 50–75.</p>
+<p>[^5]: Michel Chion, <em>Audio-Vision: Sound on Screen</em>, trans. Claudia Gorbman (New York: Columbia University Press, 1994), pp. 71–83.</p>
+<p>[^6]: 关于胡塞尔的感知零点（Nullpunkt）概念，参见Edmund Husserl, <em>Ideen zu einer reinen Phänomenologie und phänomenologischen Philosophie</em>, Zweites Buch, Hua IV, ed. Marly Biemel (Den Haag: Martinus Nijhoff, 1952), §41。中文讨论参见关群德，《梅洛-庞蒂对空间的现象学理解》，《现代哲学》2009年第6期，第72页。</p>
+<p>[^7]: Christian Metz, <em>The Imaginary Signifier: Psychoanalysis and the Cinema</em>, trans. Celia Britton et al. (Bloomington: Indiana University Press, 1982), pp. 99–115.</p>
+<p>[^8]: 莫里斯·梅洛-庞蒂著，杨大春、张尧均、关德群译，《知觉现象学》（北京：商务印书馆，2021），第147页。转引自林梓豪，前引文，第66页。</p>
+<p>[^9]: Merleau-Ponty, <em>Le Visible et l'Invisible</em>, pp. 179–183. 梅洛-庞蒂在"交织—交叉"一章中明确指出，看者无法同时看到"自身用以看的那种东西"——肉身是感知的共同基底，但它对任何一个感知主体都保持不透明。这种不透明性是可逆性永远只是渐近而非完成的原因。</p>
+    </article>
+    <div class="bottom-actions">
+        <a href="#" class="action-btn">PREV: </a>
+        <a href="javascript:window.scrollTo({top:0,behavior:'smooth'})" class="action-btn">BACK TO TOP &#8593;</a>
+        <a href="#" class="action-btn">NEXT: </a>
+    </div>
+    <div class="footer-tag">END OF DOCUMENT / NODE_01_SUCCESS</div>
+</div>
+<script>var poster=document.getElementById('poster');var tx=0,ty=0,cx=0,cy=0;if(window.innerWidth>1024){window.addEventListener('mousemove',function(e){tx=(e.clientX/window.innerWidth-0.5)*15;ty=(e.clientY/window.innerHeight-0.5)*15;});}function raf(){cx+=(tx-cx)*0.1;cy+=(ty-cy)*0.1;poster.style.transform='rotateY('+cx+'deg) rotateX('+(-cy)+'deg)';requestAnimationFrame(raf);}raf();setInterval(function(){var n=new Date();document.getElementById('time-code').textContent=n.toLocaleTimeString('en-GB')+':'+('0'+Math.floor(n.getMilliseconds()/10)).slice(-2);},40);var pc=document.getElementById('particles');for(var i=0;i<40;i++){var d=document.createElement('div');d.className='dot';var s=Math.random()*2;d.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--z:'+(Math.random()*1000-500)+'px;--duration:'+(2+Math.random()*3)+'s;';pc.appendChild(d);}</script>
+</body>
+</html>
