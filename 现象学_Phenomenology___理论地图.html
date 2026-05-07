@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>现象学（Phenomenology）— 理论地图</title>
+    <style>
+:root{--red:#ff3b30;--paper:#f5f5f7;--dark:#1d1d1f;--dim:#86868b;--bg:#0a0b10;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--dark);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.8;overflow-x:hidden;}
+.particles{position:fixed;width:100%;height:100%;pointer-events:none;z-index:0;}
+.dot{position:absolute;background:#fff;border-radius:50%;opacity:.2;animation:tw var(--duration) infinite ease-in-out;}
+@keyframes tw{0%,100%{opacity:.1;transform:scale(.8);}50%{opacity:.6;transform:scale(1.2);}}
+.top-nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(245,245,247,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.07);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;}
+.back-link{font-size:12px;font-weight:800;color:var(--red);text-decoration:none;letter-spacing:1px;}
+.nav-info{font-size:10px;color:var(--dim);font-family:monospace;}
+.wrap{position:relative;z-index:10;margin:80px auto 40px;width:92%;max-width:800px;background:var(--paper);box-shadow:0 40px 100px rgba(0,0,0,.5);padding:40px 30px;min-height:100vh;transition:transform .4s cubic-bezier(.2,0,.2,1);}
+@media(max-width:600px){.wrap{width:100%;margin:60px 0 0;padding:30px 20px;box-shadow:none;}h1.at{font-size:24px!important;}}
+/* Header */
+.ah{border-bottom:2px solid var(--red);padding-bottom:20px;margin-bottom:30px;}
+h1.at{font-size:28px;font-weight:900;line-height:1.3;margin-bottom:10px;color:#000;}
+.article-subtitle{font-size:18px;color:#444;margin-bottom:15px;font-weight:600;}
+.abstract-box{background:#eee;padding:15px;margin-bottom:30px;font-size:14px;color:#555;border-left:3px solid var(--red);}
+.abstract-label{font-weight:800;color:var(--dark);display:block;margin-bottom:5px;font-size:12px;}
+/* Body */
+.ab{font-size:16px;text-align:justify;}
+.ab p{margin-bottom:22px;}
+.ab h2{font-size:20px;font-weight:800;margin:40px 0 18px;display:flex;align-items:center;}
+.ab h2::before{content:"";width:12px;height:12px;background:var(--red);margin-right:10px;display:inline-block;flex-shrink:0;}
+.ab h3{font-size:17px;font-weight:700;margin:28px 0 14px;color:#333;}
+.ab hr{border:none;border-top:1px dashed #ccc;margin:28px 0;}
+/* Tables */
+.table-wrap{overflow-x:auto;margin:20px 0;}
+.ab table{width:100%;border-collapse:collapse;font-size:15px;}
+.ab th{background:#f0f0f0;font-weight:800;padding:10px 14px;text-align:left;border-bottom:2px solid var(--red);white-space:nowrap;}
+.ab td{padding:8px 14px;border-bottom:1px solid #ddd;}
+.ab tr:last-child td{border-bottom:none;}
+.ab tr:nth-child(even) td{background:#f9f9f9;}
+/* Code */
+.ab pre{background:#1e1e2e;color:#cdd6f4;padding:16px 18px;overflow-x:auto;margin:20px 0;font-family:"Courier New",monospace;font-size:13px;line-height:1.65;border-left:3px solid var(--red);}
+.code-lang{font-size:10px;color:var(--red);letter-spacing:1px;display:block;margin-bottom:8px;font-family:monospace;}
+.ab code.ic{background:#f0f0f2;color:#c44030;padding:2px 5px;font-size:.88em;font-family:"Courier New",monospace;}
+/* Blockquote */
+.ab blockquote{border-left:3px solid var(--red);padding:8px 16px;margin:20px 0;color:#555;font-style:italic;background:#f5f5f5;}
+/* Callout */
+.callout{margin:20px 0;padding:14px 18px;border-left:4px solid;}
+.callout .ct{font-weight:800;font-size:13px;letter-spacing:.5px;margin-bottom:6px;}
+.callout .cb{font-size:15px;line-height:1.7;}
+/* Lists */
+.ab ul,.ab ol{margin:12px 0 16px 26px;}
+.ab li{margin-bottom:5px;line-height:1.7;}
+.task-item{list-style:none;margin-left:-18px;}
+.task-item input{margin-right:7px;cursor:default;}
+.task-item .done{text-decoration:line-through;color:#999;}
+/* Obsidian inline */
+mark{background:#ffe066;padding:1px 3px;}
+del{color:#999;}
+.wl{color:var(--red);font-style:italic;border-bottom:1px dashed var(--red);cursor:default;}
+.tag{background:#eee;color:#666;font-size:12px;padding:1px 6px;border-radius:3px;font-family:monospace;}
+.obs-img{max-width:100%;height:auto;margin:16px 0;display:block;}
+.obs-embed{color:#aaa;font-style:italic;}
+/* Footer */
+.footer-tag{margin-top:40px;text-align:center;font-family:monospace;font-size:10px;color:var(--red);opacity:.6;}
+.bottom-actions{display:flex;justify-content:space-between;margin-top:40px;padding:20px 0;border-top:1px dashed #ccc;flex-wrap:wrap;gap:8px;}
+.action-btn{font-size:12px;color:var(--dark);text-decoration:none;font-weight:bold;}
+.action-btn:hover{color:var(--red);}
+    </style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav class="top-nav">
+    <a href="javascript:history.back()" class="back-link">&#8592; INDEX</a>
+    <div class="nav-info" id="time-code">00:00:00</div>
+</nav>
+<div class="wrap" id="poster">
+    <header class="ah">
+        <h1 class="at">现象学（Phenomenology）— 理论地图</h1>
+        
+        <div style="font-size:12px;color:var(--dim);font-weight:bold;letter-spacing:2px;">TANG ZE ZHEN / 2026.05.07</div>
+    </header>
+    
+    <article class="ab">
+
+<div class="callout" style="border-color:#607d8b;background:#eceff1"><div class="ct" style="color:#607d8b">Quote</div><div class="cb">回到事物本身！——胡塞尔《逻辑研究》（1900–01）</div></div>
+<div class="callout" style="border-color:#607d8b;background:#eceff1"><div class="ct" style="color:#607d8b">Quote</div><div class="cb">现象学不是一个已经完成的体系，而是一种方法，一种态度，一种永远重新开始的运动。——梅洛-庞蒂《知觉现象学》序言（1945）</div></div>
+<p>现象学不是关于「世界是什么」的学说，而是关于「世界如何向意识显现」的方法论：悬置一切关于世界存在的素朴预设（自然态度），回到意识的直接经验结构本身。它从胡塞尔的意识分析出发，经过海德格尔的存在论转向、梅洛-庞蒂的身体化转向、萨特的存在主义化、列维纳斯的他者伦理学，延伸至当代的后现象学、4E认知科学与电影现象学。</p>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">在理论坐标中的位置</div><div class="cb">现象学对应 <span class="wl">L1-A 主体感知本体论</span>，但 L1-A 内部存在本体论承诺的<strong>三重分裂</strong>：胡塞尔（先验意识构成，保留先验自我）、海德格尔（此在在世，无先验主体）、梅洛-庞蒂（活的身体，超越主客二分）——三者不兼容，共用「L1-A」是粗略定位，不是相同本体论。与 <span class="wl">结构主义</span> 的共时系统分析正相反对——现象学坚持第一人称经验和时间性。</div></div>
+<div class="callout" style="border-color:#00bcd4;background:#e0f7fa"><div class="ct" style="color:#00bcd4">作为运动的现象学</div><div class="cb">现象学首先是一种<strong>研究风格和共享方法</strong>，不是统一学说。其内聚力来自：「回到事物本身」的口号、对自然态度的反省、对直接经验的优先性。但各主要思想家在<strong>本体论承诺、主体地位、历史性、他者关系</strong>上的立场差异极大——有时是根本性冲突。把「现象学家」当作同一立场的代表是常见误读；更准确的说法是：他们共享<strong>出发点</strong>（回到经验），但走向了完全不同的目的地。</div></div>
+<hr>
+<h2>〇、施皮格伯格的历史诊断：运动的结构与方法七步</h2>
+<p>赫伯特·施皮格伯格（Herbert Spiegelberg）《现象学运动》（<em>The Phenomenological Movement: A Historical Introduction</em>，1960/1982）是迄今最权威的现象学运动史。他的分析提供了理解现象学内部分歧的根本框架。</p>
+<h3>〇.1 现象学运动的三个历史阶段</h3>
+<p>施皮格伯格将整个运动划分为三个阶段：</p>
+<div class="table-wrap"><table><thead><tr><th>阶段</th><th>时间</th><th>代表人物</th><th>特征</th></tr></thead><tbody><tr><td><strong>准备阶段</strong></td><td>1890s–1900s</td><td>布伦塔诺（Brentano）、施通普夫（Stumpf）</td><td>建立意向性概念；心理学描述方法</td></tr><tr><td><strong>德国阶段</strong></td><td>1900–1930s</td><td>胡塞尔 + 慕尼黑圈 + 哥廷根圈；谢勒；海德格尔</td><td>系统现象学；内部分裂（描述vs先验）</td></tr><tr><td><strong>法国阶段</strong></td><td>1930s–今</td><td>萨特、梅洛-庞蒂、列维纳斯、亨利、马里翁</td><td>存在主义化；身体化；激进化</td></tr></tbody></table></div>
+<h3>〇.2 现象学方法的七个操作</h3>
+<p>施皮格伯格最重要的分析贡献：现象学不是单一方法，而是<strong>最多七个操作的集合体</strong>。不同的现象学家使用不同的子集——这解释了为什么他们的立场差异如此巨大。</p>
+<div class="table-wrap"><table><thead><tr><th>操作</th><th>内容</th><th>谁使用</th></tr></thead><tbody><tr><td><strong>1. 描述特殊现象</strong></td><td>直接描述实际呈现的经验，悬置理论预设</td><td>所有现象学家（最小公分母）</td></tr><tr><td><strong>2. 把握普遍本质（Wesensschau）</strong></td><td>从个别经验跳跃到普遍本质（本质直观）</td><td>胡塞尔、谢勒、慕尼黑圈</td></tr><tr><td><strong>3. 把握本质关系</strong></td><td>不同本质之间的必然关系（颜色必然蕴含广延）</td><td>胡塞尔早期、英加登</td></tr><tr><td><strong>4. 观察显现方式</strong></td><td>不只看「显现什么」，还看「如何显现」（透视性、轮廓、时间流）</td><td>胡塞尔中期</td></tr><tr><td><strong>5. 观察意识中的构成</strong></td><td>意识如何通过其行为「建构」对象</td><td>胡塞尔先验现象学</td></tr><tr><td><strong>6. 悬置存在信念（Epoché）</strong></td><td>括号悬置：搁置「世界独立存在」的设定</td><td>胡塞尔先验现象学（慕尼黑圈多人拒绝此步）</td></tr><tr><td><strong>7. 诠释隐藏意义</strong></td><td>超越直接给予，诠释被遮蔽的存在结构</td><td><strong>海德格尔独有</strong>——解释学现象学的加法</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">关键内部分裂</div><div class="cb"><strong>慕尼黑圈和哥廷根圈的多数成员在操作6（括号悬置/先验还原）处停下来</strong>，拒绝跟随胡塞尔进入先验唯心论。他们认为操作1–3（描述、本质直观、本质关系）就足够，现象学是一种<strong>描述-本质分析法</strong>，不必走向先验构成论。这一拒绝意味着：「胡塞尔的学生」不等于「先验现象学家」。英加登终其一生坚持实在论立场批评胡塞尔的先验唯心论。</div></div>
+<hr>
+<h2>一、传承总图</h2>
+<pre>布伦塔诺（Brentano）1838–1917  ── 意向性的前史
+「每个心理现象都指向一个对象」
+施通普夫（Stumpf）1848–1936  ── 实验心理学/现象学先驱
+        │
+        ▼
+胡塞尔（Husserl）1859–1938 ── 现象学奠基
+《逻辑研究》1900 / 《观念Ⅰ》1913 / 《欧洲科学危机》1936
+        │
+        ├──► 【慕尼黑圈 / 哥廷根圈】1904–1930s  ── 第一代现象学家
+        │     普凡德尔（Pfänder 1870–1941）── 意志/动机现象学
+        │     莱纳赫（Reinach 1883–1917）── 社会行为现象学（言语行为先驱）
+        │     盖格尔（Geiger 1880–1937）── 美学享受的现象学
+        │     → 大多数人拒绝胡塞尔先验还原（停在方法第1–3步）
+        │     → 保持描述/本质分析立场，不进入先验唯心论
+        │
+        ├──► 谢勒（Scheler）1874–1928           ── 价值与情感现象学
+        │     价值的材质性 / 爱的秩序 / 人格 / 同感
+        │     《伦理学中的形式主义》1913–16
+        │
+        ├──► 英加登（Ingarden）1893–1970         ── 现象学美学/实在论立场
+        │     纯粹意向对象 / 不确定点 / 具体化
+        │     → 接受美学（Jauss / Iser）的前驱
+        │
+        ├──► 施泰因（Edith Stein）1891–1942      ── 移情/同理心现象学
+        │     《论移情问题》1917
+        │
+        ├──► 海德格尔（Heidegger）1889–1976      ── 存在论转向（+操作7）
+        │     此在 / 在世存在 / 时间性 / 技术
+        │     → [[海德格尔-哲学词条]]
+        │     → 伽达默尔（Gadamer）→ 解释学
+        │
+        ├──► 雅斯贝尔斯（Jaspers）1883–1969      ── 存在澄明/边界处境
+        │     精神病理学的现象学方法 / 超越性
+        │
+        ├──► 舒茨（Schutz）1899–1959             ── 社会现象学
+        │     胡塞尔 + 韦伯的综合
+        │     《社会世界的现象学》1932
+        │
+        ├──► 梅洛-庞蒂（Merleau-Ponty）1908–1961 ── 身体化转向
+        │     活的身体 / 运动意向性 / 肉 / 可逆性
+        │     → [[梅洛-庞蒂]]
+        │     → Sobchack → 电影身体现象学
+        │
+        ├──► 萨特（Sartre）1905–1980             ── 存在主义转向
+        │     自在-自为 / 坏信仰 / 他者的凝视
+        │     《存在与虚无》1943
+        │
+        ├──► 列维纳斯（Levinas）1906–1995        ── 他者伦理学
+        │     面容 / 他者性 / 伦理先于存在论
+        │
+        ├──► 里克尔（Ricoeur）1913–2005          ── 解释学现象学
+        │     叙事身份 / 三重模仿
+        │
+        ├──► 亨利（Michel Henry）1922–2002       ── 生命现象学/激进内在性
+        │     自我触发 / 生命的自身感受 / 去意向性
+        │
+        ├──► 马里翁（Marion）b.1946              ── 给予现象学
+        │     饱和现象 / 给予性先于存在 / 图像-圣像
+        │
+        └──► 意大利现象学（帕奇 Paci）           ── 马克思-胡塞尔接合
+              → 卡尔博纳（Carbone）→ 达尔马索（Dalmasso）
+
+后现象学（Post-phenomenology）
+        │
+        ├── 唐·伊德（Don Ihde）    ── 技术-人关系类型学
+        │     具身关系 / 解释关系 / 他者关系 / 背景关系
+        │     《后现象学与技术科学》2009
+        │
+        ├── 维尔贝克（Verbeek）    ── 技术道德中介
+        │     《物做什么》2005
+        │
+        ├── 德雷福斯（Dreyfus）    ── 技能性应对 / AI批判
+        │     《计算机不能做什么》1972
+        │     《在世存在》（海德格尔注疏）1991
+        │
+        └── 4E认知科学
+              涌现/生成主义（Varela / Thompson / Rosch）
+              《涌现的心灵》1991
+              加拉格尔（Gallagher）：身体图式/身体意象
+              扎哈维（Zahavi）：自我意识现象学
+              克拉克（Clark）：延伸心灵
+
+气氛美学（Atmosphere / Stimmung）
+        │
+        ├── 波姆（Gernot Böhme）  ── 气氛作为美学范畴
+        │     《大气层》1995 / 《新美学》2001
+        │     → 生态美学 / 空间知觉
+        │
+        └── 施密茨（Hermann Schmitz）  ── 身体感受现象学
+              新现象学 / 半自主感受（halbautonomous Gefühle）
+              气氛作为弥散的情绪空间</pre>
+<hr>
+<h2>二、胡塞尔：现象学奠基</h2>
+<h3>2.1 自然态度与现象学还原</h3>
+<p><strong>自然态度（natürliche Einstellung）</strong>：日常生活中我们素朴地假设世界独立于意识而存在。这是科学和常识的默认预设，但现象学认为它遮蔽了意识经验的构成性结构。</p>
+<p><strong>现象学还原（phänomenologische Reduktion）= 括号悬置（Epoché）</strong>：悬置关于世界存在的一切设定——不是否定世界存在，而是「搁置」（bracketing）这个问题，聚焦于「世界如何向意识呈现」。</p>
+<pre>自然态度：「世界存在」（命题）
+        │ 括号悬置（Epoché）
+        ▼
+现象学还原：「世界作为被给予者」（经验结构）
+        │ 本质直观（eidetische Reduktion）
+        ▼
+本质还原：从个别经验到普遍本质（eidos）
+        │ 先验还原（transzendentale Reduktion）
+        ▼
+先验意识：构成经验世界的意识本身</pre>
+<h3>2.2 意向性（Intentionalität）</h3>
+<p>所有意识都是<strong>关于某物的意识</strong>（Bewusstsein von etwas）——意识不是一个封闭的容器，而是永远向外指向的运动。</p>
+<div class="table-wrap"><table><thead><tr><th>术语</th><th>含义</th><th>例子</th></tr></thead><tbody><tr><td><strong>意向行为（Noesis）</strong></td><td>意识的指向性活动本身</td><td>知觉、记忆、想象、判断……</td></tr><tr><td><strong>意向对象（Noema）</strong></td><td>意识所把握的对象（作为被给予者）</td><td>被知觉到的苹果（不是苹果本身）</td></tr><tr><td><strong>充实（Erfüllung）</strong></td><td>空乏意向被直觉充实的过程</td><td>空想→实见：意向得到充实</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">Noema 不是心理表象</div><div class="cb">Noema 不是脑中的图像，而是对象「如何」被意识——同一棵树可以被知觉、被记忆、被想象，这是三个不同的 Noema，但指向同一对象。这是胡塞尔区别于心理主义的核心。</div></div>
+<h3>2.3 内时间意识（Zeitbewusstsein）</h3>
+<p>意识不是瞬间的点，而是具有时间厚度的流动结构：</p>
+<pre>          ←── 过去方向                           未来方向 ──►
+    沉淀（Retention）   「现在」（Primal Impression）   预持（Protention）
+    （刚刚流逝的余留）         （原初印象）               （即将到来的预期）
+              └──────────────────┬─────────────────────┘
+                        活的当下（lebendige Gegenwart）</pre>
+<ul><li><strong>沉淀（Retention）</strong>：刚刚流逝的时刻仍保留在意识中（听一段旋律：刚才的音符仍在）</li><li><strong>预持（Protention）</strong>：对即将到来的期待（听旋律时隐约预期下一个音）</li><li><strong>回忆（Wiedererinnerung）</strong>：与 Retention 不同，是主动唤回的二次意向行为</li></ul>
+<p>这个结构解释了为什么我们能感知到<strong>运动</strong>（而非一系列静止画面）：意识本身就是时间性的流。</p>
+<h3>2.4 生活世界（Lebenswelt）</h3>
+<p>晚期胡塞尔（《欧洲科学危机》1936）：科学用抽象的数学自然取代了直接经验的生活世界，这是现代科学的「危机」根源。</p>
+<p><strong>生活世界</strong>是前科学的、直接经验的世界，是一切科学理论化的<strong>隐性基础</strong>——科学从生活世界出发，但把这个基础遗忘了。</p>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">生活世界与海德格尔的关系</div><div class="cb">海德格尔的「在世存在」（In-der-Welt-sein）和「日常此在」是对胡塞尔生活世界概念的存在论深化：不仅是经验的地平线，而是此在先于一切理论的存在方式。→ <span class="wl">海德格尔-哲学词条</span></div></div>
+<h3>2.5 主体间性（Intersubjektivität）</h3>
+<p>胡塞尔面对的难题：如果一切从我的意识出发，他人如何可能？</p>
+<p><strong>同感（Einfühlung）</strong>：通过类比推理和身体配对（Paarung），我把握他人为同样具有意识的主体——他人的身体被体验为「另一个我」（alter ego）。</p>
+<p>这个解决方案被梅洛-庞蒂和列维纳斯分别批评：前者认为身体的可逆性先于主体间性的推理；后者认为他人根本无法被还原为「另一个我」，他者的异质性是伦理的起点。</p>
+<h3>2.6 胡塞尔与本体论：三重框架及教条本体论的拒斥</h3>
+<p>胡塞尔对本体论的态度常被误读为「拒绝本体论」。更准确的表述是：他拒绝<strong>教条式本体论</strong>（dogmatische Ontologie，未经现象学奠基就预设存在的形而上学），但从现象学描述中建构了三类本体论框架，并主张这三类是唯一合法的本体论形式：</p>
+<div class="table-wrap"><table><thead><tr><th>框架</th><th>来源文本</th><th>内容</th><th>与传统本体论的关系</th></tr></thead><tbody><tr><td><strong>形式本体论</strong>（Formale Ontologie）</td><td>《逻辑研究》第三研究（1900）</td><td>对象性一般的最基本结构：部分-整体关系（Mereologie）、依存性（Fundierung）、整体与片段</td><td>不预设任何存在域，是纯粹逻辑-形式层面的本体论</td></tr><tr><td><strong>区域本体论</strong>（Regionale Ontologie）</td><td>《观念 Ⅰ》§9–17（1913）</td><td>不同「存在域」各有其先天本质结构——自然（Natur）、意识（Bewusstsein）、精神（Geist）、文化</td><td>通过本质直观（eidetische Reduktion）获得，先于具体科学</td></tr><tr><td><strong>先验构成</strong>（Transzendentale Konstitution）</td><td>《内时间意识现象学》《笛卡尔式沉思》</td><td>先验自我如何构成各存在域的意义结构——本质是认识论，但隐含本体论权重</td><td>是前两类本体论的最终根基，但胡塞尔坚持这不是形而上学</td></tr></tbody></table></div>
+<p><strong>胡塞尔的核心立场</strong>：任何合法的本体论都必须是「从下往上」——先做现象学描述，再从中提炼本质结构，最后得到本体论。传统形而上学「从上往下」（先设定实体/本质，再用来解释现象），这是教条式的倒置。</p>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">括号悬置≠反本体论</div><div class="cb">括号悬置（Epoché）搁置的是「世界独立存在」这一<strong>存在论命题</strong>，但并不搁置对<strong>本质结构</strong>的分析。胡塞尔可以在括号内做完整的区域本体论——这正是形式/区域本体论与先验构成论的运作空间。误读「括号悬置＝拒绝本体论」会遮蔽胡塞尔最有原创性的本体论贡献（Mereologie 至今仍是分析本体论的重要参照）。</div></div>
+<p><strong>后继者的分歧</strong>：海德格尔认为胡塞尔的先验还原本身是对此在在世结构的压制——此在无法被「还原」到先验意识，在世存在先于一切意识分析。这个批评直接把现象学推向了显性的存在论立场，而胡塞尔终其一生拒绝承认这是他工程的「完成」，而是视之为误入歧途。</p>
+<hr>
+<h2>三、海德格尔：存在论转向</h2>
+<p>→ 详见 <span class="wl">海德格尔-哲学词条</span></p>
+<p>要点摘录：</p>
+<div class="table-wrap"><table><thead><tr><th>胡塞尔</th><th>海德格尔</th></tr></thead><tbody><tr><td>先验意识的构成</td><td>此在（Dasein）的存在方式</td></tr><tr><td>意向性：意识→对象</td><td>在世存在：先于主客分裂的投身于世</td></tr><tr><td>括号悬置（还原）</td><td>此在无法还原：我们总已在世界中</td></tr><tr><td>理论态度</td><td>上手性（Zuhandenheit）：实践先于理论</td></tr><tr><td>时间：意识内部的流</td><td>时间性：此在存在的意义就是时间性</td></tr></tbody></table></div>
+<p><strong>海德格尔对胡塞尔的两个根本批评</strong>：</p>
+<ol><li>胡塞尔保留了先验主体，仍在主体哲学框架内——海德格尔要的是<strong>存在论</strong>（Sein的问题），不是意识论</li><li>胡塞尔的「还原」把世界悬置了，但此在根本无法从世界中被抽离</li></ol>
+<hr>
+<h2>四、梅洛-庞蒂：身体化转向</h2>
+<p>→ 详见 <span class="wl">梅洛-庞蒂</span></p>
+<p>要点摘录：</p>
+<p><strong>核心翻转</strong>：胡塞尔的意向性是意识的结构；梅洛-庞蒂把意向性下移到<strong>身体</strong>——身体本身就有意向性（运动意向性/motor intentionality），不需要意识的指挥。</p>
+<div class="table-wrap"><table><thead><tr><th>胡塞尔</th><th>梅洛-庞蒂</th></tr></thead><tbody><tr><td>先验意识构成世界</td><td>活的身体（corps vécu）栖居于世界</td></tr><tr><td>主体间性通过同感推理</td><td>身体间可逆性（chiasme）先于推理</td></tr><tr><td>时间：意识流</td><td>时间性：身体的习惯与运动节律</td></tr><tr><td>肉体 = 客体（Körper）</td><td>肉（chair）= 世界的质料，主客不可分</td></tr></tbody></table></div>
+<hr>
+<h2>五、萨特：存在主义现象学</h2>
+<p>萨特接受胡塞尔的意向性，但拒绝先验自我，走向存在主义：</p>
+<h3>5.1 存在先于本质</h3>
+<p>「存在先于本质」（L'existence précède l'essence）：人没有先天规定的本质，人先「存在」，然后通过自由选择创造自身。这是对胡塞尔本质直观的存在主义化反转。</p>
+<h3>5.2 自在存在与自为存在</h3>
+<div class="table-wrap"><table><thead><tr><th></th><th>自在存在（Être-en-soi）</th><th>自为存在（Être-pour-soi）</th></tr></thead><tbody><tr><td>是什么</td><td>物的存在：就是它所是的</td><td>意识的存在：永远不是它所是的</td></tr><tr><td>特征</td><td>充实、固定、无否定</td><td>包含否定、虚无、自由</td></tr><tr><td>例子</td><td>杯子、桌子</td><td>人的意识</td></tr></tbody></table></div>
+<p>自为存在的本质是<strong>虚无（néant）</strong>：意识之所以能够意识到对象，正因为它不是对象，它与自身之间有「距离」。</p>
+<h3>5.3 坏信仰（Mauvaise Foi）</h3>
+<p>人试图把自己当作物（自在存在）来逃避自由的责任——「我只是在执行命令」「我天生就是这样」。坏信仰是对自由的逃避，也是对存在的不诚实。</p>
+<h3>5.4 他者的凝视（Le Regard d'autrui）</h3>
+<p>他人的凝视把我变成对象——当被他人看见，我突然意识到自己「是」一个对象，有固定的性质（在他人眼中）。这产生<strong>羞耻</strong>（honte）：我的自由被他人的凝视凝固。</p>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">萨特凝视与电影理论</div><div class="cb">萨特的他者凝视影响了劳拉·穆尔维（Laura Mulvey）的「男性凝视」理论（1975），但穆尔维的路径更接近拉康的镜像理论。萨特的凝视是本体论意义的，穆尔维的凝视是意识形态-精神分析意义的，两者不能等同。</div></div>
+<hr>
+<h2>六、列维纳斯：他者伦理学</h2>
+<p>列维纳斯（Emmanuel Levinas）是对胡塞尔和海德格尔的双重批判：</p>
+<h3>6.1 对胡塞尔的批判</h3>
+<p>胡塞尔用同感（Einfühlung）把他人还原为「另一个我」——这是<strong>同一性哲学</strong>的暴力：他者被纳入自我的认知框架，失去其根本他者性（altérité）。</p>
+<h3>6.2 对海德格尔的批判</h3>
+<p>海德格尔的存在论把「存在」放在第一位，而存在论从一开始就是对他者的归并（totalization）。<strong>伦理先于存在论</strong>：面对他者的责任是比存在的问题更原初的事情。</p>
+<h3>6.3 面容（Visage / Face）</h3>
+<p><strong>面容</strong>不是脸的视觉外观，而是他者作为绝对他者向我「显现」的方式：</p>
+<pre>面容的双重结构：
+├── 赤裸与脆弱：「不要杀我」（命令的被动性）
+└── 无限超越：他者永远超出我能把握的范围</pre>
+<p><strong>面容</strong>打断了我的自发性，召唤我对他者负责——<strong>伦理关系先于知识关系</strong>。</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>胡塞尔/海德格尔</th><th>列维纳斯</th></tr></thead><tbody><tr><td>第一哲学</td><td>存在论（存在的问题）</td><td>伦理学（对他者的责任）</td></tr><tr><td>他者</td><td>另一个自我/此在</td><td>绝对他者（Autrui）：不可化约</td></tr><tr><td>关系</td><td>认识/理解</td><td>责任/欠债</td></tr><tr><td>时间</td><td>此在的时间性</td><td>他者打断时间：「无限」</td></tr><tr><td></td><td></td><td></td></tr></tbody></table></div>
+<hr>
+<h2>七、解释学现象学（Gadamer / Ricoeur）</h2>
+<h3>7.1 伽达默尔（Hans-Georg Gadamer，1900–2002）</h3>
+<p><strong>《真理与方法》（1960）</strong>：核心争论：理解不是一种方法，而是存在方式（海德格尔影响）。</p>
+<p><strong>视域融合（Horizontverschmelzung）</strong>：</p>
+<ul><li>我带着自己的历史视域（Horizont）去理解文本或他者</li><li>文本也有自己的历史视域</li><li>理解是两个视域的融合，而非一方消解于另一方</li></ul>
+<p><strong>效果历史（Wirkungsgeschichte）</strong>：任何理解都受到「历史效果」的影响——我们总已站在某个传统中，这不是障碍而是理解的条件。这是对「方法消除偏见」的启蒙主义信念的批判。</p>
+<p><strong>前见（Vorurteil）的平反</strong>：启蒙主义把偏见/前见视为必须清除的障碍；伽达默尔认为前见（前理解）是理解的条件，没有前见就没有理解的出发点。</p>
+<h3>7.2 里克尔（Paul Ricoeur，1913–2005）</h3>
+<p>里克尔的工程是在<strong>解释学</strong>（文本理解）和<strong>现象学</strong>（主体经验）之间架桥：</p>
+<p><strong>叙事身份（Identité narrative）</strong>：</p>
+<pre>两种身份：
+├── 同一性身份（idem）：随时间保持同一的「什么」（指纹/性格）
+└── 自身性身份（ipse）：「我是能说&#x27;我&#x27;的那个人」，经由叙事构建</pre>
+<p>人的身份不是固定本质，而是通过<strong>叙事</strong>构建的：我是「我讲述自己的故事」中的主人公。叙事是时间经验和身份的中介。</p>
+<p><strong>文本的世界</strong>：文本不是作者意图的表达，而是展开一个「世界」——读者与文本的相遇是两个世界的交汇（近似伽达默尔的视域融合，但更强调文本的自律性）。</p>
+<p><strong>三重模仿（Mimesis）</strong>（《时间与叙事》）：</p>
+<div class="table-wrap"><table><thead><tr><th>阶段</th><th>名称</th><th>内容</th></tr></thead><tbody><tr><td>Mimesis I</td><td>前叙事理解</td><td>行动者对行动的前叙事理解（实践语义学）</td></tr><tr><td>Mimesis II</td><td>叙事构型</td><td>情节（emplotment）把异质事件综合为整体</td></tr><tr><td>Mimesis III</td><td>接受与应用</td><td>读者/观众把故事世界与生活世界相交汇</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">里克尔与电影</div><div class="cb">里克尔的叙事理论（尤其 Mimesis III）是电影叙事学与现象学对话的重要节点：电影如何构型时间经验，观众如何把电影时间与生活时间交织？</div></div>
+<hr>
+<h2>七·五、早期运动的重要人物（施皮格伯格重点论述）</h2>
+<p>以下人物是施皮格伯格《现象学运动》中专章处理的德国阶段核心成员，他们构成了胡塞尔圈子的第一代扩展，但各自走出了独立路径。</p>
+<hr>
+<h3>7A、谢勒（Max Scheler，1874–1928）：价值现象学与情感的优先性</h3>
+<p>谢勒是德国现象学运动中影响最广泛的人物之一，施皮格伯格称他为「现象学与哲学人类学之间的桥梁」。他对胡塞尔既有继承也有根本性的修正。</p>
+<h3>7A.1 对胡塞尔形式伦理学的批判</h3>
+<p>胡塞尔的伦理学基本上沿袭了康德的形式主义路径（义务/规则高于情感）。谢勒在《伦理学中的形式主义与实质的价值伦理学》（<em>Der Formalismus in der Ethik und die materiale Wertethik</em>，1913–16）中提出根本反驳：</p>
+<div class="table-wrap"><table><thead><tr><th>康德（被谢勒批判）</th><th>谢勒的替代方案</th></tr></thead><tbody><tr><td>伦理基础 = 形式理性规则（绝对命令）</td><td>伦理基础 = 实质价值（materiale Werte）</td></tr><tr><td>情感是障碍，理性才是道德的保证</td><td>情感具有<strong>认识功能</strong>：价值通过情感被把握</td></tr><tr><td>普遍规则先于具体处境</td><td>价值的等级秩序（Rangordnung）是直接被感受到的</td></tr><tr><td>人格 = 理性自律主体</td><td>人格（Person）= 不可化约的价值实现中心</td></tr></tbody></table></div>
+<p><strong>核心论点</strong>：情感（Gefühl）不是盲目冲动，而是一种<strong>意向性行为</strong>——它指向价值（Wert），就像知觉指向事物。价值是通过情感被直接把握的，这是一种「情感直觉」（emotionale Anschauung）。</p>
+<h3>7A.2 价值的等级秩序（Rangordnung der Werte）</h3>
+<p>谢勒认为价值之间存在客观的高低等级，这个等级是被感受到的（不是被推理出来的）：</p>
+<pre>最高（Höchste）：神圣价值（heilig / profan）
+        │
+        ▼
+精神价值（geistig）：美、正义、真理
+        │
+        ▼
+生命价值（vital）：高贵 / 卑贱；健康 / 疾病
+        │
+        ▼
+最低（Niedrigste）：感官价值（angenehm / unangenehm）——快适 / 不快</pre>
+<p><strong>偏好（Vorziehen）与忽视（Nachsetzen）</strong>：我们在实践中体验价值等级——选择更高价值时「感受到」它的优越性，这种感受本身就是道德认识。</p>
+<h3>7A.3 爱的秩序（Ordo Amoris）</h3>
+<p>谢勒的核心命题：每个人格（Person）都有一个特定的<strong>爱的秩序</strong>——哪些价值被爱、哪些被忽视、爱的等级如何排列。这个秩序构成了人格的「心的先天结构」（apriorische Herzensstruktur）。</p>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">爱的秩序 vs 胡塞尔的本质直观</div><div class="cb">胡塞尔的本质直观是认知性的（通过变体法 Variation Method 把握本质）；谢勒的「爱的秩序」是意志-情感性的——人格的核心不是认知结构而是<strong>爱的方式</strong>。这使谢勒更接近奥古斯丁（「我的重量是我的爱」）而非笛卡尔传统。</div></div>
+<h3>7A.4 同感（Mitgefühl）vs 胡塞尔的移情（Einfühlung）</h3>
+<p>胡塞尔用<strong>移情</strong>（Einfühlung）解释主体间性：通过类比推理，我把他人身体类比为「另一个我」。谢勒批评这个模型：</p>
+<div class="table-wrap"><table><thead><tr><th>胡塞尔的移情（Einfühlung）</th><th>谢勒的同感（Mitgefühl）批判</th></tr></thead><tbody><tr><td>通过类比推理到达他人</td><td>同感是<strong>直接的</strong>，先于推理</td></tr><tr><td>他人 = 另一个我（alter ego）</td><td>他人的情感直接被感受（不是推出来的）</td></tr><tr><td>主体间性是认知问题</td><td>主体间性是情感问题</td></tr><tr><td>难题：如何跨越主我与他人的间隙？</td><td>我们首先<strong>就在</strong>情感共鸣中，间隙是后来才有的</td></tr></tbody></table></div>
+<p>谢勒区分了四种「同感」层次：</p>
+<ol><li><strong>情感融合（Gefühlsansteckung）</strong>：如传染性大笑，自我边界消融</li><li><strong>同感（Mitgefühl）</strong>：与他人一起感受，但保持自我-他人区分</li><li><strong>情感认同（Nachfühlen）</strong>：「仿佛」他人的情感（艺术欣赏中）</li><li><strong>宇宙情感（kosmisches Mitgefühl）</strong>：对所有存在者的情感共鸣（佛教/斯宾诺莎路径）</li></ol>
+<h3>7A.5 怨恨（Ressentiment）分析</h3>
+<p>《道德建构中的怨恨》（1912）：谢勒将尼采的 Ressentiment 概念现象学化。</p>
+<p><strong>怨恨结构</strong>：无力实现更高价值的人，将高价值<strong>重新解释</strong>为「坏的」，将低价值解释为「好的」——这是一种系统性的价值欺骗（Werttäuschung）。</p>
+<div class="callout" style="border-color:#009688;background:#e0f2f1"><div class="ct" style="color:#009688">怨恨的现象学结构</div><div class="cb">无法获得某价值（无力感）→ 对持有该价值者的隐蔽敌意 → 通过「道德」重新定性价值次序 → 把自己实际上「只能得到」的解释为「道德上更好的」</div></div>
+<hr>
+<h3>7B、英加登（Roman Ingarden，1893–1970）：纯粹意向对象与现象学美学</h3>
+<p>英加登是胡塞尔在哥廷根时期最重要的学生之一，但他终其一生从<strong>实在论立场</strong>批判胡塞尔的先验唯心论，成为现象学内部最重要的本体论异见者。</p>
+<h3>7B.1 对胡塞尔先验唯心论的批判</h3>
+<p>胡塞尔的先验还原最终结论是：世界是先验意识的<strong>构成成果</strong>（Konstitut）——世界的存在依赖于意识。英加登认为这走向了唯心论，而唯心论无法解释世界的实在性：</p>
+<p><strong>英加登的反驳</strong>：如果世界只是意识的构成物，那么世界的存在就是<strong>纯粹意向性的</strong>（purely intentional）——这对于艺术作品是正确的，但对于实在的物理世界是错误的。</p>
+<p>这个批判促使英加登提出了经典的本体论区分：</p>
+<div class="table-wrap"><table><thead><tr><th>存在方式</th><th>定义</th><th>例子</th></tr></thead><tbody><tr><td><strong>实在的存在</strong>（real existence）</td><td>独立于意识存在，有时间性和因果性</td><td>物理事物（桌子、山川）</td></tr><tr><td><strong>观念的存在</strong>（ideal existence）</td><td>非时间性、非因果性，不依赖意识但也不是物质</td><td>数学对象、本质</td></tr><tr><td><strong>纯粹意向的存在</strong>（purely intentional existence）</td><td>依赖意识行为而存在，但有自律的结构</td><td>艺术作品、虚构人物</td></tr></tbody></table></div>
+<p><strong>核心贡献</strong>：艺术作品（文学、音乐、绘画、电影）的存在方式既不是实在的，也不是观念的，而是<strong>纯粹意向的</strong>——它需要意识行为才能存在，但一旦被构成，它就有自己的结构。</p>
+<h3>7B.2 文学作品的四层结构</h3>
+<p>《文学艺术品》（<em>Das literarische Kunstwerk</em>，1931）：英加登分析文学作品由四个层次构成：</p>
+<pre>第四层：图式化面相（schematisierte Ansichten）
+        呈现人物/场景的感性面相，但只是「图式」（非全面）
+        ↑
+第三层：再现的对象性（dargestellte Gegenständlichkeiten）
+        作品中的人物、事件、世界（虚构对象）
+        ↑
+第二层：意义单元（semantische Einheiten / Satzsinne）
+        句子所表达的意义（命题内容）
+        ↑
+第一层：语音层（Wortlautschichten）
+        语言的物质性声音层（词的发音/印刷形式）</pre>
+<h3>7B.3 不确定点（Unbestimmtheitsstellen）与具体化（Konkretisation）</h3>
+<p><strong>不确定点</strong>（spots of indeterminacy / <em>Unbestimmtheitsstellen</em>）：文学作品中的虚构对象<strong>不是完全被规定的</strong>——哈姆雷特到底长什么样？胡须几根？这些在文本中是不确定的。任何虚构对象都有无数的不确定点。</p>
+<p><strong>具体化</strong>（Konkretisation）：读者通过阅读行为「填补」不确定点，把图式化的作品<strong>具体化</strong>为自己经验中的具体世界。每个读者的具体化都不同。</p>
+<pre>作品（图式的、有不确定点的纯意向对象）
+        │ 读者的具体化行为
+        ▼
+具体化版本（更丰满、但每次都不同）
+        │
+        ▼
+审美对象（Ästhetischer Gegenstand）：价值评估的真正对象</pre>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">英加登与接受美学</div><div class="cb">英加登的「不确定点」和「具体化」概念直接影响了接受美学（Rezeptionsästhetik）：<br>- <strong>姚斯（Hans Robert Jauss）</strong>：「期待视野」（Erwartungshorizont）= 读者具体化的历史框架<br>- <strong>伊泽尔（Wolfgang Iser）</strong>：「空白（Leerstellen）」= 不确定点的另一名称；「隐含读者」<br>英加登是接受美学的现象学基础。</div></div>
+<h3>7B.4 时间对象与电影</h3>
+<p>英加登对音乐和时间性艺术的分析对电影理论有间接意义：时间性艺术作品（音乐、戏剧、电影）在时间中展开，它们的具体化本身是时间过程，不是一次性的。</p>
+<hr>
+<h3>7C、施泰因（Edith Stein，1891–1942）：移情作为独特行为</h3>
+<p>施泰因的博士论文《论移情问题》（<em>Zum Problem der Einfühlung</em>，1917，胡塞尔指导）是对移情现象学最精确的分析之一。</p>
+<h3>7C.1 移情的结构分析</h3>
+<p>施泰因拒绝两种简单化的解释：</p>
+<ul><li><strong>投射说（projection）</strong>：我把自己的感受投射到他人身上——但这样我只是感受到自己，不是他人</li><li><strong>模仿说（imitation / inner imitation）</strong>：我在内部模仿他人的行为从而推出其感受——但这是间接的推理，不是直接的移情</li></ul>
+<p><strong>施泰因的论点</strong>：移情是一种<strong>独特的（sui generis）意向行为</strong>，既非知觉（因为他人的内在经验不像物体那样被给予），也非记忆，也非想象——它有自己的给予方式。</p>
+<p><strong>移情的三个时刻</strong>：</p>
+<ol><li><strong>浮现（Auftauchen）</strong>：他人经验作为外来经验涌现（「这不是我的感受，但我感到它」）</li><li><strong>充实性实现（erfüllende Ausführung）</strong>：随着理解加深，移情内容变得更充实</li><li><strong>对象化（Objektivierung）</strong>：把他人经验作为他人的经验来把握（保持距离）</li></ol>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">施泰因对胡塞尔的修正</div><div class="cb">施泰因认为胡塞尔的「类比推理」模型过于认知化。移情不是从我的身体经验类比到他人的推理，而是直接被给予的——但给予的方式是「被给予为外来的」（gegeben als fremd），这一点是移情区别于所有其他意向行为的特征。</div></div>
+<hr>
+<h3>7D、舒茨（Alfred Schutz，1899–1959）：社会现象学</h3>
+<p>舒茨的工程是将<strong>胡塞尔的现象学</strong>与<strong>马克斯·韦伯的理解社会学</strong>综合，建立严格的社会科学的现象学基础。</p>
+<h3>7D.1 韦伯问题与胡塞尔的解答</h3>
+<p><strong>韦伯的问题</strong>：社会科学的对象是<strong>有意义的行动</strong>（sinnhaftes Handeln）——如何科学地理解行动者给自己行动赋予的主观意义？</p>
+<p><strong>胡塞尔的资源</strong>：意向性分析提供了「意义如何被构成」的精确描述框架。</p>
+<p><strong>舒茨的综合</strong>（《社会世界的现象学》，<em>Der sinnhafte Aufbau der sozialen Welt</em>，1932）：</p>
+<div class="table-wrap"><table><thead><tr><th>韦伯概念</th><th>胡塞尔现象学基础</th><th>舒茨的综合</th></tr></thead><tbody><tr><td>主观意义（subjektiver Sinn）</td><td>意向性：意识行为的指向性结构</td><td>行动的意义 = 行动者意向结构的特定时间取向</td></tr><tr><td>理解（Verstehen）</td><td>移情（Einfühlung）</td><td>通过共同的生活世界框架理解他人</td></tr><tr><td>理想类型（Idealtypus）</td><td>本质直观（Wesensschau）</td><td>类型化（Typifikation）= 实践中的理想类型建构</td></tr></tbody></table></div>
+<h3>7D.2 多元现实（Multiple Realities）</h3>
+<p>舒茨继承詹姆斯（William James）的「次等宇宙」（subuniverses of reality）概念，加以现象学精确化：</p>
+<p><strong>最高现实（Paramount Reality）</strong>：日常生活的自然态度世界——时间性的、实践取向的、共同存在的。这是所有其他「现实」的参照基础。</p>
+<div class="table-wrap"><table><thead><tr><th>现实领域</th><th>特征</th><th>与日常现实的关系</th></tr></thead><tbody><tr><td>日常生活世界</td><td>工作-时间，身体参与，主体间性直接</td><td>最高现实</td></tr><tr><td>梦境</td><td>非时间性，私人性，身体退隐</td><td>需要「休止符」切换</td></tr><tr><td>虚构/艺术世界</td><td>有限封闭，内部逻辑自洽</td><td>美学切换</td></tr><tr><td>科学理论世界</td><td>去时间化，去主体性</td><td>理论化还原</td></tr><tr><td>儿戏</td><td>局限规则，临时约定</td><td>游戏切换</td></tr></tbody></table></div>
+<p><strong>各领域之间的切换</strong>需要「休止符（shock）」——从电影院走出来时的那种定向感（再定向的需要）就是切换时的休止符现象。</p>
+<h3>7D.3 知识储备（Stock of Knowledge）与类型化（Typification）</h3>
+<p><strong>知识储备</strong>：每个行动者带入情境的前知识系统——关于人、事件、社会规则的习惯性知识，大部分是未被反思的、「自明的」（taken-for-granted）。</p>
+<p><strong>类型化</strong>：在实践中我们不把每个人都当作完全特殊的个体理解，而是把他们归入类型（「卖报的人」「大学教授」「陌生人」）——类型化是社会互动的认知效率机制。</p>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">舒茨与社会建构论</div><div class="cb">舒茨直接影响了<strong>伯格与勒克曼</strong>（Peter Berger & Thomas Luckmann）《现实的社会建构》（1966）——社会学中的知识社会学传统。也影响了常人方法论（Ethnomethodology，Garfinkel）。</div></div>
+<hr>
+<h3>7E、雅斯贝尔斯（Karl Jaspers，1883–1969）：存在澄明与边界处境</h3>
+<p>雅斯贝尔斯从精神病理学出发走向存在哲学，与海德格尔齐名为「存在主义现象学」的德国代表，但其路径与海德格尔有根本差异。</p>
+<h3>7E.1 精神病理学的现象学方法</h3>
+<p>《一般精神病理学》（<em>Allgemeine Psychopathologie</em>，1913）：雅斯贝尔斯将现象学方法引入精神医学——不是用自然科学的因果解释压制病人的主观体验，而是<strong>描述</strong>精神疾病患者的主观现象（内部体验、意义结构）。</p>
+<p>这开创了<strong>精神病学现象学</strong>（Phänomenologie der Psychiatrie）传统，影响了后来的反精神病学运动（Laing / Cooper）。</p>
+<h3>7E.2 存在澄明（Existenzerhellung）与存在的三个维度</h3>
+<p>雅斯贝尔斯的哲学工程不是「存在论」（关于存在的理论），而是<strong>存在澄明</strong>——照亮我的存在、帮助我理解自身的哲学活动。</p>
+<p>他区分三种「存在包围（Umgreifende）」维度：</p>
+<pre>超越者（Transzendenz）── 不可把握的「彼岸」，只在失败中显现
+        ↑
+精神（Geist）── 通过理念和意义把一切综合为整体
+        ↑
+此在（Dasein）── 经验的、实证的存在（雅斯贝尔斯≠海德格尔的Dasein）
+        +
+存在（Existenz）── 不能被客观化的我自身：自由、历史性、与超越者的关系</pre>
+<h3>7E.3 边界处境（Grenzsituationen）</h3>
+<p><strong>边界处境</strong>是雅斯贝尔斯最重要的概念：死亡、苦难、斗争、罪责——我们在其中遭遇存在的绝对边界，日常生活的「遮蔽」被打破。</p>
+<div class="table-wrap"><table><thead><tr><th>边界处境</th><th>揭示的存在维度</th></tr></thead><tbody><tr><td><strong>死亡</strong></td><td>时间性的终极边界；此在的有限性</td></tr><tr><td><strong>苦难</strong></td><td>我无法摆脱的处境性（情境性）存在</td></tr><tr><td><strong>斗争</strong></td><td>他人的存在作为威胁；共同存在的张力</td></tr><tr><td><strong>罪责</strong></td><td>自由带来的必然责任（我的每个选择都使其他可能性关闭）</td></tr></tbody></table></div>
+<p><strong>边界处境的功能</strong>：不是让人绝望，而是打破日常的「遮蔽状态」，迫使人面对<strong>真实存在（authentische Existenz）</strong>。在边界处境中，人才真正被迫面对自身。</p>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">雅斯贝尔斯 vs 海德格尔</div><div class="cb">表面相似（均谈此在、边界、真实性），但立场对立：海德格尔试图建立存在论（关于存在的理论体系）；雅斯贝尔斯认为存在无法被理论化——任何系统化都是对存在的背叛。此外，雅斯贝尔斯始终保持对「超越者」（上帝/绝对）的开放性，而海德格尔走向了世俗的此在有限性分析。</div></div>
+<hr>
+<h3>7F、亨利（Michel Henry，1922–2002）与马里翁（Jean-Luc Marion，b.1946）：法国激进现象学</h3>
+<p>两人代表法国现象学的两个「激进化」方向——都对胡塞尔的意向性框架提出根本挑战，但方向相反。</p>
+<h3>7F.1 亨利：生命现象学（Phénoménologie de la Vie）</h3>
+<p><strong>核心问题</strong>：胡塞尔的现象学始终是<strong>意向性的</strong>——意识指向外部对象。但亨利问：有没有一种不指向外部的显现（manifestation）？</p>
+<p><strong>答案</strong>：<strong>生命</strong>（la Vie）是自身显现的（auto-affection）：生命不需要意向性，不需要指向外部就能感受自身——疼痛、活力、情感本身就是自身感受，没有距离，没有表象。</p>
+<div class="table-wrap"><table><thead><tr><th>胡塞尔的意向性现象学</th><th>亨利的生命现象学</th></tr></thead><tbody><tr><td>显现 = 意识对对象的指向（意向弧）</td><td>显现 = 生命对自身的感受（auto-affection）</td></tr><tr><td>主体-客体结构</td><td>生命：无主客分裂，纯粹内在性</td></tr><tr><td>世界显现于意识之中</td><td>生命在黑暗中（en nuit）感受自身，无需光的外在化</td></tr><tr><td>时间性（保留/预持）是意识的结构</td><td>生命是永恒现在（présent vivant），无时间流逝</td></tr></tbody></table></div>
+<pre>胡塞尔的显现：意识 ──→ 对象（光/视觉隐喻：可见的显现）
+亨利的显现：  生命 ←── 自身感受（触觉/黑暗隐喻：内在的触碰）</pre>
+<p><strong>《显现的本质》（<em>L'essence de la manifestation</em>，1963）</strong>是亨利最系统的论著。他认为西方哲学从希腊开始就走了「外在化」的歧路——把一切都理解为在光中的可见性，而遗忘了生命内在的自身感受。</p>
+<p><strong>晚期亨利</strong>：将生命现象学与基督教神学综合（《我是真理》1996，《肉与道成肉身》2000）——基督教的「道成肉身」是生命自身显现最高的历史形式。</p>
+<h3>7F.2 马里翁：给予性现象学（Phénoménologie de la donation）</h3>
+<p>马里翁从海德格尔出发，但对海德格尔的存在（Sein）概念进行了激进的「还原」。</p>
+<p><strong>存在论差异之上的还原</strong>：海德格尔区分了存在（Sein）与存在者（Seiendes）；马里翁认为必须再还原一步——把「给予性（donation / Gegebenheit）」置于存在之上，作为最终基础。</p>
+<p><strong>给予性（donation）</strong>：任何显现（phenomenon）都是被给予的（given）；但什么在给予？不是胡塞尔的先验自我，不是海德格尔的存在（Sein），而是<strong>给予本身（la donation elle-même）</strong>——一个无名的「它给予（Es gibt / Il y a）」。</p>
+<p><strong>核心概念：饱和现象（Phénomène saturé）</strong></p>
+<p>《饱和现象》（<em>Étant donné</em>，1997）：普通现象的特征是「意向能对其进行充分把握」——我能预期、测量、概念化它。但有些现象<strong>超溢（saturation）</strong>意向的把握能力：</p>
+<div class="table-wrap"><table><thead><tr><th>饱和现象类型</th><th>康德范畴对应</th><th>例子</th></tr></thead><tbody><tr><td><strong>历史事件（Événement）</strong></td><td>量的饱和：不可被总体化</td><td>历史事件（法国大革命）：无法穷尽描述</td></tr><tr><td><strong>偶像（Idole）</strong></td><td>质的饱和：不堪忍受的强度</td><td>绘画/视觉现象：目光无法穷尽</td></tr><tr><td><strong>肉身（Chair）</strong></td><td>关系的饱和：无法客观化</td><td>我的身体：既是主体也是客体</td></tr><tr><td><strong>面容（Visage）</strong></td><td>模态的饱和：绝对抵抗把握</td><td>他者面容：无限超越，不可化约</td></tr></tbody></table></div>
+<pre>普通现象：意向 ──→ 对象（意向充实对象，可把握）
+饱和现象：给予性 ──→→→ 意向（给予超溢意向，我被给予淹没）
+                   接受者（adonné）= 被给予击中的我</pre>
+<p><strong>接受者（l'adonné）</strong>：在饱和现象中，「我」不再是主动构成的先验主体，而是<strong>被给予性击中的接受者</strong>——我成为「亲受（witness）」。主体性的方向被翻转：不是我构成世界，而是世界给予击中我。</p>
+<div class="table-wrap"><table><thead><tr><th>胡塞尔</th><th>海德格尔</th><th>马里翁</th></tr></thead><tbody><tr><td>先验自我构成世界</td><td>此在在世存在</td><td>接受者（adonné）被给予击中</td></tr><tr><td>意向性：从我出发</td><td>此在：在世界中被抛</td><td>给予性：从给予出发（更激进）</td></tr><tr><td>充实（Erfüllung）</td><td>揭示（Erschlossenheit）</td><td>饱和（saturation）：超溢充实</td></tr><tr><td>括号内的意识</td><td>括号无法成立</td><td>给予在括号之前</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">马里翁与图像理论</div><div class="cb">马里翁区分「偶像（Idole）」和「圣像（Icône）」：偶像把目光止步于可见性（我看到的终止于图像本身）；圣像让目光穿透自身，指向不可见的深度（图像成为向无限开放的窗口）。这个区分影响了当代图像哲学（让-克里斯托夫·巴伊：l'image-idole vs l'image-icône）。</div></div>
+<hr>
+<h2>八、后现象学（Post-phenomenology）</h2>
+<p>后现象学（Don Ihde 1990s 提出）继承现象学的具身经验分析，但聚焦于<strong>技术的中介作用</strong>：人不是直接与世界接触，而是通过各种技术装置与世界关联。</p>
+<h3>8.1 唐·伊德（Don Ihde）：人-技术关系类型学</h3>
+<p>《后现象学》（1993）、《技术与生活世界》（1990）</p>
+<div class="table-wrap"><table><thead><tr><th>关系类型</th><th>结构</th><th>例子</th><th>特征</th></tr></thead><tbody><tr><td><strong>具身关系</strong>（Embodiment）</td><td>（人-技术）→ 世界</td><td>佩戴眼镜 / 使用工具</td><td>技术被纳入身体图式，透明化</td></tr><tr><td><strong>解释关系</strong>（Interpretive）</td><td>人 → （技术-世界）</td><td>读温度计 / 看仪器</td><td>技术呈现需要解读，非直接</td></tr><tr><td><strong>他者关系</strong>（Alterity）</td><td>人 → 技术（←世界）</td><td>与机器人交互</td><td>技术作为准他者，类主体</td></tr><tr><td><strong>背景关系</strong>（Background）</td><td>人（技术/世界）</td><td>空调 / 建筑结构</td><td>技术退入背景，不被注意</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">后现象学与 AIGC</div><div class="cb">AI 生成图像是哪种关系？可能是新类型：<strong>生成关系</strong>——人通过提示词（prompt）指挥技术生成世界，人既不具身于 AI，也不只是解读它，而是与它共同构成了作品的「世界」。这是伊德框架的延伸边界。</div></div>
+<h3>8.2 维尔贝克（Peter-Paul Verbeek）</h3>
+<p><strong>《物做什么》（What Things Do, 2000）</strong>：延伸伊德，主张技术不只是工具，而是<strong>道德中介</strong>——技术参与道德实践的构型（技术决定了某些行为可能/不可能/更容易）。</p>
+<p><strong>后现象学设计伦理</strong>：如果技术中介了人的感知和行动，那么设计本身就是道德行为。</p>
+<h3>8.3 德雷福斯（Hubert Dreyfus）</h3>
+<p>《计算机不能做什么》（1972）：早期 AI 批判——符号主义 AI 预设人类智能是符号操作，但海德格尔的「在世存在」表明：人类的技能性应对（skillful coping）是前符号的、身体的、情境的，无法被规则化。</p>
+<p><strong>技能习得的五阶段</strong>（与 Stuart Dreyfus 合作）：</p>
+<ul><li>新手（遵守规则）→ 进阶学习者 → 胜任者 → 精通者 → <strong>专家</strong>（直觉性整体把握，规则消失）</li></ul>
+<p>专家的行动不是「运用规则」，而是「身体知道怎么做」——这是海德格尔上手性（Zuhandenheit）的认知科学翻译。</p>
+<hr>
+<h2>九、4E认知科学与现象学的交汇</h2>
+<p>1990年代后，认知科学的「涌现转向」（embodied/enactive turn）与现象学深度汇合：</p>
+<div class="table-wrap"><table><thead><tr><th>维度</th><th>内容</th><th>代表人物</th></tr></thead><tbody><tr><td><strong>具身（Embodied）</strong></td><td>认知依赖身体结构，不只是大脑</td><td>Varela / Thompson / Merleau-Ponty</td></tr><tr><td><strong>嵌入（Embedded）</strong></td><td>认知依赖环境，不只在头颅内</td><td>Gibson（生态心理学）</td></tr><tr><td><strong>生成（Enactive）</strong></td><td>认知是生命体与环境的动态耦合，世界被「生成」而非表征</td><td>Varela / Maturana（自创生）</td></tr><tr><td><strong>延伸（Extended）</strong></td><td>认知系统延伸到大脑之外（笔记本、手机）</td><td>Andy Clark / Chalmers</td></tr></tbody></table></div>
+<p><strong>弗朗西斯科·瓦雷拉（Varela）《涌现的心灵》（1991）</strong>：</p>
+<ul><li>反对表征主义（representationalism）：认知不是大脑对世界的镜像</li><li>生命体与环境之间的「结构耦合（structural coupling）」</li><li>自创生（autopoiesis）：生命系统自我生产和维持</li><li>现象学与认知科学的「循环」：经验描述和科学解释相互校正</li></ul>
+<p><strong>肖恩·加拉格尔（Shaun Gallagher）</strong>：</p>
+<div class="table-wrap"><table><thead><tr><th></th><th>身体图式（Body Schema）</th><th>身体意象（Body Image）</th></tr></thead><tbody><tr><td>性质</td><td>前意识的、运动的、自动的</td><td>有意识的、感知的、表征的</td></tr><tr><td>例子</td><td>盲杖使用中的空间感知</td><td>照镜子时看到自己的身体</td></tr><tr><td>层次</td><td>实践层次</td><td>感知/信念层次</td></tr></tbody></table></div>
+<hr>
+<h2>十、气氛美学（Atmosphere / Stimmung）</h2>
+<p>气氛美学是现象学（尤其是海德格尔的 Stimmung 概念）在当代美学中的重要延伸。</p>
+<h3>10.1 格诺特·波姆（Gernot Böhme，1937–）</h3>
+<p><strong>《大气层》（Atmosphären, 1995）</strong>、<strong>《新美学》（Neue Ästhetik, 2001）</strong></p>
+<p><strong>核心命题</strong>：气氛（Atmosphäre）是美学的基本现象，先于主客分离——它既不完全在对象中（物的「放射」），也不完全在主体中（情绪状态），而是在两者之间的<strong>弥散场域</strong>。</p>
+<pre>传统美学路径：
+主体（情感/判断）↔ 客体（形式/内容）
+
+波姆的气氛：
+气氛（Atmosphäre）= 弥散于主客之间的共振场
+         ├── 来自物的「放射（Ausstrahlung）」
+         └── 落入感知主体的「情调着陆（Angestimmtheit）」</pre>
+<p><strong>物的「放射」（Ecstasies of Things）</strong>：物不只是客观属性的集合，它向周围空间「放射」（ecstasies）自身——一把椅子放射出「舒适」，一片森林放射出「神秘」。气氛是这种放射被感知主体感受的结果。</p>
+<p><strong>气氛美学的应用</strong>：</p>
+<ul><li>舞台设计（Bühnenbild）</li><li>建筑空间体验</li><li>自然体验（weather / light）</li><li>商品设计的「气氛生产」（阿多诺批判的对象：资本主义对气氛的商品化）</li></ul>
+<h3>10.2 赫尔曼·施密茨（Hermann Schmitz，1928–）</h3>
+<p><strong>新现象学（Neue Phänomenologie）</strong>：</p>
+<p>施密茨发展出一套脱离传统主客框架的现象学，核心是<strong>身体感受</strong>（leibliches Spüren）的自律性：</p>
+<ul><li><strong>半自主感受（halbautonome Gefühle）</strong>：情绪不只在心里，它是弥散的、空间性的——悲哀不是「我感到悲哀」，而是「悲哀笼罩着这个空间」</li><li>气氛是「入侵性的情绪空间」，先于主体感知到情绪</li></ul>
+<div class="table-wrap"><table><thead><tr><th></th><th>波姆</th><th>施密茨</th></tr></thead><tbody><tr><td>侧重</td><td>物的放射 + 美学批评</td><td>身体感受 + 现象学分析</td></tr><tr><td>气氛的方向</td><td>从物到人（放射）</td><td>弥散于空间（入侵性）</td></tr><tr><td>主要应用</td><td>设计/建筑/舞台美学</td><td>情感现象学/新现象学体系</td></tr></tbody></table></div>
+<hr>
+<h2>十一、电影现象学传承</h2>
+<pre>梅洛-庞蒂（《电影与新心理学》1945）
+身体即感知 / 电影与知觉结构相似
+        │
+        ▼
+薇薇安·索布查克（Vivian Sobchack）── 美国电影现象学
+《眼的话语》（The Address of the Eye, 1992）
+「电影身体」：电影本身像有知觉经验的生命体
+        │
+        ├──► 劳拉·马克斯（Laura U. Marks）
+        │     《皮肤的电影》（The Skin of the Film, 2000）
+        │     触感视觉（haptic visuality）/ 触觉影像
+        │     涉身记忆（embodied memory）/ 跨文化电影
+        │
+        ├──► 珍妮弗·巴克（Jennifer M. Barker）
+        │     《触觉之眼》（The Tactile Eye, 2009）
+        │     肌肉层 / 皮肤层 / 内脏层 三层身体参与
+        │
+        └──► 意大利学派
+              毛罗·卡尔博纳（Mauro Carbone）
+              《影像之肉》（The Flesh of Images, 2015）
+              梅洛-庞蒂 + 普鲁斯特 + 当代图像理论
+                      │
+                      ▼
+              阿涅斯·达尔马索（Agnès Dalmasso）
+              感知的非个人性（impersonal perception）
+              图像的前主体层次
+
+朱利亚纳·布鲁诺（Giuliana Bruno）
+《情感地图集》（Atlas of Emotion, 2002）
+《表面》（Surface, 2014）
+触感地理学 / 纺织品-电影-建筑的材料性</pre>
+<p><strong>电影现象学的核心问题</strong>：</p>
+<div class="table-wrap"><table><thead><tr><th>问题</th><th>各理论家的回答</th></tr></thead><tbody><tr><td>电影是否有「视角」？</td><td>索布查克：电影有具身视角，不只是机械记录</td></tr><tr><td>观众如何与影像接触？</td><td>马克斯：触感而非凝视；皮肤而非眼睛</td></tr><tr><td>身体如何参与观影？</td><td>巴克：三层身体（肌肉/皮肤/内脏）同时激活</td></tr><tr><td>影像的存在方式？</td><td>卡尔博纳：影像有「肉」，先于主客分裂</td></tr></tbody></table></div>
+<hr>
+<h2>十二、各流派核心立场对比</h2>
+<div class="table-wrap"><table><thead><tr><th></th><th>胡塞尔</th><th>海德格尔</th><th>梅洛-庞蒂</th><th>萨特</th><th>列维纳斯</th></tr></thead><tbody><tr><td>起点</td><td>先验意识</td><td>此在/存在</td><td>活的身体</td><td>自为意识</td><td>他者面容</td></tr><tr><td>核心概念</td><td>意向性/还原</td><td>在世存在/时间性</td><td>肉/运动意向性</td><td>虚无/坏信仰</td><td>他者性/责任</td></tr><tr><td>主体地位</td><td>先验自我</td><td>此在（非先验）</td><td>身体主体</td><td>自由自我</td><td>被他者召唤的自我</td></tr><tr><td>他者关系</td><td>同感推理</td><td>共同此在</td><td>身体间可逆性</td><td>凝视冲突</td><td>无限责任</td></tr><tr><td>第一哲学</td><td>意识论</td><td>存在论</td><td>知觉理论</td><td>存在论</td><td>伦理学</td></tr><tr><td>历史性</td><td>晚期才引入</td><td>核心（时间性）</td><td>习惯/传统</td><td>处境</td><td>他者打断历史</td></tr></tbody></table></div>
+<hr>
+<h2>十三、现象学 vs. 其他理论</h2>
+<div class="table-wrap"><table><thead><tr><th></th><th>现象学</th><th><span class="wl">结构主义</span></th><th><span class="wl">辩证法</span></th><th>[[德勒兹-哲学词条\</th><th>德勒兹]]</th></tr></thead><tbody><tr><td>起点</td><td>第一人称经验</td><td>差异系统（无主体）</td><td>矛盾运动（阶级/精神）</td><td>内在性平面（无中心）</td></tr><tr><td>主体</td><td>经验主体（或身体主体）</td><td>系统效果</td><td>历史主体/阶级意识</td><td>奇点/强度，非主体</td></tr><tr><td>时间性</td><td>核心（意识流/此在时间性）</td><td>悬置（共时分析）</td><td>辩证历史</td><td>生成（devenir）：非线性</td></tr><tr><td>意义来源</td><td>经验的给予性</td><td>差异关系</td><td>矛盾运动</td><td>差异的强度</td></tr><tr><td>科学性</td><td>描述性，反自然主义</td><td>追求「科学的」理论</td><td>批判科学主义</td><td>概念创造，非科学</td></tr><tr><td>身体</td><td>核心（MP/Sobchack）</td><td>系统中的位置</td><td>被劳动/历史塑造</td><td>无器官身体（BwO）</td></tr></tbody></table></div>
+<hr>
+<h2>十四、著作时间线</h2>
+<div class="table-wrap"><table><thead><tr><th>年代</th><th>著作</th><th>作者</th><th>意义</th></tr></thead><tbody><tr><td>1900–01</td><td>《逻辑研究》</td><td>胡塞尔</td><td>现象学奠基，反心理主义</td></tr><tr><td>1907</td><td>《现象学的观念》</td><td>胡塞尔</td><td>还原方法首次系统陈述</td></tr><tr><td>1912</td><td>《道德建构中的怨恨》</td><td>谢勒</td><td>价值现象学与怨恨分析</td></tr><tr><td>1913</td><td>《纯粹现象学与现象学哲学的观念Ⅰ》</td><td>胡塞尔</td><td>先验现象学体系</td></tr><tr><td>1913–16</td><td>《伦理学中的形式主义与实质的价值伦理学》</td><td>谢勒</td><td>价值现象学奠基；批判康德形式伦理学</td></tr><tr><td>1913</td><td>《一般精神病理学》</td><td>雅斯贝尔斯</td><td>精神病学现象学方法</td></tr><tr><td>1917</td><td>《论移情问题》</td><td>施泰因</td><td>移情作为独特意向行为</td></tr><tr><td>1927</td><td>《存在与时间》</td><td>海德格尔</td><td>存在论转向</td></tr><tr><td>1928</td><td>《内时间意识现象学》</td><td>胡塞尔</td><td>时间意识分析</td></tr><tr><td>1931</td><td>《文学艺术品》</td><td>英加登</td><td>四层结构/不确定点/具体化</td></tr><tr><td>1932</td><td>《社会世界的现象学》</td><td>舒茨</td><td>社会现象学奠基；胡塞尔+韦伯</td></tr><tr><td>1936</td><td>《欧洲科学危机与先验现象学》</td><td>胡塞尔</td><td>生活世界概念</td></tr><tr><td>1943</td><td>《存在与虚无》</td><td>萨特</td><td>存在主义现象学</td></tr><tr><td>1945</td><td>《知觉现象学》</td><td>梅洛-庞蒂</td><td>身体化现象学</td></tr><tr><td>1945</td><td>《电影与新心理学》（讲座）</td><td>梅洛-庞蒂</td><td>电影现象学最早文本之一</td></tr><tr><td>1960</td><td>《真理与方法》</td><td>伽达默尔</td><td>解释学现象学</td></tr><tr><td>1960/1982</td><td>《现象学运动》</td><td>施皮格伯格</td><td>现象学运动史权威综述</td></tr><tr><td>1961</td><td>《整体与无限》</td><td>列维纳斯</td><td>他者伦理学</td></tr><tr><td>1963</td><td>《显现的本质》</td><td>亨利</td><td>生命现象学/自身感受</td></tr><tr><td>1964</td><td>《可见的与不可见的》</td><td>梅洛-庞蒂</td><td>肉/chiasme，未完稿</td></tr><tr><td>1966</td><td>《现实的社会建构》</td><td>伯格/勒克曼</td><td>舒茨影响的社会建构论</td></tr><tr><td>1974</td><td>《异于存在》</td><td>列维纳斯</td><td>他者责任的彻底化</td></tr><tr><td>1983–85</td><td>《时间与叙事》三卷</td><td>里克尔</td><td>叙事现象学</td></tr><tr><td>1990</td><td>《技术与生活世界》</td><td>唐·伊德</td><td>后现象学奠基</td></tr><tr><td>1991</td><td>《涌现的心灵》</td><td>Varela/Thompson/Rosch</td><td>4E认知与现象学汇合</td></tr><tr><td>1992</td><td>《眼的话语》</td><td>索布查克</td><td>电影现象学系统化</td></tr><tr><td>1995</td><td>《大气层》</td><td>波姆</td><td>气氛美学奠基</td></tr><tr><td>1997</td><td>《被给予》（<em>Étant donné</em>）</td><td>马里翁</td><td>给予性现象学/饱和现象</td></tr><tr><td>2000</td><td>《皮肤的电影》</td><td>马克斯</td><td>触感视觉理论</td></tr><tr><td>2009</td><td>《触觉之眼》</td><td>巴克</td><td>身体层次的电影参与</td></tr><tr><td>2015</td><td>《影像之肉》</td><td>卡尔博纳</td><td>意大利电影现象学</td></tr></tbody></table></div>
+<hr>
+<h2>相关词条</h2>
+<ul><li><span class="wl">海德格尔</span> — 存在论转向：此在、时间性、技术</li><li><span class="wl">梅洛-庞蒂</span> — 身体化转向：肉、可逆性、电影现象学传承</li><li><span class="wl">结构主义</span> — 现象学的对立面：共时系统 vs. 经验时间性</li><li><span class="wl">辩证法</span> — 另一条反自然主义路径，但以历史矛盾取代意识经验</li><li><span class="wl">德勒兹</span> — 从现象学出发又彻底离开：内在性平面取代意向性</li><li><span class="wl">理论坐标总图-文艺学入门指南</span> — L1-A 现象学本体论的总览位置</li></ul>
+    </article>
+    <div class="bottom-actions">
+        <a href="#" class="action-btn">PREV: </a>
+        <a href="javascript:window.scrollTo({top:0,behavior:'smooth'})" class="action-btn">BACK TO TOP &#8593;</a>
+        <a href="#" class="action-btn">NEXT: </a>
+    </div>
+    <div class="footer-tag">END OF DOCUMENT / NODE_01_SUCCESS</div>
+</div>
+<script>var poster=document.getElementById('poster');var tx=0,ty=0,cx=0,cy=0;if(window.innerWidth>1024){window.addEventListener('mousemove',function(e){tx=(e.clientX/window.innerWidth-0.5)*15;ty=(e.clientY/window.innerHeight-0.5)*15;});}function raf(){cx+=(tx-cx)*0.1;cy+=(ty-cy)*0.1;poster.style.transform='rotateY('+cx+'deg) rotateX('+(-cy)+'deg)';requestAnimationFrame(raf);}raf();setInterval(function(){var n=new Date();document.getElementById('time-code').textContent=n.toLocaleTimeString('en-GB')+':'+('0'+Math.floor(n.getMilliseconds()/10)).slice(-2);},40);var pc=document.getElementById('particles');for(var i=0;i<40;i++){var d=document.createElement('div');d.className='dot';var s=Math.random()*2;d.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--z:'+(Math.random()*1000-500)+'px;--duration:'+(2+Math.random()*3)+'s;';pc.appendChild(d);}</script>
+</body>
+</html>
