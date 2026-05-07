@@ -12,48 +12,41 @@
             --black: #1d1d1f;
         }
 
-        /* 基础重置 */
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
+
         body {
-            background-color: #0a0b10; 
+            background-color: #0a0b10;
             color: var(--black);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            /* 解决移动端浏览器工具栏遮挡问题 */
             height: 100vh;
-            height: 100svh; 
+            height: 100svh;
             overflow: hidden;
             display: flex; justify-content: center; align-items: center;
             perspective: 2000px;
         }
 
-        /* 粒子背景 */
         .particles { position: fixed; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
         .dot { position: absolute; background: white; border-radius: 50%; opacity: 0.2; animation: twinkle var(--duration) infinite ease-in-out; }
-        @keyframes twinkle { 
-            0%, 100% { opacity: 0.1; transform: translateZ(var(--z)) scale(0.8); } 
-            50% { opacity: 0.6; transform: translateZ(var(--z)) scale(1.2); } 
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.1; transform: translateZ(var(--z)) scale(0.8); }
+            50% { opacity: 0.6; transform: translateZ(var(--z)) scale(1.2); }
         }
 
-        /* 响应式卡片框架 */
         .poster-frame {
-            position: relative; 
+            position: relative;
             z-index: 10;
-            background: var(--paper-white); 
+            background: var(--paper-white);
             box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-            display: flex; 
+            display: flex;
             flex-direction: column;
             transition: transform 0.4s cubic-bezier(0.2, 0, 0.2, 1);
-            
-            /* 核心尺寸逻辑 */
-            width: 90%; 
-            max-width: 450px; 
+            width: 90%;
+            max-width: 450px;
             height: 85vh;
             max-height: 750px;
             padding: clamp(20px, 6vw, 35px);
         }
 
-        /* 桌面端大屏稍微调整比例 */
         @media (min-width: 1024px) {
             .poster-frame {
                 max-width: 400px;
@@ -61,25 +54,21 @@
             }
         }
 
-        /* 头部 */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0; }
         .back-link { font-size: 10px; font-weight: 800; color: var(--accent-red); text-decoration: none; border-bottom: 1px solid var(--accent-red); }
 
-        /* 标题区域 */
         .title-area { flex-shrink: 0; margin-bottom: 15px; }
         .section-title { font-size: clamp(20px, 6vw, 26px); font-weight: 900; letter-spacing: 2px; }
         .section-sub { font-size: 10px; color: var(--text-dim); text-transform: uppercase; }
 
-        /* 列表容器：支持内部滚动 */
         .list-container {
-            flex-grow: 1; 
-            overflow-y: auto; 
+            flex-grow: 1;
+            overflow-y: auto;
             overflow-x: hidden;
             padding-right: 8px;
-            margin-right: -8px; /* 抵消内边距使滚动条靠边 */
+            margin-right: -8px;
         }
-        
-        /* 美化滚动条 */
+
         .list-container::-webkit-scrollbar { width: 3px; }
         .list-container::-webkit-scrollbar-thumb { background: #d1d1d6; border-radius: 10px; }
 
@@ -90,27 +79,25 @@
         }
 
         .item-meta { font-family: monospace; font-size: 10px; color: var(--accent-red); margin-bottom: 6px; display: flex; justify-content: space-between; }
-        .item-title { 
-            font-size: clamp(14px, 4vw, 15px); 
-            font-weight: 700; 
+        .item-title {
+            font-size: clamp(14px, 4vw, 15px);
+            font-weight: 700;
             line-height: 1.4;
-            transition: 0.3s; 
+            transition: 0.3s;
         }
 
-        /* 仅在支持鼠标的设备上启用悬停偏移 */
         @media (hover: hover) {
             .list-item:hover .item-title { color: var(--accent-red); transform: translateX(8px); }
         }
 
-        /* 底部 */
-        .footer { 
-            margin-top: 15px; 
-            display: flex; 
-            justify-content: space-between; 
-            font-size: 10px; 
-            font-weight: 700; 
-            border-top: 1px solid #eee; 
-            padding-top: 15px; 
+        .footer {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            font-weight: 700;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
             flex-shrink: 0;
         }
     </style>
@@ -131,6 +118,10 @@
         </div>
 
         <div class="list-container">
+            <a href="portfolio.html" class="list-item">
+                <div class="item-meta"><span>INDEX_00</span><span>2026/05/07</span></div>
+                <div class="item-title">作品集</div>
+            </a>
             <a href="zhangwairen-script.html" class="list-item">
                 <div class="item-meta"><span>INDEX_01</span><span>2024/05/12</span></div>
                 <div class="item-title">电视剧策划书 账外人</div>
@@ -141,7 +132,7 @@
             </a>
             <a href="ta-zuoshi.html" class="list-item">
                 <div class="item-meta"><span>INDEX_03</span><span>2024/08/01</span></div>
-                <div class="item-title">“她”组诗</div>
+                <div class="item-title">"她"组诗</div>
             </a>
             <a href="milian-diary.html" class="list-item">
                 <div class="item-meta"><span>INDEX_04</span><span>2024/09/15</span></div>
@@ -160,12 +151,10 @@
     </div>
 
     <script>
-        // 1. 3D 视角跟随效果优化
         const poster = document.getElementById('poster');
         let targetX = 0, targetY = 0;
         let currentX = 0, currentY = 0;
 
-        // 仅在非触摸设备上开启强烈的跟随效果，避免手机滑动冲突
         if (window.matchMedia("(pointer: fine)").matches) {
             window.addEventListener('mousemove', (e) => {
                 targetX = (e.clientX / window.innerWidth - 0.5) * 20;
@@ -181,26 +170,24 @@
         }
         updateParallax();
 
-        // 2. 实时时间
         setInterval(() => {
             const now = new Date();
             document.getElementById('time-code').textContent = now.toLocaleTimeString('en-GB', { hour12: false });
         }, 1000);
 
-        // 3. 粒子背景生成
         const partContainer = document.getElementById('particles');
-        const particleCount = window.innerWidth < 768 ? 30 : 60; // 移动端减少粒子数量提高性能
-        
+        const particleCount = window.innerWidth < 768 ? 30 : 60;
+
         for(let i=0; i<particleCount; i++) {
             const dot = document.createElement('div');
             dot.className = 'dot';
             const size = Math.random() * 2;
             dot.style.cssText = `
-                width:${size}px; 
-                height:${size}px; 
-                left:${Math.random()*100}%; 
-                top:${Math.random()*100}%; 
-                --z:${Math.random()*1000-500}px; 
+                width:${size}px;
+                height:${size}px;
+                left:${Math.random()*100}%;
+                top:${Math.random()*100}%;
+                --z:${Math.random()*1000-500}px;
                 --duration:${2+Math.random()*3}s;
             `;
             partContainer.appendChild(dot);
