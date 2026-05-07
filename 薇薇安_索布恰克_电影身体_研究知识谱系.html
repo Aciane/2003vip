@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>薇薇安·索布恰克「电影身体」研究知识谱系</title>
+    <style>
+:root{--red:#ff3b30;--paper:#f5f5f7;--dark:#1d1d1f;--dim:#86868b;--bg:#0a0b10;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--dark);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.8;overflow-x:hidden;}
+.particles{position:fixed;width:100%;height:100%;pointer-events:none;z-index:0;}
+.dot{position:absolute;background:#fff;border-radius:50%;opacity:.2;animation:tw var(--duration) infinite ease-in-out;}
+@keyframes tw{0%,100%{opacity:.1;transform:scale(.8);}50%{opacity:.6;transform:scale(1.2);}}
+.top-nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(245,245,247,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.07);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;}
+.back-link{font-size:12px;font-weight:800;color:var(--red);text-decoration:none;letter-spacing:1px;}
+.nav-info{font-size:10px;color:var(--dim);font-family:monospace;}
+.wrap{position:relative;z-index:10;margin:80px auto 40px;width:92%;max-width:800px;background:var(--paper);box-shadow:0 40px 100px rgba(0,0,0,.5);padding:40px 30px;min-height:100vh;transition:transform .4s cubic-bezier(.2,0,.2,1);}
+@media(max-width:600px){.wrap{width:100%;margin:60px 0 0;padding:30px 20px;box-shadow:none;}h1.at{font-size:24px!important;}}
+/* Header */
+.ah{border-bottom:2px solid var(--red);padding-bottom:20px;margin-bottom:30px;}
+h1.at{font-size:28px;font-weight:900;line-height:1.3;margin-bottom:10px;color:#000;}
+.article-subtitle{font-size:18px;color:#444;margin-bottom:15px;font-weight:600;}
+.abstract-box{background:#eee;padding:15px;margin-bottom:30px;font-size:14px;color:#555;border-left:3px solid var(--red);}
+.abstract-label{font-weight:800;color:var(--dark);display:block;margin-bottom:5px;font-size:12px;}
+/* Body */
+.ab{font-size:16px;text-align:justify;}
+.ab p{margin-bottom:22px;}
+.ab h2{font-size:20px;font-weight:800;margin:40px 0 18px;display:flex;align-items:center;}
+.ab h2::before{content:"";width:12px;height:12px;background:var(--red);margin-right:10px;display:inline-block;flex-shrink:0;}
+.ab h3{font-size:17px;font-weight:700;margin:28px 0 14px;color:#333;}
+.ab hr{border:none;border-top:1px dashed #ccc;margin:28px 0;}
+/* Tables */
+.table-wrap{overflow-x:auto;margin:20px 0;}
+.ab table{width:100%;border-collapse:collapse;font-size:15px;}
+.ab th{background:#f0f0f0;font-weight:800;padding:10px 14px;text-align:left;border-bottom:2px solid var(--red);white-space:nowrap;}
+.ab td{padding:8px 14px;border-bottom:1px solid #ddd;}
+.ab tr:last-child td{border-bottom:none;}
+.ab tr:nth-child(even) td{background:#f9f9f9;}
+/* Code */
+.ab pre{background:#1e1e2e;color:#cdd6f4;padding:16px 18px;overflow-x:auto;margin:20px 0;font-family:"Courier New",monospace;font-size:13px;line-height:1.65;border-left:3px solid var(--red);}
+.code-lang{font-size:10px;color:var(--red);letter-spacing:1px;display:block;margin-bottom:8px;font-family:monospace;}
+.ab code.ic{background:#f0f0f2;color:#c44030;padding:2px 5px;font-size:.88em;font-family:"Courier New",monospace;}
+/* Blockquote */
+.ab blockquote{border-left:3px solid var(--red);padding:8px 16px;margin:20px 0;color:#555;font-style:italic;background:#f5f5f5;}
+/* Callout */
+.callout{margin:20px 0;padding:14px 18px;border-left:4px solid;}
+.callout .ct{font-weight:800;font-size:13px;letter-spacing:.5px;margin-bottom:6px;}
+.callout .cb{font-size:15px;line-height:1.7;}
+/* Lists */
+.ab ul,.ab ol{margin:12px 0 16px 26px;}
+.ab li{margin-bottom:5px;line-height:1.7;}
+.task-item{list-style:none;margin-left:-18px;}
+.task-item input{margin-right:7px;cursor:default;}
+.task-item .done{text-decoration:line-through;color:#999;}
+/* Obsidian inline */
+mark{background:#ffe066;padding:1px 3px;}
+del{color:#999;}
+.wl{color:var(--red);font-style:italic;border-bottom:1px dashed var(--red);cursor:default;}
+.tag{background:#eee;color:#666;font-size:12px;padding:1px 6px;border-radius:3px;font-family:monospace;}
+.obs-img{max-width:100%;height:auto;margin:16px 0;display:block;}
+.obs-embed{color:#aaa;font-style:italic;}
+/* Footer */
+.footer-tag{margin-top:40px;text-align:center;font-family:monospace;font-size:10px;color:var(--red);opacity:.6;}
+.bottom-actions{display:flex;justify-content:space-between;margin-top:40px;padding:20px 0;border-top:1px dashed #ccc;flex-wrap:wrap;gap:8px;}
+.action-btn{font-size:12px;color:var(--dark);text-decoration:none;font-weight:bold;}
+.action-btn:hover{color:var(--red);}
+    </style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav class="top-nav">
+    <a href="javascript:history.back()" class="back-link">&#8592; INDEX</a>
+    <div class="nav-info" id="time-code">00:00:00</div>
+</nav>
+<div class="wrap" id="poster">
+    <header class="ah">
+        <h1 class="at">薇薇安·索布恰克「电影身体」研究知识谱系</h1>
+        
+        <div style="font-size:12px;color:var(--dim);font-weight:bold;letter-spacing:2px;">TANG ZE ZHEN / 2026-04-17</div>
+    </header>
+    
+    <article class="ab">
+
+<div class="callout" style="border-color:#00bcd4;background:#e0f7fa"><div class="ct" style="color:#00bcd4">概要</div><div class="cb">跨中／英／法三语学术场域，围绕 Sobchack 的 <em>The Address of the Eye</em> (1992) 与 <em>Carnal Thoughts</em> (2004) 两部奠基作，展开"电影身体—具身观影—触感视觉—后电影情动"的理论脉络。收录 2000 年以来代表性文献。</div></div>
+<hr>
+<h2>一、理论前驱（Sobchack 出发的源头）</h2>
+<ul><li><strong>Maurice Merleau-Ponty</strong>：《<span class="wl">知觉现象学</span>》《<span class="wl">可见者与不可见者</span>》——"肉身""可逆性""身体图式"是 Sobchack 的核心哲学资源</li><li><strong>Don Ihde</strong>：技术现象学、"具身关系"</li><li><strong>Christian Metz / Jean-Louis Baudry</strong>（Sobchack 反拨的对象）：精神分析式银幕理论 → Sobchack 用现象学替代"缝合—凝视"范式</li></ul>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">关联笔记</div><div class="cb">参见本 vault 中 <span class="wl">电影空间理论</span> 与身体现象学相关条目（梅洛-庞蒂×空间性）</div></div>
+<hr>
+<h2>二、Sobchack 自身两部奠基作</h2>
+<div class="table-wrap"><table><thead><tr><th>著作</th><th>年份</th><th>核心概念</th></tr></thead><tbody><tr><td><em>The Address of the Eye: A Phenomenology of Film Experience</em></td><td>1992</td><td><strong>"film's body"（电影身体）</strong>；电影是一个具身的感知—表达主体</td></tr><tr><td><em>Carnal Thoughts: Embodiment and Moving Image Culture</em></td><td>2004</td><td><strong>"cinesthetic subject"（电影联觉主体）</strong>——"What My Fingers Knew"一文为触感观影奠基</td></tr><tr><td><em>Le corps du film – Une phénoménologie de l'expérience filmique</em>（法译本）</td><td>2024/25</td><td>Presses du réel，Dalmasso & Lenay 编译——法语学界首次系统引介</td></tr></tbody></table></div>
+<ul><li><a href="https://monoskop.org/images/5/58/Sobchack<em>Vivian</em>Carol<em>Carnal</em>Thoughts<em>Embodiment</em>and<em>Moving</em>Image_Culture.pdf">Carnal Thoughts PDF – Monoskop</a></li><li><a href="https://necsus-ejms.org/vivian-sobchack-interview/">NECSUS 访谈</a></li><li><a href="https://www.ucpress.edu/books/carnal-thoughts/paper">Carnal Thoughts – UC Press</a></li></ul>
+<hr>
+<h2>三、英语学界：第二代"触感—具身"学派（2000— ）</h2>
+<h3>A. 触感视觉分支（Haptic Visuality）</h3>
+<ul><li><strong>Laura U. Marks</strong>, <em>The Skin of the Film</em> (2000)；<em>Touch: Sensuous Theory and Multisensory Media</em> (2002) —— 提出 <strong>haptic visuality</strong></li><li><strong>Jennifer M. Barker</strong>, <em>The Tactile Eye: Touch and the Cinematic Experience</em> (2009) —— 皮肤／肌肉／内脏三层触觉分析框架</li><li><strong>Elena del Río</strong>, <em>Deleuze and the Cinemas of Performance</em> (2008) —— affect + body</li><li><strong>Martine Beugnet</strong>, <em>Cinema and Sensation: French Film and the Art of Transgression</em> (2007) —— 感官电影（欧陆极端影像）</li></ul>
+<h3>B. 情动／后电影分支</h3>
+<ul><li><strong>Steven Shaviro</strong>, <em>Post-Cinematic Affect</em> (2010) —— 续写 Sobchack 在数字时代的身体观</li><li><strong>Jane Stadler</strong>, <em>Pulling Focus: Intersubjective Experience, Narrative Film, and Ethics</em> (2008)</li><li><strong>Julian Hanich</strong>, <em>Cinematic Emotion in Horror Films and Thrillers</em> (2010)</li></ul>
+<h3>C. 女性主义／伦理分支</h3>
+<ul><li><strong>Kelli Fuery</strong>, "Ambiguous Cinema: From Simone de Beauvoir to Feminist Film-Phenomenology" (<em>Film-Philosophy</em>, 2024) — 本库已收</li><li><strong>Jenny Chamarette</strong>, <em>Phenomenology and the Future of Film</em> (2012)</li></ul>
+<h3>D. 数字与装置分支</h3>
+<ul><li><strong>Francesco Casetti</strong>, <em>The Lumière Galaxy</em> (2015) —— "electronic being" 对话 Sobchack</li><li><strong>Stuart Walton</strong>, "Flesh, Cinema and the Baroque" / "Knots of Sensation" (2025) — 可逆性美学（本库已收）</li></ul>
+<hr>
+<h2>四、法语学界：迟到但密集的接受（2015 年后）</h2>
+<ul><li><strong>Anna Caterina Dalmasso</strong> —— <em>Le corps du film</em> 的主要引介者，研究"具身屏幕"</li><li><strong>Alice Lenay</strong> —— 屏幕—他者—在场的具身关系</li><li><strong>Antoine Gaudin</strong>, <em>L'espace cinématographique – Esthétique et dramaturgie</em> —— 将 Sobchack "身体"纳入空间美学（本库已收）</li><li><strong>Dork Zabunyan / Raymond Bellour</strong> 一脉的 <em>spectateur pensif</em>，与 Sobchack 形成对话</li><li>硕博论文：</li><li><em>Un regard hors de soi : étude des rapports entre corps, caméra et espace</em> (Montréal 博论)</li><li><em>Faire corps avec la caméra : expérimentations esthétiques et phénoménologie alternative du mouvement chorégraphique</em>（PUM 舞蹈电影现象学）</li><li>期刊专号：</li><li><em>Interfaces</em> "Bodies and Screens: Aspects for a Phenomenology of Moving Image Installations"</li><li><em>Visible</em>「Le spectateur (é)mu」</li></ul>
+<p>相关链接：</p>
+<ul><li><a href="https://www.lespressesdureel.com/EN/ouvrage.php?id=10332">Presses du réel – Le corps du film</a></li><li><a href="https://www.fabula.org/actualites/125667/vivian-sobchack-anna-caterina-dalmasso-alice-lenay-le-corps-du.html">Fabula – 书讯</a></li><li><a href="https://eur-artec.fr/wp-content/uploads/2025/02/CP<em>Sobchack</em>web.pdf">EUR ArTeC – Sobchack 事件页</a></li><li><a href="https://papyrus.bib.umontreal.ca/xmlui/handle/1866/25576">Un regard hors de soi – 博论</a></li><li><a href="https://books.openedition.org/pum/45450?lang=en">Faire corps avec la caméra – PUM</a></li><li><a href="https://journals.openedition.org/interfaces/6218?lang=en">Bodies and Screens – Interfaces</a></li></ul>
+<hr>
+<h2>五、中文学界：三阶段谱系</h2>
+<h3>第一阶段（2005–2015）引介与译介</h3>
+<ul><li>游飞、傅守祥等学人最早在《世界电影》《北京电影学院学报》系统介绍"触感学派"</li><li>韩连庆《电影现象学：斯蒂格勒 VS 巴赞》(2013) —— 侧翼进入（本库已收）</li><li>早期译介多用"薇薇安·索布切克／索布查克"等译名</li></ul>
+<h3>第二阶段（2015–2020）本土化概念输出</h3>
+<ul><li>姜宇辉《后电影状态：一份哲学的报告》(2017) —— 在德勒兹与 Sobchack 之间展开"电影经验"（本库已收）</li><li>豆瓣／公众号译介："What My Fingers Knew" 中译流传</li><li>爱思想刊《刻画伦理空间——关于死亡、死亡呈现以及纪录片的十个命题》中译</li></ul>
+<h3>第三阶段（2020— ）深化与数字时代再探</h3>
+<ul><li><strong>赵斌《超越索引性：论身体现象学视域下电影的"历史意识"问题》(2026, 本库已收)</strong> —— 梅洛-庞蒂×Sobchack×尼科尔斯，最系统中文介入</li><li><strong>姜雨昕《身体感知危机与重构：AIGC 背景下的电影现象学》(2025)</strong> —— 技术具身与联觉（本库已收）</li><li><strong>王飞／王年军《遗产与可能：重启梅洛-庞蒂的电影哲学观念》(2024)</strong>（本库已收）</li><li><strong>王雪璞／黄山《作为气氛的电影美学——源自格诺特·波默"气氛美学"的启示》(2025)</strong> —— Böhme 路径旁接 Sobchack（本库已收）</li><li><strong>苏杭"剧场中的新物质性——作为'电影身体'的实时影像"</strong> —— 跨剧场／新媒体</li><li>博硕论文：</li><li>程赟《现象学视阈下的气氛美学研究》(2023, 本库已收)</li><li>赵若晨《现象学视域下的电影策展实践：理论、方法与批判性反思》(SSRN, 2024)</li><li>相关议题扩散：</li><li>后人类具身化、情动—影像（万传法 2025，本库已收）</li><li>身体修辞与电影史（《江苏社会科学》2017）</li></ul>
+<hr>
+<h2>六、谱系结构图</h2>
+<pre>Merleau-Ponty（肉身／可逆性）
+        │
+        ▼
+Sobchack《Address of the Eye》1992 ──► 《Carnal Thoughts》2004
+        │                                         │
+   ┌────┴────────────────┬───────────────┬────────┴────────┐
+   ▼                     ▼               ▼                 ▼
+英语「触感—具身」    情动／后电影    法语迟到接受      中文本土化
+Marks, Barker,       Shaviro,        Dalmasso,         姜宇辉, 赵斌,
+del Río, Beugnet,    Hanich,         Lenay, Gaudin    姜雨昕, 王飞,
+Chamarette, Fuery    Stadler         (2024 译本)       苏杭, 王雪璞
+        │                                                  │
+        └──────► 当代议题：VR/AIGC 具身、触屏 hapticity、
+                 后人类感官、装置与策展、气氛美学 ◄────────┘</pre>
+<div class="callout" style="border-color:#4caf50;background:#e8f5e9"><div class="ct" style="color:#4caf50">可视化建议</div><div class="cb">可用 Obsidian Canvas 重绘为节点图，以四个语种／分支为象限，以时间为纵轴。稍后可创建 <code class="ic">Sobchack谱系.canvas</code> 补充。</div></div>
+<hr>
+<h2>七、核心起点（本库已入藏条目）</h2>
+<p>这些是 Zotero 中可直接作为中文阅读起点的论文：</p>
+<ul><li>赵斌《超越索引性：论身体现象学视域下电影的"历史意识"问题》(2026)  <code class="ic">zotero://select/items/@G4TD97H7</code></li><li>姜雨昕《身体感知危机与重构：AIGC 背景下的电影现象学》(2025)  <code class="ic">zotero://select/items/@T7I5LFJ6</code></li><li>王飞、王年军《遗产与可能：重启梅洛-庞蒂的电影哲学观念》(2024)  <code class="ic">zotero://select/items/@QXZMC3LQ</code></li><li>王雪璞、黄山《作为气氛的电影美学》(2025)  <code class="ic">zotero://select/items/@MKWCF4UH</code></li><li>程赟《现象学视阈下的气氛美学研究》(2023)  <code class="ic">zotero://select/items/@4B8TEQUB</code></li><li>姜宇辉《后电影状态：一份哲学的报告》(2017)  <code class="ic">zotero://select/items/@9ZCFJU82</code></li><li>Kelli Fuery, "Ambiguous Cinema" (2024)  <code class="ic">zotero://select/items/@ZWCZDTFK</code></li><li>Sobchack, <em>The Address of the Eye</em>  <code class="ic">zotero://select/items/@X9U24K8R</code></li><li>Stuart Walton, "Flesh, Cinema and the Baroque" (2025)  <code class="ic">zotero://select/items/@SUQKTM2W</code></li><li>Stuart Walton, "Knots of Sensation" (2025)  <code class="ic">zotero://select/items/@IUG3PQEB</code></li></ul>
+<hr>
+<h2>八、追踪路径（reference pointers）</h2>
+<ul><li><strong>英语期刊</strong>：<em>Film-Philosophy</em>, <em>Screen</em>, <em>NECSUS</em>, <em>Senses of Cinema</em>, <em>Cinema Journal / JCMS</em></li><li><strong>法语</strong>：<em>Les presses du réel</em> 系列、<em>Fabula</em>、<em>Interfaces</em> (OpenEdition)、<em>1895 Revue d'histoire du cinéma</em></li><li><strong>中文</strong>：《电影艺术》《当代电影》《北京电影学院学报》《文艺研究》《上海大学学报》</li><li><strong>主题 CFP</strong>：<em>Comparative Cinema</em> "Touch Screen: Imaginaries of Hapticity in Audiovisual Media" (2025)</li></ul>
+<hr>
+<h2>九、后续计划（To-Do）</h2>
+<ul><li class="task-item"><input type="checkbox" disabled><span>补读 Marks <em>The Skin of the Film</em> 与 Barker <em>The Tactile Eye</em> 两本英语源头之作</span></li><li class="task-item"><input type="checkbox" disabled><span>订阅／追踪法译本 <em>Le corps du film</em> 的法语书评（Fabula, Critique, 1895）</span></li><li class="task-item"><input type="checkbox" disabled><span>整理"AI 动画短片"创作视角下的具身感官设计笔记（与我的创作计划打通）</span></li><li class="task-item"><input type="checkbox" disabled><span>将本谱系转为 <code class="ic">Sobchack谱系.canvas</code> 可视化</span></li><li class="task-item"><input type="checkbox" disabled><span>用 Zotero semantic search 再扫一遍"触感 / 联觉 / 肉身"三关键词，补充遗漏条目</span></li></ul>
+<hr>
+<h2>十、Sources（主要网络来源）</h2>
+<ul><li><a href="https://www.ucpress.edu/books/carnal-thoughts/paper">Carnal Thoughts – UC Press</a></li><li><a href="https://monoskop.org/images/5/58/Sobchack<em>Vivian</em>Carol<em>Carnal</em>Thoughts<em>Embodiment</em>and<em>Moving</em>Image_Culture.pdf">Carnal Thoughts PDF – Monoskop</a></li><li><a href="https://necsus-ejms.org/vivian-sobchack-interview/">NECSUS: Journeys of a Film Phenomenologist – Interview</a></li><li><a href="https://www.euppublishing.com/doi/pdf/10.3366/film.2006.0016">Bodies that Matter – Review in Film-Philosophy</a></li><li><a href="https://academic.oup.com/screen/article-abstract/51/2/190/1684521">The Tactile Eye – Jennifer Barker (Screen review)</a></li><li><a href="https://www.sensesofcinema.com/2010/book-reviews/the-tactile-eye-touch-and-the-cinematic-experience-by-jennifer-m-barker-moving-viewers-american-film-and-the-spectator%E2%80%99s-experience-by-carl-plantinga/">Senses of Cinema: Tactile Eye / Moving Viewers review</a></li><li><a href="https://www.lespressesdureel.com/EN/ouvrage.php?id=10332">Le corps du film – Presses du réel</a></li><li><a href="https://www.fabula.org/actualites/125667/vivian-sobchack-anna-caterina-dalmasso-alice-lenay-le-corps-du.html">Fabula – Le corps du film</a></li><li><a href="https://eur-artec.fr/wp-content/uploads/2025/02/CP<em>Sobchack</em>web.pdf">EUR ArTeC – Sobchack 事件页</a></li><li><a href="https://journals.openedition.org/interfaces/6218?lang=en">Bodies and Screens – Interfaces (OpenEdition)</a></li><li><a href="https://papyrus.bib.umontreal.ca/xmlui/handle/1866/25576">Un regard hors de soi – Montréal 博论</a></li><li><a href="https://books.openedition.org/pum/45450?lang=en">Faire corps avec la caméra – PUM</a></li><li><a href="https://wkxb.sicnu.edu.cn/ArticlePublished/t-5973.aspx">四川师大学报：从"电影现象学"视角重新理解"电影真实"</a></li><li><a href="https://www.douban.com/note/820806824/">豆瓣中译：我手指所知道的一切</a></li><li><a href="https://www.aisixiang.com/data/116514.html">爱思想：刻画伦理空间</a></li><li><a href="https://news.bjliyuan.com.cn/detail/4523.html">苏杭：作为"电影身体"的实时影像</a></li><li><a href="https://www.js-skl.org.cn/uploads/Files/2017-11/17/1-1510888412-687.pdf">身体修辞与中国电影史学 – 江苏社会科学 2017</a></li><li><a href="https://papers.ssrn.com/sol3/Delivery.cfm/5146872.pdf?abstractid=5146872&mirid=1">现象学视域下的电影策展实践 – SSRN</a></li></ul>
+    </article>
+    <div class="bottom-actions">
+        <a href="#" class="action-btn">PREV: </a>
+        <a href="javascript:window.scrollTo({top:0,behavior:'smooth'})" class="action-btn">BACK TO TOP &#8593;</a>
+        <a href="#" class="action-btn">NEXT: </a>
+    </div>
+    <div class="footer-tag">END OF DOCUMENT / NODE_01_SUCCESS</div>
+</div>
+<script>var poster=document.getElementById('poster');var tx=0,ty=0,cx=0,cy=0;if(window.innerWidth>1024){window.addEventListener('mousemove',function(e){tx=(e.clientX/window.innerWidth-0.5)*15;ty=(e.clientY/window.innerHeight-0.5)*15;});}function raf(){cx+=(tx-cx)*0.1;cy+=(ty-cy)*0.1;poster.style.transform='rotateY('+cx+'deg) rotateX('+(-cy)+'deg)';requestAnimationFrame(raf);}raf();setInterval(function(){var n=new Date();document.getElementById('time-code').textContent=n.toLocaleTimeString('en-GB')+':'+('0'+Math.floor(n.getMilliseconds()/10)).slice(-2);},40);var pc=document.getElementById('particles');for(var i=0;i<40;i++){var d=document.createElement('div');d.className='dot';var s=Math.random()*2;d.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--z:'+(Math.random()*1000-500)+'px;--duration:'+(2+Math.random()*3)+'s;';pc.appendChild(d);}</script>
+</body>
+</html>
