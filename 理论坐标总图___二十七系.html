@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>理论坐标总图 · 二十七系</title>
+    <style>
+:root{--red:#ff3b30;--paper:#f5f5f7;--dark:#1d1d1f;--dim:#86868b;--bg:#0a0b10;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--dark);font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.8;overflow-x:hidden;}
+.particles{position:fixed;width:100%;height:100%;pointer-events:none;z-index:0;}
+.dot{position:absolute;background:#fff;border-radius:50%;opacity:.2;animation:tw var(--duration) infinite ease-in-out;}
+@keyframes tw{0%,100%{opacity:.1;transform:scale(.8);}50%{opacity:.6;transform:scale(1.2);}}
+.top-nav{position:fixed;top:0;width:100%;z-index:100;background:rgba(245,245,247,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.07);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;}
+.back-link{font-size:12px;font-weight:800;color:var(--red);text-decoration:none;letter-spacing:1px;}
+.nav-info{font-size:10px;color:var(--dim);font-family:monospace;}
+.wrap{position:relative;z-index:10;margin:80px auto 40px;width:92%;max-width:800px;background:var(--paper);box-shadow:0 40px 100px rgba(0,0,0,.5);padding:40px 30px;min-height:100vh;transition:transform .4s cubic-bezier(.2,0,.2,1);}
+@media(max-width:600px){.wrap{width:100%;margin:60px 0 0;padding:30px 20px;box-shadow:none;}h1.at{font-size:24px!important;}}
+/* Header */
+.ah{border-bottom:2px solid var(--red);padding-bottom:20px;margin-bottom:30px;}
+h1.at{font-size:28px;font-weight:900;line-height:1.3;margin-bottom:10px;color:#000;}
+.article-subtitle{font-size:18px;color:#444;margin-bottom:15px;font-weight:600;}
+.abstract-box{background:#eee;padding:15px;margin-bottom:30px;font-size:14px;color:#555;border-left:3px solid var(--red);}
+.abstract-label{font-weight:800;color:var(--dark);display:block;margin-bottom:5px;font-size:12px;}
+/* Body */
+.ab{font-size:16px;text-align:justify;}
+.ab p{margin-bottom:22px;}
+.ab h2{font-size:20px;font-weight:800;margin:40px 0 18px;display:flex;align-items:center;}
+.ab h2::before{content:"";width:12px;height:12px;background:var(--red);margin-right:10px;display:inline-block;flex-shrink:0;}
+.ab h3{font-size:17px;font-weight:700;margin:28px 0 14px;color:#333;}
+.ab hr{border:none;border-top:1px dashed #ccc;margin:28px 0;}
+/* Tables */
+.table-wrap{overflow-x:auto;margin:20px 0;}
+.ab table{width:100%;border-collapse:collapse;font-size:15px;}
+.ab th{background:#f0f0f0;font-weight:800;padding:10px 14px;text-align:left;border-bottom:2px solid var(--red);white-space:nowrap;}
+.ab td{padding:8px 14px;border-bottom:1px solid #ddd;}
+.ab tr:last-child td{border-bottom:none;}
+.ab tr:nth-child(even) td{background:#f9f9f9;}
+/* Code */
+.ab pre{background:#1e1e2e;color:#cdd6f4;padding:16px 18px;overflow-x:auto;margin:20px 0;font-family:"Courier New",monospace;font-size:13px;line-height:1.65;border-left:3px solid var(--red);}
+.code-lang{font-size:10px;color:var(--red);letter-spacing:1px;display:block;margin-bottom:8px;font-family:monospace;}
+.ab code.ic{background:#f0f0f2;color:#c44030;padding:2px 5px;font-size:.88em;font-family:"Courier New",monospace;}
+/* Blockquote */
+.ab blockquote{border-left:3px solid var(--red);padding:8px 16px;margin:20px 0;color:#555;font-style:italic;background:#f5f5f5;}
+/* Callout */
+.callout{margin:20px 0;padding:14px 18px;border-left:4px solid;}
+.callout .ct{font-weight:800;font-size:13px;letter-spacing:.5px;margin-bottom:6px;}
+.callout .cb{font-size:15px;line-height:1.7;}
+/* Lists */
+.ab ul,.ab ol{margin:12px 0 16px 26px;}
+.ab li{margin-bottom:5px;line-height:1.7;}
+.task-item{list-style:none;margin-left:-18px;}
+.task-item input{margin-right:7px;cursor:default;}
+.task-item .done{text-decoration:line-through;color:#999;}
+/* Obsidian inline */
+mark{background:#ffe066;padding:1px 3px;}
+del{color:#999;}
+.wl{color:var(--red);font-style:italic;border-bottom:1px dashed var(--red);cursor:default;}
+.tag{background:#eee;color:#666;font-size:12px;padding:1px 6px;border-radius:3px;font-family:monospace;}
+.obs-img{max-width:100%;height:auto;margin:16px 0;display:block;}
+.obs-embed{color:#aaa;font-style:italic;}
+/* Footer */
+.footer-tag{margin-top:40px;text-align:center;font-family:monospace;font-size:10px;color:var(--red);opacity:.6;}
+.bottom-actions{display:flex;justify-content:space-between;margin-top:40px;padding:20px 0;border-top:1px dashed #ccc;flex-wrap:wrap;gap:8px;}
+.action-btn{font-size:12px;color:var(--dark);text-decoration:none;font-weight:bold;}
+.action-btn:hover{color:var(--red);}
+    </style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<nav class="top-nav">
+    <a href="javascript:history.back()" class="back-link">&#8592; INDEX</a>
+    <div class="nav-info" id="time-code">00:00:00</div>
+</nav>
+<div class="wrap" id="poster">
+    <header class="ah">
+        <h1 class="at">理论坐标总图 · 二十七系</h1>
+        
+        <div style="font-size:12px;color:var(--dim);font-weight:bold;letter-spacing:2px;">TANG ZE ZHEN / 2026-04-17</div>
+    </header>
+    
+    <article class="ab">
+
+<div class="callout" style="border-color:#00bcd4;background:#e0f7fa"><div class="ct" style="color:#00bcd4">本笔记目的</div><div class="cb">把与<strong>电影—身体—影像—创作—文化—事物</strong>相关的<strong>二十七条</strong>理论主线，以"<strong>血统 / 核心问题 / 边界 / 争论 / 焊接</strong>"理清。<br>不是百科，是<strong>判断工具</strong>：读到一篇论文、一个概念，能迅速定位它在哪个系里、和哪个系有张力。<br>上承 <span class="wl">电影现象学整体谱系-总地图</span>，与 <span class="wl">薇薇安索布恰克电影身体研究知识谱系</span> 互为补充。<br><br><strong>说明</strong>："文化研究（法兰克福）"已分拆覆盖：<span class="wl">法兰克福学派</span> = <span class="tag">#8</span> 批判理论；伯明翰文化研究 = <span class="tag">#18</span> 文化研究/女性主义。</div></div>
+<hr>
+<h2>〇、二十七系速览</h2>
+<div class="table-wrap"><table><thead><tr><th>#</th><th>理论系</th><th>核心问题</th><th>母体</th><th>身体观</th><th>对意义的主张</th></tr></thead><tbody><tr><td>1</td><td><strong>现象学</strong></td><td>意义如何在肉身感知中发生？</td><td>胡塞尔—梅洛-庞蒂</td><td>核心（活的身体）</td><td>先于符号已有意义</td></tr><tr><td>2</td><td><strong><span class="wl">符号学</span></strong></td><td>意义如何由差异编码产生？</td><td>Saussure / Peirce</td><td>⚪ 不适用（<span class="wl">索绪尔</span>系）／被符号化（皮尔斯系）</td><td>意义=系统差异</td></tr><tr><td>3</td><td><strong>图像学</strong></td><td>图像有自己独立于语言的逻辑吗？</td><td>Warburg / 图像转向</td><td>图像—身体—媒介</td><td>图像≠语言</td></tr><tr><td>4</td><td><strong>解释学</strong></td><td>理解如何在历史语境中完成？</td><td><span class="wl">考研日记/啊 艺术概论/海德格尔</span>—Gadamer—Ricoeur</td><td>此在在世</td><td>意义=历史性理解</td></tr><tr><td>5</td><td><strong>叙事学</strong></td><td>叙事能否形式化为语法？</td><td>俄国形式主义—结构主义</td><td>⚪ 不适用（经典期纯形式系统）</td><td>意义=结构位置</td></tr><tr><td>6</td><td><strong>美学</strong></td><td>感性经验本身的逻辑是什么？</td><td>Baumgarten—康德—黑格尔</td><td>感性主体</td><td>意义=判断力</td></tr><tr><td>7</td><td><strong>精神分析</strong></td><td>欲望/无意识如何结构主体与影像？</td><td>弗洛伊德—<span class="wl">拉康</span></td><td>驱力/欲望对象</td><td>意义=症状/幻象</td></tr><tr><td>8</td><td><strong>批判理论</strong></td><td>文化工业/意识形态如何宰制感性？</td><td><span class="wl">法兰克福学派</span></td><td>被商品化的身体</td><td>意义=意识形态效果</td></tr><tr><td>9</td><td><strong>情动理论</strong></td><td>前意识的情动能量如何流通？</td><td>斯宾诺莎—<span class="wl">德勒兹的空间理论</span>—马苏米</td><td>情动强度的场所</td><td>意义之前的强度</td></tr><tr><td>10</td><td><strong><span class="wl">德勒兹的空间理论</span>主义</strong></td><td>影像如何思考？差异如何生成？</td><td>柏格森—斯宾诺莎—尼采</td><td>身体=能力集合</td><td>意义=差异生成</td></tr><tr><td>11</td><td><strong>技术哲学</strong></td><td>技术如何中介人与世界的关系？</td><td><span class="wl">考研日记/啊 艺术概论/海德格尔</span>—斯蒂格勒—西蒙东</td><td>技术具身</td><td>意义=技术座架/记忆</td></tr><tr><td>12</td><td><strong>媒介理论</strong></td><td>媒介本身如何塑造感知？</td><td>麦克卢汉—基特勒—媒介生态</td><td>被媒介延伸（麦克卢汉）/ ⚪ 不适用（基特勒：话语网络驱逐感知主体）/ 被参数化（马诺维奇）</td><td>媒介即讯息</td></tr><tr><td>13</td><td><strong>媒介考古学</strong></td><td>历史中被遗忘的媒介潜力是什么？</td><td>齐林斯基—帕里卡—福柯谱系学</td><td>考古式身体—机器</td><td>意义=潜在性的挖掘</td></tr><tr><td>14</td><td><strong>系统论/控制论</strong></td><td>信息、反馈、自组织如何运作？</td><td>维纳—贝特森—卢曼</td><td>⚪ 不适用（功能节点，非身体）</td><td>意义=系统内区分</td></tr><tr><td>15</td><td><strong>4E 认知科学</strong></td><td>认知如何在具身-环境中发生？</td><td>瓦雷拉—扎哈维—克拉克</td><td>具身认知的承体</td><td>意义=行动耦合</td></tr><tr><td>16</td><td><strong>新物质主义</strong></td><td>物质本身有能动性吗？</td><td>斯宾诺莎—巴拉德—本尼特</td><td>物质-情动的聚合</td><td>意义=内在切割</td></tr><tr><td>17</td><td><strong>后人类主义</strong></td><td>人类中心主义之后，主体是什么？</td><td>哈拉维—海勒斯—布拉伊多蒂</td><td><span class="wl">赛博格</span>/后人类身体</td><td>意义=配置关系</td></tr><tr><td>18</td><td><strong>文化研究/女性主义</strong></td><td>权力、身份、差异如何结构文化？</td><td>伯明翰学派—巴特勒—穆尔维</td><td>被权力铭写的身体</td><td>意义=话语-权力效果</td></tr><tr><td>19</td><td><strong>装置/配置理论</strong></td><td>权力—知识如何通过异质配置运作？</td><td>福柯—阿甘本—<span class="wl">德勒兹的空间理论</span></td><td>被装置捕获的身体</td><td>意义=权力技术的效果</td></tr><tr><td>20</td><td><strong><span class="wl">生命政治</span></strong></td><td>权力如何作用于生命/身体/人口？</td><td>福柯—阿甘本—埃斯波西托</td><td>裸命/驯服身体</td><td>意义=生死管理</td></tr><tr><td>21</td><td><strong>球域学</strong></td><td>人如何通过共居创造保护性空间？</td><td><span class="wl">考研日记/啊 艺术概论/海德格尔</span>—斯洛特戴克—巴什拉</td><td>共鸣的空间性身体</td><td>意义=球域内共存</td></tr><tr><td>22</td><td><strong>OOO / 思辨实在论</strong></td><td>对象在关系之外有自己的实在吗？</td><td>哈曼—梅亚苏—布拉西耶</td><td>⚪ 不适用（平面本体论，拒绝人类中心）</td><td>超越关联主义</td></tr><tr><td>23</td><td><strong>ANT / 行动者网络理论</strong></td><td>人与非人如何共同组建异质网络？</td><td>拉图尔—卡隆—劳</td><td>网络中的行动者节点</td><td>意义=翻译/转录</td></tr><tr><td>24</td><td><strong>加速主义 / Nick Land</strong></td><td>应加速还是减速资本主义的解域化？</td><td><span class="wl">德勒兹的空间理论</span>-加塔利—尼克·兰德—CCRU</td><td>被资本流解码的身体</td><td>意义=速度的强度</td></tr><tr><td>25</td><td><strong>空间理论</strong></td><td>空间如何被社会生产？权力如何空间化？</td><td>列斐伏尔—索亚—德·塞托</td><td>实践空间中的身体</td><td>意义=空间实践</td></tr><tr><td>26</td><td><strong>表演性理论</strong></td><td>身份/性别/身体如何通过重复表演被构成？</td><td>巴特勒—谢克纳—费舍尔-利希特</td><td>表演中生成的身体</td><td>意义=事件/行动</td></tr><tr><td>27</td><td><strong>后殖民/解殖民理论</strong></td><td>殖民性如何结构知识、身体与视觉？</td><td>法农—斯皮瓦克—巴巴—基哈诺</td><td>被殖民铭写的种族化身体</td><td>意义=他者化/杂糅</td></tr><tr><td>28</td><td><strong>分析美学 / 认知主义<span class="wl">电影理论</span></strong></td><td>艺术在概念上是什么？观众如何认知性处理影像？</td><td>Goodman—Danto—Carroll—Bordwell—Cavell</td><td>认知处理的信息对象（⚪ 非现象学身体）</td><td>意义=认知建构 / 制度认定</td></tr></tbody></table></div>
+<hr>
+<h2>〇.五、三层架构：读懂二十七系的元框架</h2>
+<div class="callout" style="border-color:#607d8b;background:#f5f5f5"><div class="ct" style="color:#607d8b">为什么需要这一层</div><div class="cb">二十七系<strong>不是同一平面上的二十七个工具</strong>。它们在本体论、认识论、应用域三个层级上各有位置。跨层调用而不声明兼容逻辑，是理论误用的主要来源。</div></div>
+<h3>Level 1 · 第一哲学与底层本体论（五种本体论承诺）</h3>
+<p>回答：<strong>世界的基本构成是什么？意义的最终起源在哪里？</strong></p>
+<div class="table-wrap"><table><thead><tr><th>编号</th><th>本体论类型</th><th>代表理论系</th><th>核心主张</th></tr></thead><tbody><tr><td><strong>L1-A</strong></td><td><strong>主体感知本体论</strong></td><td>现象学 / 4E 认知 / 解释学</td><td>肉身感知的意向性是意义的绝对起点——但 L1-A <strong>内部三分</strong>：胡塞尔（先验自我构成，保留先验主体）/ 海德格尔（此在在世，先验主体被解体）/ 梅洛-庞蒂（活的身体超越主客，无先验主体）。「先验主体不可消除」仅属胡塞尔，不代表 L1-A 整体。</td></tr><tr><td><strong>L1-B</strong></td><td><strong>结构差异本体论</strong></td><td><span class="wl">符号学</span>（<span class="wl">索绪尔</span>系）/ 叙事学（经典期）/ 结构主义</td><td>意义只存在于形式化的系统差异中，无预设主体实体</td></tr><tr><td><strong>L1-C</strong></td><td><strong>内在性流变本体论</strong></td><td><span class="wl">德勒兹的空间理论</span>主义 / 情动理论</td><td>废除先验主体，物质与强度的差异化生成是唯一实在；内在性平面</td></tr><tr><td><strong>L1-D</strong></td><td><strong>对象撤退本体论</strong></td><td>OOO（<strong>哈曼</strong>为核心）</td><td>客体独立于一切感知或关系，具有不可穷尽的撤退内核；关联主义是哲学的囚笼</td></tr><tr><td><strong>L1-E</strong></td><td><strong>社会物质实践本体论</strong></td><td>历史唯物主义（马克思—列斐伏尔—阿尔都塞）</td><td>生产方式与社会关系是意义和文化的物质基底；意识是上层建筑；实践先于理论</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">⚡ 基特勒的 L1 级理论宣称——媒介装置本体论（暂列 L1-G，待确认）</div><div class="cb">基特勒的核心命题"<strong>媒介决定我们的处境</strong>"（Medien bestimmen unsere Lage）是对<span class="wl">海德格尔</span><strong>基础存在论</strong>的直接物质化改写：<br>- <span class="wl">考研日记/啊 艺术概论/海德格尔</span>：<strong>此在</strong>在世展开，存在先于存在者 → L1-A 的根基<br>- 基特勒：<strong>媒介装置</strong>在历史上决定何物可被感知/表达/记忆——人类感知主体是<strong>话语网络的功能性产物</strong>，而非起点<br><br>这不是 L2 方法论（不只是"分析媒介如何影响社会"），而是 L1 级别的本体论宣称：<strong>媒介装置是存在的技术先天条件（technical a priori）</strong>，优先于任何感知主体（L1-A）或差异系统（L1-B）。<br><br>| 维度 | 内容 |<br>|---|---|<br>| <strong>与 L1-A 的关系</strong> | 直接<strong>取代</strong>L1-A：媒介不是被人类主体使用的工具，人类是被媒介技术a priori所生产的效果 |<br>| <strong>与 L1-C 的关系</strong> | 有接近（物质性流动），但基特勒的媒介是<strong>历史性离散的技术系统</strong>，不是<span class="wl">德勒兹的空间理论</span>式的连续内在性平面 |<br>| <strong>L1 地位建议</strong> | 暂记为 <strong>L1-G 媒介装置本体论</strong>，待进一步哲学确认。在坐标系中不应低于 L1，不得仅归 L2 或 L3-γ。|<br><br>→ 将基特勒放在 L2 或 L3-γ 是对其<strong>理论野心的系统性压制</strong>。</div></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">⚡ L1-D 内部阵营分裂：哈曼 ≠ 梅亚苏</div><div class="cb">将 OOO 与思辨实在论合并为 L1-D 是<strong>严重的范畴误植</strong>。两者共享"反关联主义"出发点，但走向截然相反：<br><br>| 维度 | 哈曼（OOO）| 梅亚苏（思辨唯物主义）|<br>|---|---|---|<br>| 核心主张 | 客体永远<strong>撤退</strong>，不可被任何关系穷尽 | 现实是<strong>绝对偶然的</strong>，数学可以直接触及思维无关的实在 |<br>| 对物自体 | 物自体永远撤退（保留康德的隐藏维度）| 明确<strong>拒绝</strong>物自体概念，反对任何"隐藏内核" |<br>| 对数学 | 美学比数学更接近对象 | 数学是通向绝对的唯一途径（先祖性陈述的可知性）|<br>| 认识论后果 | 知识永远是间接的、偶发的美学接触 | 数学化的实在可以被彻底认识 |<br><br>→ <strong>L1-D 仅适用于哈曼的 OOO</strong>。梅亚苏的思辨唯物主义是独立的本体论位置（待建）。</div></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">⚡ 马诺维奇≠AI潜在空间——历史错位修正</div><div class="cb">将马诺维奇与 AI 扩散模型并置于同一个"L1-F 概率本体论"是<strong>历史性错位</strong>：<br><br>| 维度 | 马诺维奇（2001）| AI 扩散模型（2020s）|<br>|---|---|---|<br>| 逻辑机制 | 从有限<strong>离散选项集合</strong>中组合/选择（范式轴 × 组合轴的数字化）| 在<strong>连续高维概率分布</strong>（潜在空间）中降噪采样 |<br>| 底层哲学 | <span class="wl">索绪尔</span>范式轴/组合轴的计算机界面变体 → <strong>L1-B 结构差异本体论的延伸</strong> | 统计物理学 + 多维拓扑论：存在=概率分布，实例=采样事件 |<br>| 对 L1-B 的态度 | 在 L1-B 框架内扩展 | 根本不是差异系统——没有固定词汇表，分布随训练数据连续变化 |<br><br>→ <strong>马诺维奇应回归 L1-B 的扩展注释</strong>，不构成独立的 L1 本体论挑战。<br><br><strong>真正的 L1-F 候选：AI 概率拓扑本体论（Probabilistic-Topological Ontology）</strong><br>- 现实的基本形态 = <strong>高维连续概率分布</strong>（非离散、非二元对立、非固定词汇表）<br>- 任何"存在物"= 从潜在流形（manifold）的随机采样实例，无原本，只有分布<br>- 时间 = 降噪过程（从高熵随机噪声收敛为低熵有序影像）→ 这是一种新的时间/生成本体论<br>- 这<strong>不是<span class="wl">德勒兹的空间理论</span>式的连续流变</strong>（L1-C）：扩散模型的生成是从固定训练分布中采样，不是无边界的差异化生成<br>- 这<strong>不是结构差异</strong>（L1-B）：分布空间中不存在离散的对立符号单元<br><br>尚无与此对应的成熟哲学体系，但量子场论本体论（Barad的 intra-action 物理哲学）、信息本体论（Wheeler "It from Bit"）、以及当前 AI 哲学研究有接近的论述。<strong>L1-F 仅指向 AI 生成逻辑的潜在哲学基底，与马诺维奇脱钩。</strong></div></div>
+<h3>Level 2 · 认识论与方法论路径（四种策略）</h3>
+<p>回答：<strong>我们如何获取知识？论证逻辑的运作方式是什么？</strong></p>
+<div class="table-wrap"><table><thead><tr><th>方法论类型</th><th>代表理论系</th><th>操作特征</th></tr></thead><tbody><tr><td><strong>L2-α 现象学<span class="wl">还原</span></strong></td><td>现象学 / 解释学 / 美学（Böhme线）</td><td>悬置预设，回归"事物本身"的直接显现与理解</td></tr><tr><td><strong>L2-β 谱系学 / 考古学</strong></td><td>媒介考古学 / 福柯系装置理论 / <span class="wl">生命政治</span></td><td>拒绝目的论，挖掘话语形成的历史断裂与偶然性</td></tr><tr><td><strong>L2-γ 拓扑网络追踪</strong></td><td>ANT / 系统论</td><td>不预设宏观结构，实时追踪人类与非人类实体的实际纠缠</td></tr><tr><td><strong>L2-δ 症状阅读 / 揭露</strong></td><td>精神分析 / 批判理论 / 意识形态批评</td><td>穿透表象，定位被压抑的无意识结构或意识形态机制</td></tr><tr><td><strong>L2-ε 概念分析 / 认知建构</strong></td><td><strong>分析美学 / 认知主义<span class="wl">电影理论</span></strong>（Carroll / Bordwell / Goodman）</td><td>精确定义、必要且充分条件、思想实验、可证伪命题；拒绝不可证伪的症状阅读；认知图式（schema）分析替代无意识分析</td></tr></tbody></table></div>
+<h3>Level 3 · 区域研究与应用透镜（三个维度）</h3>
+<p>回答：<strong>针对具体客体（影像 / 身体 / 空间 / 算法）的操作策略是什么？</strong></p>
+<div class="table-wrap"><table><thead><tr><th>域维度（L3）</th><th>代表理论系</th><th>对应 L1 根基</th></tr></thead><tbody><tr><td><strong>α · 身体 / 感知 / 空间维度</strong></td><td>球域学 / 空间理论（列斐伏尔）/ 气氛美学（Böhme）/ <strong>谢克纳表演研究</strong> / 触感视觉（Marks）/ Sobchack 电影身体</td><td>L1-A 主体感知 / <strong>L1-E</strong>（列斐伏尔的空间生产须在此声明）</td></tr><tr><td><strong>β1 · 社会霸权 / 话语权力线</strong></td><td>文化研究（伯明翰 / Hall）/ 后殖民/解殖民（法农—斯皮瓦克—巴巴）/ <span class="wl">生命政治</span>（福柯—阿甘本）</td><td>L1-E 社会物质实践 + L2-β 谱系学</td></tr><tr><td><strong>β2 · 象征秩序 / 主体化线</strong></td><td>精神分析女性主义（穆尔维—科普杰克）/ 意识形态批评（阿尔都塞—Baudry）/ <strong>表演性理论（巴特勒—德里达引用性）</strong></td><td>L1-B/C 断裂线 ⚠️（→见下注）</td></tr><tr><td><strong>γ · 界面 / 物质 / 算法维度</strong></td><td>媒介理论 / 新物质主义 / 后人类主义 / 技术哲学 / 加速主义 / <strong>数字/软件本体论</strong>（马诺维奇）</td><td>L1-C/D ⚠️（→见下注）</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">⚡ L3-β2：巴特勒表演性归属的认识论矛盾</div><div class="cb">巴特勒的性别表演理论受<strong>德里达解构主义</strong>（引用性/iterability）和<strong>福柯话语分析</strong>深刻影响，是<strong>后结构主义</strong>产物：<br>- 她拆解的正是 L1-B 所依赖的"稳定的二元差异系统"（sex/gender 二元）<br>- 引用性（citationality）≠ 结构中的差异位置——前者允许偏移和改写，后者是封闭系统<br><br><strong>因此 L3-β2 里的巴特勒根植于 L1-C 而非 L1-B</strong>，与 β2 中的阿尔都塞（L1-B）处于认识论断裂线的两侧。<br>使用巴特勒时必须声明：你调用的是 L1-B 的"主体被结构位置决定"还是 L1-C 的"主体在引用行为中偏移生成"——这两种用法在分析逻辑上<strong>不可互换</strong>。</div></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">⚡ L3-γ 两项 L1 级警示</div><div class="cb">- <strong>马诺维奇数据库逻辑</strong>：见 §〇.五 Level 1 注释——暂置 L3-γ 但含 L1 级潜在挑战（L1-F 待议）<br>- <strong>尼克·兰德超迷信（Hyperstition）</strong>：时间循环（未来激活过去）是对线性因果律的直接重构，属第一哲学层面的时间本体论挑战。当前暂置 L3-γ 是出于保守性分类，但其破坏力处于 L1 级别，不宜用普通"应用域"眼光读 Land。</div></div>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">谢克纳 vs 巴特勒：同名"表演"，不同本体论根</div><div class="cb">- <strong>谢克纳</strong>（表演研究 / Performance Studies）：现象学身体为基础，关注<strong>具身的现场空间实践</strong>——环境剧场、仪式、再现（restoration of behavior）→ 归 L3-α，根在 L1-A<br>- <strong>巴特勒</strong>（表演性 / Performativity）：德里达引用性为基础，性别在<strong>话语的重复引用中偏移生成</strong> → 归 L3-β2，根在 L1-C（后结构主义），<strong>不是 L1-B</strong><br>- 两者共享"performance"词根，本体论根基和分析逻辑<strong>不可混用</strong></div></div>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">L3-α 空间理论的 L1-E 声明</div><div class="cb">列斐伏尔《空间的生产》(1974) 严格依赖<strong>历史唯物主义</strong>基底：空间不是中性容器，而是被特定<strong>生产方式与社会关系</strong>生产出来的。不声明 L1-E 基底而直接使用空间理论，会丢失其分析力的核心。<br>- L1-E（历史唯物主义）→ L2-β（谱系学/历史批判）→ L3-α（空间的社会生产分析）：这是列斐伏尔的完整路径<br>- 球域学（斯洛特戴克）则根在 L1-A（现象学共居）→ 两种"空间理论"不可混同调用</div></div>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">L3-α 美学的内部分裂</div><div class="cb">"美学"并非单一的 L1-A 应用域：<br>- <strong>Böhme 气氛美学 / 早期审美理论（康德—胡塞尔路线）</strong>：根在 L1-A 主体感知 ✓<br>- <strong><span class="wl">阿多诺</span>《美学理论》（否定辩证法）</strong>：根在批判理论 / L1-B/C 的否定辩证逻辑，对商品化和同一性的批判优先于感知<span class="wl">还原</span><br>- <strong>朗西埃"感性分配"</strong>：权力如何划定可见/可听/可言的边界——根在 L1-B/C 的政治拓扑学，是权力分析而非感知<span class="wl">还原</span><br>→ 使用"美学"框架时必须声明你调用的是哪条根</div></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">强制性声明原则</div><div class="cb">当你写"后人类主义 AI 影像"时，<strong>必须先声明本体论基底</strong>：<br>- "<span class="wl">德勒兹的空间理论</span>式内在性流变"基础上的后人类（生成 / 差异化）→ 影像是强度流动<br>- "OOO 对象撤退"基础上的后人类（AI 作为不可穷尽的撤退对象）→ 影像有永远无法被把握的内核<br>- "Level 2 症状阅读"框架下的后人类（AI 作为意识形态装置）→ 影像再生产权力关系<br><br>三种后人类的分析结论<strong>截然不同</strong>。同理适用于"装置理论"：鲍德里的 apparatus（<span class="wl">拉康</span>系，结构差异本体论 + 症状阅读）与福柯的 dispositif（内在性 + 谱系学）<strong>不可互换</strong>。</div></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">认识论断裂：结构主义 → 后结构主义</div><div class="cb"><span class="wl">符号学</span>/叙事学（结构差异本体论，Level 1）与<span class="wl">德勒兹的空间理论</span>主义/情动理论/装置理论（内在性流变本体论）之间存在<strong>认识论上的根本断裂</strong>——后结构主义不是对结构主义的"修正"，而是对其基础的拆解。在同一分析里不说明兼容逻辑地并用两者，会产生逻辑矛盾。</div></div>
+<hr>
+<h2>一、</h2>
+<div class="callout" style="border-color:#4caf50;background:#e8f5e9"><div class="ct" style="color:#4caf50">本课程精读标注说明</div><div class="cb">以下条目含"本课精读"标注的为<strong>本学期<span class="wl">电影理论</span>文献精读清单（2026）</strong>指定文本，括号内为对应周次。<br>课程结构逻辑：<strong>写实主义 × 形式主义</strong>（周1-4）→ <strong><span class="wl">符号学</span><span class="wl">电影理论</span></strong>（周5-6）→ <strong>精神分析凝视理论</strong>（周7）→ <strong>哲学电影理论</strong>（周8）</div></div>
+<hr>
+<h3>1. 现象学（Phenomenology）[[电影现象学整体谱系-总地图]] [[薇薇安索布恰克电影身体研究知识谱系]]</h3>
+<p><strong>血统</strong>：</p>
+<pre>胡塞尔《逻辑研究》(1900)《观念 I》(1913)：&quot;回到事物本身&quot;，意向性，超验[[还原]]
+    → 梅洛-庞蒂《感知现象学》(1945)：corps vécu（活的身体），身体图式，肉身性
+    → [[海德格尔]]《存在与时间》(1927)：此在在世，工具性，存在论转向
+    → 萨特《想象物》(1940)：意识的虚无化，影像的准现实性
+    → 电影现象学两支：
+        ├── 写实主义/本体论路线：[[巴赞]]（影像是被摄物的分身）→ 见 #4 解释学
+        └── 身体路线：Sobchack《眼睛的调度》(1992), Laura Marks 触感视觉,
+                       Jennifer Barker 触感观影, Carbone, 梅洛-庞蒂派</pre>
+<p><strong>核心问题</strong>：意义如何在肉身感知中<strong>原初</strong>发生？身体不是意识的容器，而是意义的生产场所。</p>
+<p><strong>关键概念</strong>：</p>
+<ul><li><strong>意向性（intentionality）</strong>：意识总是"关于某物的意识"——没有空洞的意识</li><li><strong>活的身体（corps vécu）</strong>：梅洛-庞蒂：身体是知觉主体，不是客体</li><li><strong>身体图式（body schema）</strong>：身体对世界的无意识运动预期，习惯性延伸至工具</li><li><strong>间肉身性（intercorporeality）</strong>：身体与身体之间的共鸣感知结构</li><li><strong>电影的身体（film's body）</strong>：Sobchack：电影本身有意向结构，既是意向主体又是被感知客体</li></ul>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3"><span class="wl">巴赞</span>与现象学的关系（→ 详见 §一 · 4. 解释学本课精读）</div><div class="cb"><span class="wl">巴赞</span>的写实主义本体论与现象学有深刻亲缘（影像本体论 ≈ 影像现象学），但他走的是<strong>解释学—美学路径</strong>而非梅洛-庞蒂身体路径。在课程中，巴赞是解释学传统的代表人物。</div></div>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>是<span class="wl">符号学</span>、解释学、4E认知的<strong>理论基础母体之一</strong></li><li>梅洛-庞蒂被 Sobchack / Marks / Barker / Carbone 直接用于电影身体理论</li><li>被<span class="wl">符号学</span>（<span class="wl">索绪尔</span>系）批判为"过于依赖先验主体"</li><li>与情动理论有亲缘，但情动理论绕开了主体（→ 见 §九 情动理论）</li></ul>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">⚡ L1-A 内部的本体论三分：不可混用</div><div class="cb">「现象学」在 L1-A 下掩盖了三种<strong>不兼容的本体论承诺</strong>：<br><br>| | 胡塞尔 | 海德格尔 | 梅洛-庞蒂 |<br>|--|--------|----------|-----------|<br>| <strong>主体地位</strong> | 先验自我（不可消除的构成中心） | 此在（无先验主体，总已在世） | 活的身体（前主体，超越主客） |<br>| <strong>本体论姿态</strong> | 拒绝教条本体论；从描述中建构形式/区域本体论 | 显性存在论（Sein的问题优先于一切） | 知觉本体论（肉，chiasme）；半显性 |<br>| <strong>历史性</strong> | 晚期才引入（生活世界）；主要是共时分析 | 核心（时间性是此在存在的意义） | 习惯/传统；身体历史沉淀 |<br>| <strong>他者</strong> | 同感推理（alter ego） | 共同此在（Mitsein） | 身体间可逆性，先于推理 |<br><br><strong>调用现象学时必须声明是哪一支</strong>：Sobchack/Marks/Barker 走的是梅洛-庞蒂路径，不是胡塞尔先验意识路径；解释学（Gadamer/Ricoeur）走的是海德格尔路径。混用会产生「先验自我」与「具身主体」之间的逻辑矛盾。<br><br>→ 详见 <span class="wl">现象学</span></div></div>
+<hr>
+<h3>2. [[符号学]]（Semiotics）</h3>
+<p><strong>血统</strong>：</p>
+<pre>A · [[索绪尔]]系（Structuralist Semiology）：
+    Saussure《普通语言学教程》(1916)：能指/所指，差异系统，语言符号任意性
+        → 雅各布森（隐喻/转喻轴，语言六功能）
+        → 巴特（早期）：神话学，图像修辞
+        → 麦茨《电影表意泛论》(1968)：大共时组合段，电影是 langage
+        → 麦茨《想象的能指》(1977)：精神分析转向
+        → 帕索里尼&quot;诗的电影&quot;(1965)：现实符号论（边界人物，→见下）
+
+B · 皮尔斯系（Semiotics / C.S. Peirce）：
+    Peirce：图像/索引/象征（icon / index / symbol）
+        → [[德勒兹]]借用并柏格森化（→ 见 #10 德勒兹主义）
+        → Sobchack：摄影影像的索引性 + 现象学（跨系融合路径）</pre>
+<p><strong>核心问题</strong>：意义由差异系统产生；没有差异就没有意义。电影能否被分析为一套可形式化的"语言"系统？</p>
+<p><strong>本课精读</strong>：</p>
+<blockquote><strong>📖 克里斯蒂安·麦茨《电影表意泛论》(1968)  </strong>"虚构故事片中的外延问题"<strong> - 核心命题：电影是 <em>langage</em>（语言实践/语言运用）而非 <em>langue</em>（封闭的词法系统）——电影没有词典 - </strong>外延（dénotation）<strong>：叙事内容本身（"一辆自行车被偷了"） - </strong>内涵（connotation）<strong>：叙事之上的风格/意识形态值（新现实主义 = 道德诚实的内涵） - </strong>大共时组合段（grande syntagmatique）<strong>：对叙事电影"句法"的系统描述，8 种叙事段落类型：   自主镜头 / 平行组合段 / 括弧组合段 / 描述组合段 / 交替叙事段 / 场景 / 普通段落序列 / 插段序列 - 这是把<span class="wl">索绪尔</span><span class="wl">符号学</span></strong>系统**应用于电影叙事的奠基文本——同时也是后来被后结构主义整体拆解的靶子</blockquote>
+<blockquote><strong>📖 P.P. 帕索里尼"诗的电影"(1965)  - 影像符号的特殊性：影像以</strong>现实对象本身<strong>为符号材料（物质索引），不是任意约定的——与<span class="wl">索绪尔</span>系根本分歧 - </strong>散文电影 vs 诗的电影<strong>：散文电影透明叙事、隐藏摄影机；诗的电影暴露摄影机的在场（"摄影机意识"） - </strong>自由间接主观性（soggettiva libera indiretta）<strong>：摄影机同时是角色视点和作者视点，不可分割（<span class="wl">费里尼</span>、安东尼奥尼、<span class="wl">戈达尔</span>） - 帕索里尼处于</strong><span class="wl">符号学</span>与现象学的边界**：用语言学框架，但坚持影像的物质—现实索引维度 - 与麦茨的核心分歧：麦茨把影像纳入<span class="wl">索绪尔</span>差异系统；帕索里尼拒绝把影像符号<span class="wl">还原</span>为约定性差异</blockquote>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">⚠️ 认识论断裂</div><div class="cb">麦茨所代表的<span class="wl">索绪尔</span>系<span class="wl">符号学</span>（L1-B 结构差异本体论）与<span class="wl">德勒兹的空间理论</span>/情动/后结构主义（L1-C）之间存在<strong>根本性断裂</strong>——后者不是对前者的修正，是对其基础的拆解。见 §〇.五</div></div>
+<hr>
+<h3>3. 图像学（Iconology / Bildwissenschaft）</h3>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">图像学的核心问题（影像是否有独立于语言的本体论地位）与<span class="wl">巴赞</span>"摄影影像本体论"、帕索里尼"诗的电影"构成隐性对话。</div><div class="cb"></div></div>
+<p><strong>两派</strong>：</p>
+<ul><li><strong>Panofsky 图像志—图像学</strong>（pre-iconographic / iconographic / iconological 三层解读）</li><li>→ 电影：姿势、服装、道具、场景的文化象征编码（好莱坞类型片分析）</li><li><strong>Bildwissenschaft（图像科学）</strong>（Warburg → Belting → Böhm → Mitchell）</li><li>→ 图像有自己的历史与生命，不可<span class="wl">还原</span>为语言</li><li>→ Belting《脸的历史》《图像学》：媒介—图像—身体的三角关系</li><li>→ Pinotti：图像的移情 / 具身感知——与现象学接口</li></ul>
+<hr>
+<h3>4. 解释学（Hermeneutics）</h3>
+<p><strong>血统</strong>：</p>
+<pre>施莱尔马赫 → 狄尔泰（精神科学方法论）
+    → [[海德格尔]]《存在与时间》：此在解释学，理解是存在方式而非方法
+    → Gadamer《真理与方法》(1960)：效果历史，视域融合，游戏，文本自主性
+    → Ricoeur《时间与叙事》三卷(1983-85)：叙事的时间性，三重模仿（mimesis I/II/III）
+    → 电影解释学: Dudley Andrew, Robert Stam（互文性）, [[巴赞]]传统</pre>
+<p><strong>本课精读</strong>：</p>
+<blockquote><strong>📖 安德烈·<span class="wl">巴赞</span>《电影是什么？》— 第一至三周（文章 1、2、3）</strong> <span class="wl">巴赞</span>处于<strong>解释学 + 写实主义美学 + 早期电影现象学</strong>的交汇点： <strong>文章 1："摄影影像本体论"(1945) · 第一周</strong> - 摄影的本体论功能：影像是被摄物的"分身（momie）"——<strong>将时间中的存在凝固</strong> - 摄影 vs <span class="wl">绘画</span>：绘画是诠释（主观），摄影通过物质因果（化学/光学）获得客观性；影像是被摄物的<strong>遗留物（empreinte）</strong> - <strong>索引性（index）</strong>：<span class="wl">巴赞</span>的影像本体论与皮尔斯的索引符号概念高度契合（见 <span class="tag">#2</span> <span class="wl">符号学</span> B 系） - <strong>反蒙太奇论</strong>：蒙太奇由导演强加意义；景深+长镜头尊重现实的多义性，保留观众的诠释自由 <strong>文章 2："电影语言的演进"(1950-55) · 第二周</strong> - 电影史的双重轴：<strong>相信影像的导演</strong>（<span class="wl">格里菲斯</span>/<span class="wl">爱森斯坦</span>：蒙太奇派）vs <strong>相信现实的导演</strong>（茂瑙/<span class="wl">弗拉哈迪</span>：写实派） - 1940s 转折（景深时代）：奥逊·威尔斯《公民凯恩》+ <span class="wl">意大利新现实主义</span> → 现实的多义性替代蒙太奇的意义单义性 - 景深不是风格选项，而是<strong>本体论选择</strong>：让观者在同一时空内自由"诠释"，而非被剪辑"告知" <strong>文章 3："评《偷自行车的人》"(1949) · 第三周（与汤普森文章 4 并读）</strong> - <span class="wl">意大利新现实主义</span>实践批评：非职业演员 / 实景拍摄 / 素材剧本 - 与汤普森的<strong>关键读法对比</strong>：   - <span class="wl">巴赞</span>（解释学—本体论路径）：这些选择尊重了现实的真实性   - 汤普森（形式主义路径）：这些选择本身就是一套可分析的<strong>形式策略</strong>   - <strong>两种读法的张力 = 本课核心认识论问题</strong>：写实主义是本体承诺还是形式选择？</blockquote>
+<hr>
+<h3>5. 叙事学（Narratology）</h3>
+<p><strong>血统</strong>：</p>
+<pre>俄国形式主义（什克洛夫斯基&quot;陌生化&quot;，普罗普《故事形态学》1928）
+    → 结构主义叙事学：Lévi-Strauss → Greimas（行动元模式/符号方阵）
+        → Genette《叙事话语》(1972)：聚焦，语速，顺序，频率
+    → 经典电影叙事学：Chatman《故事与话语》(1978), Bordwell《叙事电影》(1985)
+    → 新形式主义：汤普森《打破玻璃盔甲》(1988)：形式主义 + 认知心理学
+    → 后经典叙事学：向认知/现象学/跨媒介回归（Ryan, Herman, Stam）</pre>
+<p><strong>本课精读</strong>：</p>
+<blockquote><strong>📖 克里斯汀·汤普森《打破玻璃盔甲：新形式主义电影分析》(1988) — 第三、四周（文章 4、5）</strong> <strong>新形式主义（Neoformalism）</strong>：俄国形式主义"陌生化"原则 + 认知心理学（图式/推断）+ 导演意图分析 <strong>文章 4："从形式的视角看现实主义"（《偷自行车的人》） · 第三周（与<span class="wl">巴赞</span>并读）</strong> - 核心反驳："现实主义"本身是一套<strong>形式体系</strong>，没有"透明"或"自然"的现实主义风格 - <span class="wl">意大利新现实主义</span>的每个"现实"选择（非职演员/实景/线性叙事）都是可分析的<strong>形式策略</strong> - <strong>与<span class="wl">巴赞</span>的认识论张力</strong>：巴赞认为这些选择尊重现实（本体论论点）；汤普森认为它们与蒙太奇同样是"人工构造"（形式论点）——<strong>这组张力是导论周到第三周的核心对话</strong> <strong>文章 5："参数形式的知觉挑战"（小津《晚春》） · 第四周</strong> - <strong>参数形式（parametric form）</strong>：形式元素（镜头长度、机位高度、空镜头/枕头镜头）以<strong>独立于叙事</strong>的规律自我变奏时，叙事功能退后，形式参数本身成为观看核心 - 小津的"枕头镜头（pillow shots）"不服务于叙事连贯性，是纯粹的形式参数——造成"认知陌生化" - 与<span class="wl">德勒兹的空间理论</span>"纯粹光学声音情境"有隐性共鸣：两者都在讨论<strong>超出叙事功能</strong>的影像时刻</blockquote>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>是 <strong>L1-B 结构差异本体论</strong>最系统的电影应用（⚪ 经典期无身体论）</li><li>经典叙事学 + 麦茨<span class="wl">符号学</span>共同构成 1960-80s 的<span class="wl">电影理论</span>"科学化"阶段</li><li>被 Bordwell 认知主义接管；被现象学（Sobchack）指责为"无身体的叙事机器"</li><li>新形式主义（汤普森）是叙事学的认知化当代发展，仍在 L1-B 框架内</li></ul>
+<h3>6. 美学（Ästhetik / Aesthetics）</h3>
+<p><strong>血统</strong>：</p>
+<pre>Baumgarten《美学》(1750, 首次命名) → 康德《判断力批判》(1790)
+    → 黑格尔《美学》→ 尼采《悲剧的诞生》
+    → [[克罗齐]]（表现主义美学）
+    → 杜威《作为经验的艺术》(1934, 实用主义美学)
+    → [[阿多诺]]《美学理论》(1970, 否定辩证法)
+    → 当代: Böhme 气氛美学 / Rancière 感性分配 / 韦尔施后现代美学</pre>
+<p><strong>核心问题</strong>：感性经验的自律性、审美判断的普遍性、艺术与生活的边界</p>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">⚡ 美学的内部 L1 分裂——这是一个高度异质的领域</div><div class="cb">将"美学"整体归入 L1-A（主体感知本体论）是<strong>过度同质化</strong>。美学谱系内部跨越多个 L1：<br><br>| 美学传统 | L1 基底 | 核心逻辑 |<br>|---|---|---|<br>| 康德审美判断 / 胡塞尔现象学美学 / Böhme 气氛美学 | <strong>L1-A</strong> 主体感知 | 感知主体的先验/身体结构是审美经验的起点 |<br>| <strong><span class="wl">阿多诺</span>《美学理论》（否定辩证法）</strong> | <strong>L1-B/C</strong> 否定辩证逻辑 | 艺术通过否定同一性（Identitätsdenken）来抵抗文化工业；根在批判理论而非感知<span class="wl">还原</span> |<br>| <strong>朗西埃"感性分配"</strong> | <strong>L1-B/C</strong> 政治拓扑学 | 谁有权可见/可听/可言的权力分配；是政治本体论问题，不是感知问题 |<br>| 尼采《悲剧的诞生》 | 早期 <strong>L1-C</strong> 前驱 | 艺术=生命力量的过剩表达；酒神 vs 太阳神是强度的对立，非主体感知的差异 |<br><br>→ 使用"美学框架"时必须先做 L1 声明：你的"美学"是感知<span class="wl">还原</span>式、否定辩证式还是政治分配式？</div></div>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>是<strong>现象学、<span class="wl">符号学</span>、解释学的共同母体</strong>之一——几乎所有理论系都从美学借概念又反美学</li><li>Baumgarten 的"感性学"原意就是"关于感知的学问"，与现象学天然亲缘</li><li>康德"无利害的审美愉悦"被现象学（胡塞尔的悬置）借用，被情动理论批判</li><li><strong>Böhme 气氛美学</strong>是美学最接近现象学身体理论的当代接口（本库已收多篇相关论文）</li><li><strong>Rancière"感性分配"(partage du sensible)</strong>：美学与政治的交点，但 L1 根基是 L1-B/C，不是 L1-A——与文化研究对话而非与现象学对话</li></ul>
+<p><strong>电影节点</strong>：</p>
+<ul><li>早期电影美学（<span class="wl">明斯特伯格</span>、卡努杜、<span class="wl">爱因汉姆</span>）— 格式塔-美学路径</li><li><span class="wl">阿多诺</span>对"文化工业"的批判 → 与批判理论合流</li><li>Rancière《电影寓言》《影像的命运》— 感性分配在电影里的实践</li></ul>
+<hr>
+<h3>7. 精神分析（Psychoanalysis）</h3>
+<p><strong>血统</strong>：</p>
+<pre>弗洛伊德 → [[拉康]]（镜像阶段、象征/想象/实在三界）
+    → 电影精神分析: Baudry / Metz / Mulvey / Heath / de Lauretis
+    → 后[[拉康]]: Žižek（意识形态-幻象）/ Copjec / McGowan
+    → 克里斯蒂娃（原初符号域 / abjection）</pre>
+<p><strong>核心问题</strong>：无意识、欲望、凝视、认同如何在观影中运作</p>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">⚡ <span class="wl">拉康</span>体系内部的 L1 断裂：符号界（早期）vs 实在界（晚期）</div><div class="cb">将精神分析整体锁定在 L1-B（结构差异本体论）是<strong>对晚期<span class="wl">拉康</span>的严重截断</strong>：<br><br>| 维度 | 早期<span class="wl">拉康</span>（符号界为主）| 晚期拉康（实在界/享乐）|<br>|---|---|---|<br>| 核心 | 符号秩序（大他者/能指链）是主体的结构性基础 | <strong>实在界（The Real）</strong>：符号系统内部不可消除的创伤性剩余 |<br>| L1 归属 | <strong>L1-B</strong> 结构差异本体论 ✓ | 接近<strong>否定性本体论</strong>（L1-B 的内部死锁，或 L1-C 的极限形式）|<br>| 代表概念 | 镜像阶段、大他者、缝合、凝视（作为缺失位置）| <strong>object petit a（剩余享乐）</strong>、症状（sinthome）、享乐（Jouissance）|<br>| 电影分析后果 | 分析影像的符号秩序、意识形态缝合 | 分析影像中<strong>抵抗象征化的核心</strong>：创伤影像、断裂、不可<span class="wl">还原</span>的强度 |<br><br><strong>Žižek 的位置</strong>：他的电影分析核心在晚期<span class="wl">拉康</span>——幻象（fantasy）是意识形态用来<strong>填补实在界裂口</strong>的机制。幻象的对象不是象征性差异，而是 object a（剩余/无法符号化之物）。<br><br>→ <strong>对实在界/享乐有分析力的精神分析已越出 L1-B，进入一种独特的否定性本体论</strong>：现实的核心是一个不可象征化的裂口（hiatus），而非差异系统。处理影像中的创伤、断裂、非理性涌现时，须调用晚期<span class="wl">拉康</span>而非早期符号论拉康，两者不可混同。</div></div>
+<p><strong>关键概念（电影）</strong>：</p>
+<ul><li><strong>装置（apparatus）论</strong>（Baudry）：摄影机—放映机—银幕 构成"梦境装置"</li><li><strong>缝合（suture）</strong>（Oudart / Heath）：观众被剪辑—对话—凝视"缝进"文本</li><li><strong>凝视（gaze）</strong>（Mulvey）：男性凝视对女性身体的视觉控制</li><li><strong>幻象（fantasy）/ 实在界</strong>（Žižek）：意识形态通过幻象填补实在界裂口运作；电影核心是那个<strong>无法被叙事消化的剩余</strong></li></ul>
+<p><strong>本课精读</strong>：</p>
+<blockquote>📖 劳拉·穆尔维"视觉快感和叙事性电影"(1975)  精神分析（弗洛伊德/<span class="wl">拉康</span>）× 女性主义的<strong>奠基性交叉文本</strong>，Screen 杂志发表，1970s <span class="wl">电影理论</span>的地震点。 <strong>论证结构</strong>： - 经典好莱坞叙事建立在<strong>窥淫快感（scopophilia）</strong>（弗洛伊德）+ <strong>镜像认同</strong>（<span class="wl">拉康</span>）的双重机制上 - 叙事电影中的<strong>凝视结构</strong>是<strong>男性</strong>的（三重凝视：摄影机→银幕上的男性角色→观众，都预设男性观看位置） - <strong>女性身体 = 奇观（spectacle）</strong>：女性在叙事中冻结故事流动，成为"被看"的对象（to-be-looked-at-ness） - 处理女性作为阉割威胁的两种机制：<strong>恋物（fetishism）</strong>（美化女性身体以否认差异）/ <strong>偷窥-窥探（voyeurism/sadism）</strong>（惩罚、拯救或降低女性） <strong>关键论点的坐标</strong>： - L1 基础：L1-B（<span class="wl">拉康</span>的结构差异本体论：主体通过符号秩序构成） - L2 方法：症状阅读（穿透银幕快感的表象，定位其中的欲望—权力结构） - L3 域：L3-β 权力/主体化维度（性别作为权力铭写的身体） <strong>后续反驳与发展</strong>： - 玛丽·安·多纳（Mary Ann Doane）：女性观众的位置——过度认同（masochism）/ 扮装（masquerade） - E. Ann Kaplan：凝视不只是性别化的，也是种族化/阶级化的 - <strong>Sobchack 的现象学反驳</strong>：穆尔维的凝视理论预设了一个"无身体的观看主体"；现象学坚持观看者有肉身，观影快感是身体的而非仅仅是心理结构的</blockquote>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>是 <strong>Sobchack 明确反拨的对象</strong>——她用身体现象学替代"无身体的凝视"</li><li>与<span class="wl">符号学</span>高度融合（Metz 把<span class="wl">拉康</span>术语结构符号学化）</li><li>被情动理论批判为"过于依赖表征和意义"，忽略前表征的强度</li><li>被 4E 认知科学批判为不可证伪、脱离神经/身体基础</li><li>Žižek 路径则把精神分析与批判理论、<span class="wl">德勒兹的空间理论</span>嫁接，持续活跃</li></ul>
+<hr>
+<h3>8. 批判理论（Critical Theory / [[法兰克福学派]]）</h3>
+<p><strong>血统</strong>：</p>
+<pre>马克思 → 黑格尔左派
+    ├── A线：[[法兰克福学派]] (霍克海默, [[阿多诺]], 马尔库塞, 本雅明)
+    │       → 哈贝马斯（沟通理性）→ 霍耐特（承认理论）/ 弗雷泽
+    └── B线：结构主义马克思主义
+            阿尔都塞《意识形态与意识形态国家机器》(1970)
+                → 询唤（interpellation）：主体不是自发的，而是被意识形态&quot;呼唤&quot;进存在
+                → 这是 1970s《电影手册》Comolli/Narboni 意识形态电影批评的**直接理论引擎**
+                → 葛兰西（霸权 hegemony）← 伯明翰文化研究的核心工具
+                → 与[[拉康]]焊接：阿尔都塞询唤 + 拉康镜像阶段 → Baudry 装置论的哲学基础</pre>
+<div class="callout" style="border-color:#607d8b;background:#f5f5f5"><div class="ct" style="color:#607d8b">阿尔都塞不是"旁支"</div><div class="cb">阿尔都塞的询唤理论是 1970 年代<span class="wl">电影理论</span>（装置论 / 意识形态批评）的<strong>轴心</strong>，直接生产了《电影手册》时期、Screen 杂志、以及后来的凝视理论的认识论基础。把他列为"旁支"是对这段历史的严重低估。</div></div>
+<p><strong>核心问题</strong>：文化（工业）如何再生产权力关系？启蒙如何转变为宰制？主体如何被意识形态<strong>询唤</strong>进入自己的位置？</p>
+<p><strong>关键概念（电影）</strong>：</p>
+<ul><li><strong>文化工业</strong>（Adorno/Horkheimer）：好莱坞是标准化的意识形态生产</li><li><strong>本雅明</strong>《机械复制时代的艺术作品》(1935)：灵韵（Aura）、震惊（Schock）、政治化的艺术</li><li><strong>询唤（interpellation）</strong>（Althusser）：电影通过识别机制把观众"呼唤"进意识形态主体位置——这是装置论的哲学根基</li><li><strong>意识形态批评</strong>：《Cahiers du cinéma》1970s Comolli/Narboni 分析电影如何再生产意识形态</li></ul>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li><strong>阿尔都塞 × <span class="wl">拉康</span></strong>：询唤 + 镜像阶段 → 装置理论（<span class="tag">#19</span>）的哲学基础；是 A线与精神分析的关键焊接</li><li>本雅明"触感性接受（tactile reception）"与现象学有隐性亲缘（他谈到身体如何习惯媒介）</li><li>与文化研究（伯明翰学派）是<strong>母子关系</strong>（B线经葛兰西进入伯明翰）</li><li>被情动理论批判为太依赖"意识形态批判"的认知框架，忽略身体-情感层</li></ul>
+<hr>
+<h3>9. 情动理论（Affect Theory）</h3>
+<p><strong>血统</strong>：</p>
+<pre>斯宾诺莎（affect = 能力的增减）
+    → [[德勒兹]]-加塔利《千高原》(1980)：强度、生成、解辖域化
+    → Brian Massumi《情动的释义》(2002)：情动先于情感
+    → Sara Ahmed《情感的文化政治》(2004)：情动有方向性、有政治性
+    → 西沃罗（Steven Shaviro）《后电影情动》(2010)：电影中的情动经济
+    → 劳伦·贝朗特（Lauren Berlant）：残酷的乐观主义</pre>
+<p><strong>核心问题</strong>：情动（affect）≠情感（emotion）：情动是前意识的强度，情感是主体化后的情绪。影像如何传递、调动情动？</p>
+<p><strong>关键区分</strong>：</p>
+<ul><li><strong>情动（affect）</strong>：身体的能力变化，前主体，不可表征</li><li><strong>情感（emotion）</strong>：情动被命名/主体化后的产物</li><li><strong>强度（intensity）</strong>：情动的计量单位</li></ul>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>与现象学的亲缘：都关注身体、都承认前语言层——但现象学仍以<strong>主体</strong>为中心，情动理论绕开了主体</li><li><strong>马苏米批判现象学</strong>：phenomenology 仍保留"我感知"的主体结构；情动理论要的是"在主体构成之前的流动"</li><li>与<span class="wl">德勒兹的空间理论</span>主义高度重叠（德勒兹借斯宾诺莎的 affect 概念）</li><li>与新物质主义汇流（非人类的情动能量）</li><li>电影里：Shaviro 把情动理论用于分析后电影（数字影像的情动经济）</li></ul>
+<hr>
+<h3>10. [[德勒兹的空间理论]]主义（Deleuzianism）</h3>
+<div class="callout" style="border-color:#607d8b;background:#f5f5f5"><div class="ct" style="color:#607d8b"><span class="wl">德勒兹的空间理论</span>在<span class="wl">电影理论</span>里足够独立成系，不宜简单归入现象学或情动理论。</div><div class="cb"></div></div>
+<p><strong>血统</strong>：</p>
+<pre>柏格森（运动/时间/绵延）
+    + 斯宾诺莎（内在性、情动）
+    + 尼采（差异与重复）
+    + 皮尔斯（符号的三元性）
+    → [[德勒兹]]《差异与重复》(1968)《反俄狄浦斯》(1972，与加塔利合著)
+    → [[德勒兹]]《电影 1：运动-影像》(1983)、《电影 2：时间-影像》(1985)
+    → 当代: Rodowick / Flaxman / 姜宇辉（中文）</pre>
+<p><strong>核心问题</strong>：影像<strong>本身</strong>如何思考？运动-影像（行动感知情感）与时间-影像（纯粹光学声音情境）如何区分？</p>
+<p><strong>关键概念</strong>：</p>
+<ul><li>运动-影像 / 时间-影像</li><li>情动-影像（affect-image）/ 知觉-影像 / 行动-影像</li><li>块茎（rhizome）/ 生成（becoming）/ 内在性平面</li><li><span class="wl">褶子</span>（fold）/ 差异化重复</li></ul>
+<p><strong>本课精读</strong>：</p>
+<blockquote><strong>📖 吉尔·<span class="wl">德勒兹的空间理论</span>《时间-影像》(1985) — 第八周："时间的晶体"（第 8 章）</strong> <strong>为什么这一章是《时间-影像》的核心</strong>： 前几章论证了二战后电影向时间-影像的转变（<span class="wl">意大利新现实主义</span>/<span class="wl">法国新浪潮</span>）；第 8 章给出了时间-影像最纯粹的形态：<strong>晶体-影像（crystal-image）</strong> <strong>晶体-影像的结构</strong>： - 时间不是顺序流动的（过去→现在→未来），而是现在与它自己的过去<strong>同时并存</strong> - 晶体-影像 = 现在与过去的<strong>不可辨别点（point d'indiscernabilité）</strong>：在影像中已经无法区分"正在发生的"与"刚刚过去的" - 四种晶体形态：<strong>完美晶体（镜</strong>）/ <strong>破裂晶体（<span class="wl">费里尼</span>/雷诺阿）</strong> / <strong>萌芽晶体</strong> / <strong>运动晶体（Ophüls 的摄影机运动）</strong> <strong>关键例子</strong>（<span class="wl">德勒兹的空间理论</span>的文本分析）： - 雷诺阿《游戏规则》(1939)：现实与扮演的不可辨别性 → 破裂的晶体 - <span class="wl">费里尼</span>《八又二分之一》(1963)：记忆/幻想/现在同时涌现 → 晶体的多层叠置 - 温特斯（Welles）《公民凯恩》(1941)：时间的非线性地层 <strong>与其他文本的关联（本课内部）</strong>： - 与<span class="wl">巴赞</span>的隐性对话：巴赞爱长镜头因为"尊重现实"；<span class="wl">德勒兹的空间理论</span>爱长镜头因为它生产了"时间的直接影像"——<strong>不同本体论，相似实践</strong> - 与汤普森的张力：汤普森的参数形式分析（枕头镜头超出叙事）在<span class="wl">德勒兹的空间理论</span>这里有另一种解释：那些"超出叙事"的时刻正是<strong>纯粹光学声音情境（opsigne/sonsigne）</strong>，是时间-影像的入口 <strong>坐标</strong>：L1-C（内在性流变本体论）；L2 = 内在性分析（不做"症状揭露"，而是描述影像的内在差异化生成）</blockquote>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>与现象学：<strong>表面相似，内核对立</strong>。<span class="wl">德勒兹的空间理论</span>拒绝"主体—意识"的现象学框架，用"内在性"替代"意向性"</li><li>与<span class="wl">符号学</span>：借用皮尔斯但<strong>柏格森化</strong>了——符号不是"代码关系"而是"影像的运动模式"</li><li>与情动理论：高度重叠（马苏米直接来自<span class="wl">德勒兹的空间理论</span>）</li><li>与系统论/控制论：通过"自组织"概念有隐性对话</li><li>中文最主要的电影<span class="wl">德勒兹的空间理论</span>主义者：<strong>姜宇辉</strong>（本库已收多篇）</li></ul>
+<hr>
+<h3>11. 技术哲学 / 后现象学（Philosophy of Technology / Postphenomenology）</h3>
+<p><strong>血统</strong>：</p>
+<pre>[[海德格尔]]《技术的追问》(1954)：&quot;遮蔽/解蔽&quot;，Ge-stell（座架）
+    → 斯蒂格勒《技术与时间》三卷(1994–2001)：技术作为&quot;第三记忆&quot;
+    → 西蒙东《论技术对象的存在模式》(1958)：技术个体化，transindividuation
+    → Don Ihde《技术与生活世界》(1990)：后现象学，四种技术关系
+        （具身关系 / 诠释关系 / 他者关系 / 背景关系）
+    → Peter-Paul Verbeek：道德物化，技术调解
+    → 当代: 新媒体现象学 / AIGC 具身</pre>
+<p><strong>核心问题</strong>：技术如何中介人与世界的关系？人在技术中如何具身？AI/数字媒介的本体论地位？</p>
+<p><strong>关键概念</strong>：</p>
+<ul><li><strong>技术具身</strong>（embodied relations）：技术成为身体图式的延伸（工具→假体→媒介）</li><li><strong>第三记忆</strong>（斯蒂格勒）：技术物质承载的"后成种系发生"记忆</li><li><strong>个体化</strong>（西蒙东）：人与技术共同个体化（transindividuation）</li><li><strong>后现象学</strong>（Ihde）：不做"先验"现象学，做经验-技术分析</li></ul>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>是<strong>现象学的技术应用分支</strong>，但已走向独立</li><li>斯蒂格勒批判<span class="wl">考研日记/啊 艺术概论/海德格尔</span>忽略了技术的"原始性"</li><li>与<strong>媒介理论</strong>（媒介作为技术）高度重叠，但技术哲学更关注个体-具身层面，媒介理论更关注社会-感知层面</li><li>与<strong>系统论</strong>对话：西蒙东的个体化理论是"技术版系统论"</li><li><strong>对 AI 动画创作直接相关</strong>：AI 生成影像是一种什么样的技术具身关系？</li></ul>
+<hr>
+<h3>12. 媒介理论 / 传播学（Media Theory / Communication Studies）</h3>
+<p><strong>血统</strong>：</p>
+<pre>麦克卢汉《理解媒介》(1964)：&quot;媒介即讯息&quot;，冷/热媒介
+    → 媒介生态学: Postman, Meyrowitz, Ong（口语/书写/电子）
+    → 基特勒（Kittler）《留声机 电影 打字机》(1986)：媒介决定论，话语网络
+    → 媒介物质性: Hayles（N-Katherine）, Galloway
+    → 传播学主流: 拉斯韦尔, 香农-韦弗（信息论）, 哈贝马斯（沟通理性）
+    ↓（数字转向）
+马诺维奇（Lev Manovich）《新媒体语言》(2001)：
+    → 数字媒介五原则：数字化/模块化/自动化/可变性/转码（transcoding）
+    → 数据库 vs 叙事：数字媒介的深层逻辑是**数据库**，而非线性叙事
+    → 软件研究（Software Studies）: Fuller, Galloway
+    → AI 影像 = 数据库本体论的极端形式：每次生成=从潜在数据库中提取一个实例</pre>
+<p><strong>三个亚传统（不可混同）</strong>：</p>
+<p><strong>(a) 批判/人文媒介理论（欧陆）</strong>：麦克卢汉 → 基特勒 → 媒介考古学</p>
+<ul><li>问题：媒介如何塑造人的感知、主体性、历史？</li><li>身体观：被媒介重塑的感知器官</li></ul>
+<p><strong>(b) 传播学（北美经验主义）</strong>：拉斯韦尔 → 香农 → 效果研究 → 议程设置</p>
+<ul><li>问题：信息如何从 A 传到 B，效果如何？</li><li>身体观：信息接收器</li></ul>
+<p><strong>(c) 数字/软件本体论（新媒体理论）</strong>：马诺维奇 → Fuller → Galloway</p>
+<ul><li>问题：数字媒介的本体论特征是什么？算法如何组织文化逻辑？</li><li>身体观：在可变数据库中被参数化的身体；AI 生成的"身体"是统计分布的实例</li></ul>
+<div class="callout" style="border-color:#607d8b;background:#f5f5f5"><div class="ct" style="color:#607d8b">对 创作的直接意义</div><div class="cb">马诺维奇的数据库 vs 叙事对立，直接命中 AI 动画的本体论问题：你生成的每一帧不是"叙述"出来的，而是从潜在统计空间里"采样"出来的。这不是传统叙事媒介，而是<strong>数据库美学</strong>。Sobchack 的"电影身体"理论是否适用于数据库本体的影像，这是一个开放的研究问题。</div></div>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>与现象学：麦克卢汉晚年自称"现象学家"，但更接近感知生态学；马诺维奇的数据库逻辑则与现象学的"身体—意向性"基本不兼容</li><li>与<strong>技术哲学</strong>：基特勒直接对抗<span class="wl">考研日记/啊 艺术概论/海德格尔</span>技术哲学（"媒介决定人"反"人使用技术"）</li><li>与<strong>批判理论</strong>：<span class="wl">法兰克福学派</span>批判媒介工业，麦克卢汉相对价值中立</li><li>与<strong>系统论</strong>：香农信息论和维纳控制论同源</li></ul>
+<hr>
+<h3>13. 媒介考古学（Media Archaeology）</h3>
+<p><strong>血统</strong>：</p>
+<pre>福柯《知识考古学》(方法论母体)
+    → 齐林斯基（Siegfried Zielinski）《媒介的深层时间》(1989)
+    → 帕里卡（Jussi Parikka）《昆虫媒介》《地质媒介》
+    → 胡赫塔莫（Erkki Huhtamo）：媒介主题学
+    → Kluitenberg / Ernst（媒介时间性）</pre>
+<p><strong>核心问题</strong>：那些被主流媒介史遗忘的、失败的、替代性的媒介路径里藏着什么？</p>
+<p><strong>关键主张</strong>：</p>
+<ul><li>拒绝媒介进化论（线性进步史），挖掘"异托邦式"媒介</li><li>媒介有自己的物质性时间（非人类的机器时间）</li><li>每一种新媒介都是对旧媒介欲望的重新激活</li></ul>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>与<strong><span class="wl">符号学</span></strong>对立：媒介考古不关心"意义"，关心物质性/时间性</li><li>与<strong>媒介理论</strong>（基特勒系）亲缘</li><li>与<strong>新物质主义</strong>接近：物质本身的能动时间</li><li>本库 Zotero 中已有施畅《媒介考古学的兴起及其问题意识》(2019)</li></ul>
+<hr>
+<h3>14. 系统论 / 控制论（Systems Theory / Cybernetics）</h3>
+<p><strong>血统</strong>：</p>
+<pre>维纳《控制论》(1948) + 香农《通信的数学理论》(1948)
+    → 贝特森（Bateson）：心智与自然，生态系统论
+    → 马图拉纳/瓦雷拉《自创生与认知》(1980)：autopoiesis（自我创生）
+    → 卢曼（Luhmann）：社会系统论，意义=系统内的自我区分
+    → 复杂性科学: 圣菲研究所, 涌现理论</pre>
+<p><strong>核心问题</strong>：信息、反馈、自组织、涌现——系统如何自我维持和演化？</p>
+<p><strong>关键概念</strong>：</p>
+<ul><li><strong>自我创生（autopoiesis）</strong>：系统自我产生并维持自身边界</li><li><strong>涌现（emergence）</strong>：整体大于部分之和的性质</li><li><strong>反馈回路</strong>：信息的循环调节</li></ul>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>与<strong>现象学</strong>：瓦雷拉后期转向现象学（《具身心智》1991），是<strong>4E 认知科学</strong>的起点</li><li>与<strong>传播学</strong>：香农—维纳是信息论传播学的直接母体</li><li>与<strong><span class="wl">德勒兹的空间理论</span>主义</strong>：涌现/自组织概念被德勒兹借为"差异生成"的科学背书</li><li>与<strong>技术哲学</strong>：西蒙东的个体化理论是系统论的人文版</li><li>在电影：交互电影、VR 叙事的设计理论常借系统论</li></ul>
+<hr>
+<h3>15. 4E 认知科学（Embodied / Embedded / Enacted / Extended Cognition）</h3>
+<p><strong>血统</strong>：</p>
+<pre>梅洛-庞蒂（具身知觉，前期基础）
+    → 瓦雷拉/汤普森/罗施《具身心智》(1991)：认知=行动中的具身
+    → 安迪·克拉克（Andy Clark）《超脑：具身认知与延伸心智》：延伸心智
+    → 扎哈维（Dan Zahavi）：现象学 × 认知科学的严格对话
+    → 电影认知理论: Torben Grodal (BioCultural Theory), Carl Plantinga, Murray Smith</pre>
+<p><strong>核心问题</strong>：认知不在大脑里，在身体-环境的耦合中。电影如何在"脑—身体—环境"系统中被体验？</p>
+<p><strong>4E</strong>：</p>
+<ul><li><strong>Embodied</strong>（具身）：认知依赖身体的形态和感觉运动能力</li><li><strong>Embedded</strong>（嵌入）：认知嵌入环境</li><li><strong>Enacted</strong>（生成/行动）：认知是行动者与环境的共同创生</li><li><strong>Extended</strong>（延伸）：认知系统延伸到工具和媒介中</li></ul>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>是<strong>现象学的认知科学翻译</strong>，但更愿意接受神经科学证据</li><li>与<strong>精神分析</strong>正面冲突：4E 认为精神分析的无意识理论无法被验证</li><li>与<strong>技术哲学</strong>（Ihde 的后现象学）高度重叠</li><li>与<strong>系统论</strong>亲缘：autopoiesis 是具身认知的生物学基础</li><li>在电影：认知电影研究（Bordwell/Carroll/Plantinga）与现象学电影研究（Sobchack）之间的<strong>调解空间</strong></li></ul>
+<hr>
+<h3>16. 新物质主义（New Materialism）</h3>
+<p><strong>血统</strong>：</p>
+<pre>斯宾诺莎（物质内在性，情动）
+    → [[德勒兹]]-加塔利（块茎，生成，非有机生命）
+    → 凯伦·巴拉德（Karen Barad）《与宇宙相遇》(2007)：intra-action, 物质-话语纠缠
+    → 简·本尼特（Jane Bennett）《有活力的物质》(2010)：物质的活力（vital materialism）
+    → 露西·伊里加雷 + 布拉伊多蒂（Rosi Braidotti）：后人类女性主义物质论</pre>
+<p><strong>核心问题</strong>：物质不是被动的"被赋予意义的底质"——物质自己有能动性、有力量、有差异化生成能力。</p>
+<p><strong>关键概念</strong>：</p>
+<ul><li><strong>intra-action</strong>（巴拉德）：不是"相互作用（interaction）"（两个已存在的实体），而是"纠缠中的相互构成"</li><li><strong>vital materialism</strong>（本尼特）：电、食物、垃圾等物质聚集体的政治</li><li><strong>物质-话语纠缠</strong>：后结构主义话语论 × 量子物理学</li></ul>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>批判<span class="wl">符号学</span>和话语分析"把一切化为语言"</li><li>与现象学的差别：现象学仍以<strong>主体身体</strong>为中心，新物质主义去中心化，让非人类物质也参与</li><li>与情动理论高度重叠（都继承斯宾诺莎-<span class="wl">德勒兹的空间理论</span>）</li><li>与<strong>后人类主义</strong>互为补充：后人类提供政治框架，新物质主义提供本体论</li><li><strong>对 AI 动画的直接意义</strong>：AI 生成影像的"物质性"—— GPU、电力、数据流、像素聚合体——都有自己的能动性</li></ul>
+<hr>
+<h3>17. 后人类主义（Posthumanism）</h3>
+<p><strong>血统</strong>：</p>
+<pre>哈拉维《[[赛博格]]宣言》(1985)：&quot;我宁愿做赛博格而不是女神&quot;
+    → N. 凯瑟琳·海勒斯（N. Katherine Hayles）《我们如何成为后人类》(1999)
+    → 布拉伊多蒂（Rosi Braidotti）《后人类》(2013)：唯物主义-生机论的后人类伦理
+    → 斯蒂格勒（技术人类学路线）
+    → 当代 AI 伦理学/数字人文学科</pre>
+<p><strong>核心问题</strong>：启蒙人文主义的"人"（理性、自律、统一主体）已经结束。<span class="wl">赛博格</span>、AI、生物技术之后，什么是"我们"？</p>
+<p><strong>两个方向</strong>：</p>
+<ul><li><strong>批判后人类主义</strong>（Hayles, Braidotti）：解构人类中心主义，拥抱差异与流变</li><li><strong>超人类主义（transhumanism）</strong>：把后人类理解为"升级版人类"（技术乐观主义） → 与批判后人类主义对立</li></ul>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>与女性主义/文化研究：哈拉维、布拉伊多蒂都是女性主义后人类主义</li><li>与新物质主义：布拉伊多蒂显式结合</li><li>与技术哲学：对话斯蒂格勒的"技术人类"</li><li>与现象学：部分对话（Zahavi 的最低限度自我论 vs 后人类的去中心化主体）</li><li><strong>AI 动画的创作身位</strong>：你正在操作的是一种后人类创作实践——作者、机器、影像三者共同生成</li></ul>
+<hr>
+<h3>18. 文化研究 / 女性主义（Cultural Studies / Feminist Theory）</h3>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">认识论警告：被强行捆绑的两个传统</div><div class="cb">本系实际上合并了<strong>认识论起点根本不同</strong>的两条线，使用时必须明确声明你调用的是哪一支：<br><br><strong>A线 · 伯明翰文化研究（CCCS）</strong><br>- 母体：葛兰西霸权理论 + 阿尔都塞询唤（经由批判理论）<br>- 问题：阶级 / 受众 / 媒体机构如何生产和再生产文化霸权？<br>- 方法论：编码/解码（Hall）；民族志式受众研究；文化唯物主义<br>- Level 2 方法：介于"症状阅读"与"网络追踪"之间<br><br><strong>B线 · 精神分析女性主义</strong>（穆尔维/德洛雷蒂斯/多恩/克里斯蒂娃）<br>- 母体：<span class="wl">拉康</span>象征秩序 + 弗洛伊德凝视/窥视欲<br>- 问题：无意识的性别机制如何在影像中结构女性主体位置？<br>- 方法论：症状阅读，主体位置分析<br>- Level 2 方法：<strong>纯粹的症状阅读/揭露</strong><br><br>两者表面上都谈"权力"和"身份"，但本体论承诺完全不同（A线更接近马克思主义社会本体论；B线是结构差异本体论）。将穆尔维和霍尔放在同一个分析框架里使用，需要显式说明兼容逻辑。</div></div>
+<p><strong>血统</strong>：</p>
+<pre>A线（文化研究）:
+伯明翰文化研究中心 (CCCS): 霍加特 → 斯图亚特·霍尔 → 威廉斯（文化唯物主义）
+    → 意识形态/霸权: 葛兰西（hegemony）→ 编码/解码（Hall 1980）
+    → 交叉性（intersectionality）: Crenshaw
+
+B线（精神分析女性主义）:
+弗洛伊德/[[拉康]] → 穆尔维《视觉愉悦与叙事电影》(1975)
+    → de Lauretis, Doane, Modleski
+    → 克里斯蒂娃（原初符号域 / abjection）
+
+汇聚 / 分叉点:
+    → 酷儿理论: 巴特勒（performativity，语言哲学路线，非精神分析）
+    → 后殖民理论: Fanon, Spivak, Bhabha（第三空间）← 更接近独立的 #27 系</pre>
+<p><strong>核心问题</strong>：性别、种族、阶级、性向如何通过文化（包括电影）被生产和挑战？身体不是自然的——身体是话语-权力的效果。</p>
+<p><strong>关键概念</strong>：</p>
+<ul><li><strong>凝视（gaze）</strong>（穆尔维）：好莱坞构建男性凝视结构</li><li><strong>表演性（performativity）</strong>（巴特勒）：性别不是本质，是重复表演的效果</li><li><strong>霸权（hegemony）</strong>（葛兰西）：统治阶级通过"常识"维持权力</li><li><strong>第三空间（third space）</strong>（Bhabha）：殖民/后殖民混杂身份</li></ul>
+<p><strong>与其他系的关系</strong>：</p>
+<ul><li>穆尔维的凝视理论是<strong>精神分析（<span class="wl">拉康</span>）× 女性主义</strong>的产物</li><li>被现象学触感理论（Sobchack, Marks）批判：不能只谈"凝视"，身体还有触感</li><li>与批判理论：共享意识形态批判框架，但文化研究更关注微观权力</li><li>与后人类主义：布拉伊多蒂、哈拉维将二者结合</li><li><strong>交叉性</strong>是当代女性主义的核心方法论——可以用于分析 AI 生成影像中的种族/身体再现</li></ul>
+<hr>
+<h3>19. 装置 / 配置理论（Dispositif / Apparatus Theory）</h3>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">术语辨析：装置艺术（installation art）≠ 本条目。本条目是福柯 dispositif / 电影 apparatus。</div><div class="cb"></div></div>
+<p><strong>血统</strong>：</p>
+<pre>福柯（1977 访谈）：dispositif = 话语、机构、建筑、法规的异质网络
+    → [[德勒兹]]《什么是配置？》(1989)：可见性/可言说性/权力/主体化 四轴
+    → 阿甘本《什么是装置？》(2009)：任何捕获生命的技术皆是装置
+    ↓（平行）
+鲍德里《基本电影装置意识形态效果》(1974/75)——摄影机—放映—银幕=梦境装置
+梅茨《想象的能指》(1977)
+卡塞蒂&quot;再定位&quot;——媒介装置的迁移与重构</pre>
+<p><strong>核心概念</strong>：福柯 dispositif = 权力-知识<strong>关系网络</strong>，而非单一机构；阿甘本：手机、法律、烟斗都是装置；电影装置：配置制造"主体效果"</p>
+<p><strong>与其他系关系</strong>：装置 × 精神分析（鲍德里嫁接<span class="wl">拉康</span>）；装置 × ANT（同样描述异质网络，ANT 中性，装置带权力批判）；装置 × <span class="wl">生命政治</span>（装置是生命政治的具体操作技术）</p>
+<hr>
+<h3>20. [[生命政治]]（Biopolitics / Biopolitique）</h3>
+<p><strong>血统</strong>：</p>
+<pre>福柯《性史》卷一(1976)、《[[生命政治]]的诞生》讲座(1978–79)
+    ├── 解剖-政治：训诫个体身体
+    └── 生命-政治：调控人口/物种
+阿甘本《神圣人》(1995)：裸命（bare life）/ 主权例外 / 营地
+埃斯波西托《免疫》(2002)：社群—免疫逻辑
+哈特 &amp; 奈格里《帝国》(2000)：[[生命政治]]生产、非物质劳动
+姆贝姆贝《死亡政治》(2003)：谁的死亡被允许——后殖民[[生命政治]]
+布拉伊多蒂：zoe（非人类生命）的后人类[[生命政治]]</pre>
+<p><strong>核心概念</strong>：生命权力（作用于活的身体与人口）；裸命（被剥夺政治资格的纯生物生命）；免疫逻辑；死亡政治</p>
+<p><strong>与其他系关系</strong>：装置=<span class="wl">生命政治</span>的操作技术；现象学"活的身体"与福柯"驯服身体"是同一身体的不同问题框架；与后殖民（姆贝姆贝）；与新物质主义/后人类（布拉伊多蒂的 zoe 政治）</p>
+<hr>
+<h3>21. 球域学（Sphärologie / Spherology）</h3>
+<p><strong>血统</strong>：</p>
+<pre>巴什拉《空间的诗学》(1958) + [[海德格尔]]&quot;在世存在&quot;
+    ↓
+彼得·斯洛特戴克《球域》三部曲（1998–2004）：
+    卷一《气泡》—— 微球域：母婴共鸣，最小亲密空间
+    卷二《地球》—— 宏球域：宇宙/神圣/帝国的球形想象
+    卷三《泡沫》—— 现代多元：无数小泡沫的聚合
+哈特穆特·罗萨《共鸣》(2016)—— 共鸣社会学</pre>
+<p><strong>核心概念</strong>：球域（Sphäre）= 被保护的共居空间；气泡 = 最小亲密球域（母婴关系）；泡沫 = 现代多元状态；共鸣（Resonanz）= 主体与世界之间有回应的关系</p>
+<p><strong>与其他系关系</strong>：延伸<span class="wl">考研日记/啊 艺术概论/海德格尔</span>，把"在世"转向<strong>共居空间性</strong>；与空间理论区别：球域学侧重存在论共鸣，空间理论侧重社会政治生产；与情动理论互补（球域内共鸣=情动的空间化）</p>
+<p><strong>创作节点</strong>：VR、沉浸影院、电影院 = 人造气泡；"沉浸感设计"可用球域学框架</p>
+<hr>
+<h3>22. OOO / 思辨实在论（Object-Oriented Ontology / Speculative Realism）</h3>
+<p><strong>血统</strong>：</p>
+<pre>2007 年伦敦大学学院研讨会，思辨实在论（SR）= 伞形名称：
+    梅亚苏《有限性之后》(2006)—— 批判&quot;关联主义&quot;，寻求思维之外的绝对
+    哈曼《工具存在》(2002)《四方对象》(2011)—— OOO 核心
+    布拉西耶《虚无解绑》(2007)—— 反人类主义，宇宙对意义漠然
+    格兰特——自然哲学，谢林路线
+旁支：莫顿《超级对象》《黑暗生态学》—— 生态 OOO</pre>
+<p><strong>核心概念</strong>：</p>
+<ul><li><strong>关联主义批判</strong>（梅亚苏）：哲学把存在化为"存在与思维的关系"——这是现代哲学的囚笼</li><li><strong>撤退（withdrawal）</strong>（哈曼）：对象永远有无法被任何关系穷尽的内在维度</li><li><strong>平坦本体论</strong>：去除人类特权，锤子、算法、神话本体论地位平等</li><li><strong>超级对象（hyperobject）</strong>（莫顿）：气候变化、互联网——巨大分散、超越感知尺度</li></ul>
+<p><strong>与其他系关系</strong>：</p>
+<ul><li><strong>明确批判现象学</strong>（关联主义批判）</li><li>与新物质主义核心对立：新物质主义<strong>关系先于实体</strong>，OOO <strong>对象先于关系</strong></li><li>与 ANT：都给非人类权利，但 ANT 关系主义，OOO 实体主义</li><li><strong>哈曼《艺术与对象》(2020)</strong>：艺术是接触对象"撤退维度"的唯一方式</li></ul>
+<p><strong>AI 创作节点</strong>：模型内部的生成过程对作者永远"撤退"——AI 影像有自己的 OOO 意涵</p>
+<hr>
+<h3>23. ANT / 行动者网络理论（Actor-Network Theory）</h3>
+<p><strong>血统</strong>：</p>
+<pre>巴黎矿业学院 STS 团队，1980s：拉图尔 + 卡隆 + 劳
+    拉图尔《科学在实践中》(1987)《我们从未现代过》(1991)《重新聚集社会》(2005)
+    卡隆《翻译社会学》(1984)—— 扇贝、渔民与科学家的网络
+    劳《方法之后》(2004)
+当代：哈拉维&quot;伴侣物种&quot;（ANT × 女性主义）</pre>
+<p><strong>核心概念</strong>：行动素（actant）= 任何能改变他者状态的实体；翻译 = 实时建构网络；铭写 = 意图写入非人类物；对称性原则；黑箱化</p>
+<p><strong>与其他系关系</strong>：</p>
+<ul><li>与装置理论：同描述异质网络，但 ANT 中性，装置有权力批判</li><li>与 OOO：<strong>最核心分歧</strong>——ANT 关系主义 vs OOO 实体主义</li><li>与批判理论：拉图尔批评批判理论懒惰，批判理论批评 ANT 忽视权力不对称</li><li>与系统论：卢曼系统自我指涉封闭，ANT 网络外部开放</li></ul>
+<hr>
+<h3>24. 加速主义 / Nick Land（Accelerationism）</h3>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">政治立场提示：左/右加速主义伦理上南辕北辙，作为<strong>理论工具</strong>记录。</div><div class="cb"></div></div>
+<p><strong>血统</strong>：</p>
+<pre>[[德勒兹]]-加塔利《反俄狄浦斯》(1972)：资本解域化力量
+    ↓
+尼克·兰德 + CCRU（华威，1990s）：
+    → &quot;暗黑[[德勒兹]]主义&quot;：资本=非人类智能，加速至奇点
+    → 超迷信（Hyperstition）：使自身成真的虚构
+    → 时间循环：未来 AI 向过去发送信号激活自身
+2013 分裂：左翼 L/ACC（威廉斯&amp;斯尔尼塞克《加速宣言》）/ 右翼 R/ACC / U/ACC / e/acc</pre>
+<p><strong>核心概念</strong>：超迷信（Hyperstition）= 虚构通过被相信而成真；时间扭曲；非人化加速</p>
+<p><strong>与其他系关系</strong>：源于<span class="wl">德勒兹的空间理论</span>但激进化超出本人意图；与媒介理论（基特勒）同路；与批判理论根本对立；后人类主义的黑暗镜像（不是解放而是吞噬）</p>
+<p><strong>AI 创作节点</strong>：AI 生成影像 = 一种超迷信过程？虚构的影像通过被大量生产而塑造现实感知</p>
+<hr>
+<h3>25. 空间理论（Spatial Theory / Critical Human Geography）</h3>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">本库 Zotero 已有大量空间理论文献。</div><div class="cb"></div></div>
+<p><strong>血统</strong>：</p>
+<pre>列斐伏尔《空间的生产》(1974)—— 三元：空间实践/空间再现/再现空间
+    ↓
+索亚《第三空间》(1996) / 德·塞托《日常生活实践》(1980) / 马西《为了空间》(2005)
+[[德勒兹]]《千高原》—— 光滑空间 vs 纹理空间（平行线）</pre>
+<p><strong>核心概念</strong>：空间三元（<span class="wl">列斐伏尔</span>）；战术 vs 战略（德·塞托，弱者游击实践）；第三空间（拒绝二元的杂糅开放）</p>
+<p><strong>与其他系关系</strong>：与现象学（<span class="wl">巴什拉</span>—球域学是现象学入口）；与 ANT（"关系先于位置"共享）；与后殖民（巴巴"第三空间"是后殖民杂糅的空间化）</p>
+<hr>
+<h3>26. 表演性理论（Performance Theory / Performativity）</h3>
+<div class="callout" style="border-color:#607d8b;background:#f5f5f5"><div class="ct" style="color:#607d8b">两种表演性不可混同：</div><div class="cb">① 谢克纳系：表演研究，身体事件，戏剧/仪式<br>② 巴特勒系：语言哲学，性别通过重复话语行为被构成</div></div>
+<p><strong>血统</strong>：</p>
+<pre>(a) 表演研究：阿尔托→格洛托夫斯基→谢克纳《表演理论》(1988)→特纳（阈限）
+    → 费舍尔-利希特《表演美学》(2004)：表演转向，观演共振回路
+    → 奥斯兰德《现场感》(1999)：现场 vs 媒介化表演
+(b) 巴特勒表演性：奥斯汀言语行为→德里达解构→巴特勒《性别麻烦》(1990)</pre>
+<p><strong>核心概念</strong>：阈限（liminality）= 转换状态，意义在此诞生；表演性（巴特勒）= 表演<strong>构成</strong>身份；现场性（奥斯兰德）= 纯粹现场已被媒介侵入</p>
+<p><strong>与其他系关系</strong>：与现象学亲缘（身体在场）；与文化研究/女性主义（巴特勒是核心工具）；与<span class="wl">生命政治</span>（仪式阈限 ≈ 主权例外状态）</p>
+<hr>
+<h3>27. 后殖民 / 解殖民理论（Postcolonial / Decolonial Theory）</h3>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">后殖民（话语/表征批判，英法系）≠ 解殖民（拆解现代性知识体系，拉美系）</div><div class="cb"></div></div>
+<p><strong>血统</strong>：</p>
+<pre>后殖民：法农《黑皮肤白面具》(1952)→ 萨义德《东方主义》(1978)
+    → 斯皮瓦克《底层能说话吗？》(1988)→ 巴巴《文化的定位》(1994)
+解殖民：基哈诺（权力殖民性）→ 米格诺罗（地缘政治的知识）→ 马尔多纳多-托雷斯（存在殖民性）</pre>
+<p><strong>核心概念</strong>：东方主义（萨义德）；底层（斯皮瓦克）；杂糅性/含混性（巴巴）；权力殖民性（基哈诺）；存在殖民性（被存在论地剥夺，"被允许死亡"）</p>
+<p><strong>与其他系关系</strong>：</p>
+<ul><li><strong>与现象学</strong>：<strong>法农直接与梅洛-庞蒂对话</strong>——黑人身体被白人凝视"固定"，无法自由展开身体图式；这是对 Sobchack"具身主体"假设最重要的政治化挑战</li><li>与<span class="wl">生命政治</span>（姆贝姆贝）；与 OOO/新物质主义（解殖民批评"谁的本体论？"）</li><li>第三<span class="wl">电影理论</span>（Solanas/Getino 1969）是电影里的解殖民实践</li></ul>
+<hr>
+<h3>28. 分析美学 / 认知主义[[电影理论]]（Analytic Aesthetics / Cognitivist Film Theory）</h3>
+<div class="callout" style="border-color:#2196f3;background:#e3f2fd"><div class="ct" style="color:#2196f3">大西洋对岸的平行宇宙：同样讨论艺术、感知与意义，但方法论上与大陆传统形成镜像对照。这是英美学院电影研究的另一个重要轴线，在中文<span class="wl">电影理论</span>教育中长期被低估。</div><div class="cb"></div></div>
+<p><strong>血统</strong>：</p>
+<pre>分析哲学主干（弗雷格—罗素—早期维特根斯坦《逻辑哲学论》1921）
+    ↓
+晚期维特根斯坦《哲学研究》(1953)：语言游戏，日常语言哲学（反本质主义）
+    + 牛津日常语言哲学：Austin（言语行为）/ Ryle / Strawson
+    ↓
+分析美学奠基（美国，1950s-80s）：
+    Monroe Beardsley《美学》(1958)：&quot;意图谬误&quot;/&quot;感染谬误&quot;：艺术意义在作品内，不在作者意图或读者反应
+    Nelson Goodman《艺术的语言》(1968)：艺术=符号系统；例证（exemplification）≠ 指称（denotation）
+    Arthur Danto《寻常物的变容》(1981)：Artworld — 同一物理对象是否为艺术取决于理论氛围与历史位置
+        → 《艺术的终结之后》(1997)：后历史艺术，多元主义
+    George Dickie：制度主义艺术理论（Institutional Theory of Art）
+    ↓
+认知主义[[电影理论]]（1980s-90s 英美，对精神分析-[[符号学]]霸权的集体反攻）：
+    Noël Carroll《谜惑电影》(1988)：点名批判 Metz/Mulvey，建立认知—情感[[电影理论]]
+        《恐惜哲学》(1990)：art-horror（艺术恐惧）的认知结构；虚构悖论（Paradox of Fiction）
+    David Bordwell《制造意义》(1989)：解读的历史社会学；《叙事电影》(1985)：认知建构主义
+    Murray Smith《与角色交融》(1995)：character engagement（角色参与），反认同论
+    Gregory Currie《影像与心灵》(1995)：意象论（imagining seeing）
+    Paisley Livingston / Berys Gaut：意图、作者、艺术价值的分析哲学论述
+    ↓
+实用主义接口：
+    Dewey《作为经验的艺术》(1934) → 已入 §六美学
+    Richard Shusterman《实用主义美学》(1992)《身体意识与身体知识》(2008)：
+        Somaesthetics（身体美学）：实用主义 + 梅洛-庞蒂 → 身体感知可训练、可反思
+    ↓
+焊接人物 · Stanley Cavell（1926-2018）：
+    《所见之世界》(1971)《幸福的追求》(1981)《争辩的眼泪》(1996)
+    日常语言哲学 × 电影本体论 × 好莱坞类型分析</pre>
+<p><strong>核心问题</strong>：</p>
+<ul><li>在概念上，"艺术"的必要且充分条件是什么？</li><li>观众如何<strong>认知性地</strong>处理电影——而非无意识地欲望化？</li><li>如何提出可证伪的、逻辑严格的美学命题？</li></ul>
+<p><strong>关键概念</strong>：</p>
+<div class="table-wrap"><table><thead><tr><th>概念</th><th>提出者</th><th>核心内容</th></tr></thead><tbody><tr><td><strong>Artworld（艺术世界）</strong></td><td>Danto / Dickie</td><td>成为艺术品不取决于感知属性，而取决于被置入特定制度性—历史性语境（"关于这是什么的理论氛围"）</td></tr><tr><td><strong>Exemplification（例证）</strong></td><td>Goodman</td><td>艺术不只是指称，而是<strong>体现</strong>某些性质：一幅描绘忧郁的画是忧郁的样本（非任意约定的）</td></tr><tr><td><strong>虚构悖论</strong></td><td>Carroll</td><td>我们对不存在的虚构物"感到"恐惧——这需要哲学解释；Carroll：情感激活不需要信念，只需要想象</td></tr><tr><td><strong>Art-horror（艺术恐惧）</strong></td><td>Carroll</td><td>恐惧类型片的情感结构：认知评估（对象=威胁）+ 身体反应 + 虚构框架</td></tr><tr><td><strong>Character engagement</strong></td><td>Murray Smith</td><td>识别（recognition）→ 立场（alignment）→ 拥护（allegiance）三层；反对<span class="wl">拉康</span>"认同"论</td></tr><tr><td><strong>历史诗学（Historical Poetics）</strong></td><td>Bordwell</td><td>从<strong>历史规范</strong>和<strong>认知图式</strong>两维分析叙事形式；观众用 schema + 推断主动建构故事</td></tr><tr><td><strong>Somaesthetics</strong></td><td>Shusterman</td><td>身体感知是可训练/可反思的美学实践；融合杜威实用主义与梅洛-庞蒂身体现象学</td></tr></tbody></table></div>
+<p><strong>Stanley Cavell — 分析与大陆之间的焊接点</strong></p>
+<blockquote>Cavell 是分析哲学内部最接近大陆传统的人，也是认知主义之外另一条分析哲学进入电影的路线： - <strong>《所见之世界》(1971)</strong>：摄影的"自动性"（automatism）——机械印迹使影像与被摄物建立不同于<span class="wl">绘画</span>的本体论关系   - 呼应<strong><span class="wl">巴赞</span></strong>：两人都主张摄影有特殊的"现实性关系"   - 工具不同：<span class="wl">巴赞</span>用现象学语言；Cavell 用维特根斯坦日常语言哲学 - <strong>好莱坞再婚喜剧 / 女性情节剧</strong>：从日常对话的语言分析发现哲学问题（极不分析传统的研究对象） - <strong>维特根斯坦线索</strong>：语言游戏的限制 = 表达的限制；什么是无法言说的？→ 电影能说语言无法说的吗？</blockquote>
+<p><strong>与其他系的关系</strong>：</p>
+<div class="table-wrap"><table><thead><tr><th>关系</th><th>内容</th></tr></thead><tbody><tr><td><strong>vs 精神分析（最核心对立）</strong></td><td>Carroll《谜惑电影》直接点名：精神分析<span class="wl">电影理论</span>无法证伪、依赖隐喻代替论证，是"神秘化"（mystification）。认知主义用可检验命题取代无意识假设</td></tr><tr><td><strong>vs 现象学</strong></td><td>同样关注感知主体，但路径相反：现象学=悬置一切预设，回到直接体验；分析哲学=精确界定命题逻辑结构。Shusterman 试图弥合</td></tr><tr><td><strong>vs <span class="wl">符号学</span>（<span class="wl">索绪尔</span>系）</strong></td><td>Goodman 也研究符号系统，但<strong>拒绝任意性</strong>——艺术符号的例证关系是非任意的，与索绪尔能指-所指的约定性根本不同</td></tr><tr><td><strong>vs 叙事学</strong></td><td>Bordwell 的认知建构主义 = 叙事学的分析哲学版：以认知图式/推断替代格雷马斯行动元/大共时组合段</td></tr><tr><td><strong>vs 批判理论</strong></td><td>分析传统相对价值中立：Carroll 批评批判理论的意识形态批评同样不可证伪</td></tr><tr><td><strong>焊接点</strong></td><td>Cavell 焊 分析×大陆；Shusterman 焊 实用主义×现象学；Bordwell 焊 认知科学×叙事学</td></tr></tbody></table></div>
+<p><strong>L1 / L2 / L3 坐标</strong>：</p>
+<div class="table-wrap"><table><thead><tr><th>层级</th><th>定位</th><th>说明</th></tr></thead><tbody><tr><td><strong>L1</strong></td><td>主要 <strong>L1-A</strong>（认知主体处理知觉信息）</td><td>但方法论是概念分析而非现象学<span class="wl">还原</span>；制度主义理论（Danto/Dickie）触及 <strong>L1-B</strong>（制度性结构）</td></tr><tr><td><strong>L2</strong></td><td><strong>L2-ε 概念分析 / 认知建构</strong></td><td>必要且充分条件、思想实验、可证伪命题；与 L2-α（现象学<span class="wl">还原</span>）路径正相反</td></tr><tr><td><strong>L3</strong></td><td>L3-α（认知感知 / 情感处理）/ L3-β2（Artworld 制度语境）</td><td>Carroll/Smith 在 L3-α；Danto/Dickie 在 L3-β2</td></tr></tbody></table></div>
+<hr>
+<h2>三、系统间关系网（扩展版）</h2>
+<h3>核心张力轴（六组对立）</h3>
+<pre>【轴一：意义的来源】
+    身体/感知先于符号          ←————————————→         一切皆编码
+    现象学 / 图像学 / 情动       中间地带              [[符号学]]（[[索绪尔]]）
+                               皮尔斯 / 解释学         批判理论（话语）
+
+【轴二：主体的地位】
+    保留主体（具身的我）        ←————————————→         去中心化主体
+    现象学 / 4E认知 / 球域学     [[德勒兹]] / 情动           新物质主义 / 后人类 / OOO
+
+【轴三：政治性的位置】
+    内在批判殖民性/权力         ←————————————→         无政治立场（普世主体假设）
+    后殖民 / [[生命政治]] / 批判理论  文化研究 / 女性主义      现象学（Sobchack 预设西方身体）
+    装置理论                    空间理论 / 表演性         [[符号学]] / 系统论 / OOO
+
+【轴四：技术的角色】
+    技术座架/中介               ←————————————→         技术即存在本身/加速力量
+    技术哲学（[[海德格尔]]路线）     斯蒂格勒（记忆/第三保留） 媒介理论（基特勒：媒介决定主体）
+                                                       加速主义（技术=资本解域化机器）
+
+【轴五：关系 vs 实体】
+    关系先于实体（网络中生成）  ←————————————→         实体先于关系（撤退之内核）
+    ANT / 新物质主义（intra-action）  [[德勒兹]]（内在性）   OOO / 思辨实在论（撤退 withdrawal）
+    装置理论 / 系统论（功能关系）
+
+【轴六：空间/身体如何被构成】
+    身体/空间是存在论结构       ←————————————→         身体/空间是权力-话语效果
+    现象学 / 球域学 / 4E认知     空间理论（列斐伏尔三元）  文化研究 / [[生命政治]] / 后殖民
+                               表演性理论（重复构成）      装置理论（异质网络中的主体化）</pre>
+<h3>关键焊接节点（完整版）</h3>
+<div class="table-wrap"><table><thead><tr><th>焊接点</th><th>连接的两系</th><th>焊接人物</th><th>方式</th></tr></thead><tbody><tr><td>皮尔斯 phaneroscopy</td><td>现象学 ↔ <span class="wl">符号学</span></td><td>Peirce 本人</td><td>符号学内嵌现象学维度</td></tr><tr><td>Ricoeur mimesis</td><td>解释学 ↔ 叙事学</td><td>Ricoeur</td><td>三层 mimesis 分别对应两系</td></tr><tr><td>晚期巴特 punctum</td><td><span class="wl">符号学</span> → 现象学</td><td>Barthes 本人</td><td>从符号学内部叛逃</td></tr><tr><td>本雅明触感接受</td><td>批判理论 ↔ 现象学</td><td>Benjamin</td><td>身体习惯媒介的感知政治</td></tr><tr><td><span class="wl">德勒兹的空间理论</span>情动</td><td>情动理论 ↔ 德勒兹主义</td><td>Deleuze/Massumi</td><td>斯宾诺莎情动被两系共享</td></tr><tr><td>瓦雷拉具身认知</td><td>现象学 ↔ 4E认知</td><td>Varela/Zahavi</td><td>梅洛-庞蒂被认知科学翻译</td></tr><tr><td>西蒙东个体化</td><td>技术哲学 ↔ 系统论</td><td>Simondon</td><td>个体化=技术版autopoiesis</td></tr><tr><td>Böhme 气氛美学</td><td>美学 ↔ 现象学</td><td>Böhme</td><td>感性学的身体化转向</td></tr><tr><td>巴拉德 intra-action</td><td>新物质主义 ↔ 后人类主义</td><td>Barad</td><td>量子物理×女性主义</td></tr><tr><td>穆尔维凝视</td><td>精神分析 ↔ 女性主义</td><td>Mulvey</td><td><span class="wl">拉康</span>凝视理论的女性主义应用</td></tr><tr><td>Mitchell 图像转向</td><td><span class="wl">符号学</span> → 图像学</td><td>Mitchell</td><td>从视觉文化研究内部翻转</td></tr><tr><td>Carbone/Pinotti</td><td>现象学 ↔ 图像学 ↔ <span class="wl">符号学</span></td><td>意大利学派</td><td>三系集成</td></tr><tr><td>法农《黑皮肤白面具》</td><td>现象学 ↔ 后殖民理论</td><td>Fanon</td><td>直接对话梅洛-庞蒂，种族化身体击穿"普世"身体图式</td></tr><tr><td>阿甘本 裸命 / 神圣人</td><td>装置理论 ↔ <span class="wl">生命政治</span></td><td>Agamben</td><td>装置=捕获裸命的具体机制</td></tr><tr><td>拉图尔"对称性原则"</td><td>ANT ↔ 新物质主义</td><td>Latour/Haraway</td><td>非人类行动素 × 伴侣物种</td></tr><tr><td>巴特勒 performativity</td><td>文化研究/女性主义 ↔ 表演性理论</td><td>Butler</td><td>性别不是本质，是重复话语行为的效果</td></tr><tr><td>巴巴"第三空间"</td><td>后殖民理论 ↔ 空间理论</td><td>Bhabha</td><td>杂糅身份的空间化——既非殖民者也非被殖民者</td></tr><tr><td>Rancière 感性分配</td><td>美学 ↔ 批判理论</td><td>Rancière</td><td>审美判断即政治配置，感性学=政治学</td></tr><tr><td>斯洛特戴克—罗萨 共鸣</td><td>球域学 ↔ 情动理论</td><td>Sloterdijk/Rosa</td><td>球域内共居=情动共鸣的空间化描述</td></tr></tbody></table></div>
+<hr>
+<h2>四、典型争论现场（电影里）</h2>
+<div class="table-wrap"><table><thead><tr><th>争论</th><th>时间</th><th>阵营 A</th><th>阵营 B</th><th>焦点</th><th>结果</th></tr></thead><tbody><tr><td><span class="wl">巴赞</span> vs 蒙太奇派</td><td>1940–60s</td><td>巴赞：长镜头保留现实暧昧性（现象学-解释学）</td><td><span class="wl">爱森斯坦</span>：剪辑创造辩证意义（形式主义-<span class="wl">符号学</span>）</td><td>影像的基本单位</td><td>至今未结，两传统并存</td></tr><tr><td>装置论争</td><td>1970s</td><td>Baudry：摄影机装置制造意识形态效果（精神分析-批判理论）</td><td><span class="wl">巴赞</span>传统</td><td>技术是否意识形态中立</td><td>精神分析<span class="wl">电影理论</span>主导 1970–80s</td></tr><tr><td>缝合争论</td><td>1970s</td><td>Oudart/Heath：缝合把观众置入意识形态（精神分析）</td><td>Carroll：缝合理论是误用<span class="wl">拉康</span>（分析哲学-认知）</td><td>剪辑如何定位观众</td><td>未结，但精神分析影响式微</td></tr><tr><td>凝视 vs 触感</td><td>1990s—</td><td>Mulvey：男性凝视，视觉控制（精神分析-女性主义）</td><td>Sobchack/Marks：多感官身体，触感视觉（现象学）</td><td>观影是视觉宰制还是身体共振</td><td>两条线并行，互相补充</td></tr><tr><td>语言转向 vs 图像转向</td><td>1990s—</td><td>后结构主义<span class="wl">符号学</span></td><td>Mitchell/Boehm（图像科学）</td><td>图像能否自主</td><td>图像科学持续扩张</td></tr><tr><td>认知 vs 现象学</td><td>2000s</td><td>Bordwell/Carroll（认知科学，可证伪）</td><td>Sobchack（现象学，不可证伪）</td><td>电影研究是否需要科学基础</td><td>4E认知成为调解地带</td></tr><tr><td>情动 vs 意识形态</td><td>2010s—</td><td>情动理论（Massumi/Shaviro）：前意识强度</td><td>批判理论/文化研究：意识形态分析仍有效</td><td>影像的政治如何运作</td><td>进行中</td></tr><tr><td>人类中心 vs 后人类</td><td>2015s—</td><td>传统<span class="wl">电影理论</span>（主体中心）</td><td>后人类主义/新物质主义</td><td>AI 影像的作者/主体地位</td><td>正在打开</td></tr><tr><td>ANT vs 批判理论</td><td>2000s—</td><td>拉图尔：批判理论懒惰，靠"揭露"维生（反物神崇拜）</td><td>批判理论：ANT 忽视权力不对称，给予技术虚假中立性</td><td>理论该"揭露"还是"追踪"？</td><td>进行中，各有领地</td></tr><tr><td>OOO vs 新物质主义</td><td>2010s—</td><td>OOO：对象撤退，关系无法穷尽对象</td><td>新物质主义：关系先于实体，物质在 intra-action 中生成</td><td>本体论优先级：实体还是关系？</td><td>进行中，均属思辨实在论圈</td></tr><tr><td>法农 vs 现象学（身体）</td><td>1952—</td><td>法农：被凝视的黑人身体无法自由展开身体图式</td><td>Sobchack/梅洛-庞蒂：身体图式是感知-运动整合</td><td>"普世"身体 vs 种族化身体</td><td>后殖民现象学回应中（Al-Saji等）</td></tr><tr><td>加速主义（右） vs 批判理论</td><td>2013—</td><td>R/ACC：顺着资本加速至奇点/后人类</td><td>批判理论：这是主动配合宰制，幻想技术自我解放</td><td>技术改变是否能带来解放？</td><td>尖锐对立，尚无调解</td></tr><tr><td>装置论（Baudry） vs 现象学</td><td>1974—</td><td>Baudry：摄影机制造意识形态主体效果</td><td>Sobchack：电影首先是感知-表达主体，不是意识形态机器</td><td>电影是装置还是身体？</td><td>Sobchack 后现象学暂时占上风，但装置论在 VR 语境复活</td></tr></tbody></table></div>
+<hr>
+<h2>五、总坐标图（三层架构 × 二十七系）</h2>
+<h3>视图一：三层架构分类表（本体论优先）</h3>
+<div class="table-wrap"><table><thead><tr><th>Level</th><th>本体论 / 方法论 / 域</th><th>理论系</th><th>断裂边界</th></tr></thead><tbody><tr><td><strong>L0</strong></td><td><strong>元批判层</strong></td><td><strong>列维纳斯</strong>（打断 L1 问题本身，不提供 L1 答案）</td><td>↑L0 打断 ↓L1 被问</td></tr><tr><td><strong>L1-A</strong></td><td>主体感知本体论</td><td>现象学、解释学、美学（康德/Böhme线）、4E认知、球域学</td><td>──认识论断裂──</td></tr><tr><td><strong>L1-B</strong></td><td>结构差异本体论</td><td><span class="wl">符号学</span>（<span class="wl">索绪尔</span>系）、叙事学（经典期）</td><td>↑结构主义 ↓后结构主义</td></tr><tr><td><strong>L1-C</strong></td><td>内在性流变本体论</td><td><span class="wl">德勒兹的空间理论</span>主义、情动理论、<strong>后结构主义（巴特勒-德里达线）</strong></td><td></td></tr><tr><td><strong>L1-D</strong></td><td>对象撤退本体论</td><td>OOO（<strong>哈曼</strong>）⚠️ 梅亚苏≠L1-D</td><td></td></tr><tr><td><strong>L1-E</strong></td><td><strong>社会物质实践本体论</strong></td><td><strong>历史唯物主义（马克思—列斐伏尔—阿尔都塞）</strong></td><td></td></tr><tr><td><strong>L1-F</strong></td><td>⚙️ 待议：概率潜在本体论</td><td>数据库本体论（马诺维奇）/ AI 扩散模型</td><td></td></tr><tr><td><strong>L2-a</strong></td><td>现象学<span class="wl">还原</span>（方法）</td><td>现象学 / 美学 / 解释学（方法层面）</td><td></td></tr><tr><td><strong>L2-b</strong></td><td>谱系学 / 考古学</td><td>媒介考古学 / 福柯系装置理论 / <span class="wl">生命政治</span></td><td></td></tr><tr><td><strong>L2-c</strong></td><td>拓扑网络追踪</td><td>ANT / 系统论</td><td></td></tr><tr><td><strong>L2-d</strong></td><td>症状阅读 / 揭露</td><td>精神分析 / 批判理论 / 装置论（鲍德里）</td><td></td></tr><tr><td><strong>L3-α</strong></td><td>身体/感知/空间维度</td><td>球域学 / 空间理论（须声明L1-E）/ 气氛美学 / 谢克纳</td><td></td></tr><tr><td><strong>L3-β1</strong></td><td>社会霸权/话语权力线</td><td>伯明翰文化研究 / 后殖民 / <span class="wl">生命政治</span></td><td></td></tr><tr><td><strong>L3-β2</strong></td><td>象征秩序/主体化线</td><td>精神分析女性主义 / 意识形态批评 / 巴特勒（L1-C根）</td><td></td></tr><tr><td><strong>L3-γ</strong></td><td>界面/物质/算法维度</td><td>媒介理论 / 新物质主义 / 后人类主义 / 技术哲学 / 加速主义</td><td></td></tr></tbody></table></div>
+<div class="callout" style="border-color:#ff9800;background:#fff3e0"><div class="ct" style="color:#ff9800">如何读这张表</div><div class="cb">同一个系可能同时出现在 L1 和 L2（如现象学：L1-A 本体论承诺 + L2-a <span class="wl">还原</span>方法），也可能在 L1 和 L3（如<span class="wl">德勒兹的空间理论</span>：L1-C 本体论 + L3-γ 界面应用）。这是正常的——问题在于<strong>不说明你在哪个层级上使用它</strong>。</div></div>
+<h3>视图二：域关系图（历史 / 亲缘参考）</h3>
+<pre> ════════════════════════════════════════════════════════════════
+  L0  元批判层（两种打断模式）
+  列维纳斯（外部打断：伦理先于存在论）
+  德里达（内部解构：延异取消一切本体论的稳定在场）
+  ▸ L0 不替代 L1，而是在 L1→L2→L3 结束后追加伦理/解构审查层
+ ════════════════════════════════════════════════════════════════
+  L1 本体论层（五种确定 + 两种待议）
+  [A主体感知] [B结构差异] [C内在流变] [D对象撤退] [E社会物质] [G待升级] [F待议]
+  现象/解/美   符号/叙事   德/情动     OOO(哈曼)   马克思/列斐  基特勒?   AI扩散模型?
+             ↕L1-B/C认识论断裂    ⚠️梅亚苏≠L1-D  ⚠️基特勒L1级理论宣称
+  ─────────────────────────────────────────────────────────────
+  [[[拉康]]内部分裂]  早期=L1-B(符号界)  晚期=否定性实在界→越出L1-B
+ ════════════════════════════════════════════════════════════════
+          │                                │
+      认知/图像/球域          ◄──断裂──►  ANT（关系先）
+      4E认知/图像学                        vs OOO（实体先）
+ ════════════════════════════════════════════════════════════════
+  L2 方法论层
+  [α[[还原]]]     [β谱系学]         [γ网络追踪]    [δ症状揭露]    [ε概念分析]
+  现象学[[还原]]  媒介考古/装置(福)  ANT/系统论    精神分析/批判  分析美学/认知主义
+  ⚠️ 基特勒被低估放于此处，其理论宣称应在 L1-G 级
+ ════════════════════════════════════════════════════════════════
+          │               │                        │
+    技术哲学           媒介理论                 装置(鲍德里/早期[[拉康]])
+    斯蒂格勒           马诺维奇(→L1-B延伸)       阿尔都塞×[[拉康]]焊接
+                                               Žižek(晚期[[拉康]]/实在界)
+ ════════════════════════════════════════════════════════════════
+  L3 应用域层
+  [身体/感知/空间]      [权力/主体化β1/β2]         [界面/物质/算法]
+  球域学                β1:[[生命政治]]/后殖民           新物质主义
+  空间理论(列斐,须L1-E)  β1:文化研究(伯明翰)          后人类主义
+  气氛美学/谢克纳        β2:精分女性主义              加速主义(Land:L1级!)
+                        β2:意识形态批评/巴特勒(L1-C)  AI扩散本体论(L1-F待议)
+ ════════════════════════════════════════════════════════════════
+  关键焊接点（跨层）：
+  法农 L1-A⟷L3-β1 | 巴巴 L0/L1-C⟷L3-β1 | 阿甘本 L2-b⟷L3-β1
+  Rancière L1-C⟷L3-β1 | 巴拉德 L1-C⟷L3-γ | Butler L1-C⟷L3-β2
+  列斐伏尔 L1-E⟷L3-α | 阿尔都塞 L1-E⟷L3-β2 | 梅亚苏 L1独立待议
+  基特勒 L1-G(待升级)⟷L2-b | Žižek L1-B/否定性实在界⟷L3-β2</pre>
+<hr>
+<h2>六、判读法（扩展至十四问）</h2>
+<p>遇到任何论文、概念、学者，问：</p>
+<ol><li><strong>身体是核心还是边缘？</strong> → 核心=现象学/情动/球域学；边缘=<span class="wl">符号学</span>/叙事学；工具=技术哲学</li><li><strong>意义先于符号还是由符号产生？</strong> → 先于=现象学/图像学；由符号=<span class="wl">符号学</span>/批判理论</li><li><strong>主体还在不在？</strong> → 在=现象学/4E认知；消解=<span class="wl">德勒兹的空间理论</span>/情动/OOO；重构=后人类/后殖民</li><li><strong>技术是工具、中介还是本体？</strong> → 工具=普通美学；中介=技术哲学；本体=媒介理论/基特勒；加速力量=加速主义</li><li><strong>有政治吗？有殖民性批判吗？</strong> → 内在=批判理论/文化研究；殖民性=后殖民/解殖民/<span class="wl">生命政治</span>；外加=现象学；无=<span class="wl">符号学</span>/OOO</li><li><strong>谈时间还是谈空间？</strong> → 时间=叙事学/<span class="wl">德勒兹的空间理论</span>/技术哲学（记忆）；空间=空间理论/球域学/图像学/媒介考古</li><li><strong>个体还是系统还是网络？</strong> → 个体=现象学/4E；系统=系统论/媒介理论/卢曼；网络=ANT</li><li><strong>人类中心还是后人类？</strong> → 人类中心=现象学/认知；后人类=新物质主义/后人类主义；对象/非人类=OOO/ANT</li><li><strong>历史的还是共时的？</strong> → 历史=解释学/批判理论/媒介考古/后殖民；共时=<span class="wl">符号学</span>/系统论</li><li><strong>能被证伪吗？</strong> → 愿意证伪=4E认知/叙事学；不关心=现象学/<span class="wl">德勒兹的空间理论</span>；反对证伪=解释学</li><li><strong>谁被赋予存在论地位？</strong> → 主体=现象学；对象=OOO（撤退）；行动素（人+非人）=ANT；生命=<span class="wl">生命政治</span>；<span class="wl">赛博格</span>=后人类</li><li><strong>关系先还是实体先？</strong> → 关系先=ANT/新物质主义/装置理论；实体先=OOO/思辨实在论；都有=<span class="wl">德勒兹的空间理论</span>（差异化关系）</li><li><strong>身份是本质还是生成？</strong> → 本质=<span class="wl">身份政治</span>早期；生成=表演性理论（巴特勒）/<span class="wl">德勒兹的空间理论</span>（生成）/后人类</li><li><strong>叙述者/分析者站在哪里？</strong> → 西方/普世视角=传统现象学/<span class="wl">符号学</span>；站在被他者化者=后殖民；工具中立=系统论/ANT（但受批判）</li></ol>
+<h3>第二级：理论归位决策树（排他性三层判断）</h3>
+<div class="callout" style="border-color:#607d8b;background:#f5f5f5"><div class="ct" style="color:#607d8b">使用说明</div><div class="cb">这是一棵<strong>排他性决策树</strong>：每个节点只能走一条路径，走完三层才算完成定位。<br>任何未走完 L1→L2→L3 全程就直接调用 L3 工具的操作均属<strong>跨层误用</strong>。</div></div>
+<hr>
+<pre>┌─────────────────────────────────────────────────────────────────┐
+│ 节点 0：该理论是否质疑&quot;本体论/存在论作为第一哲学&quot;的合法性本身？        │
+└─────────────────────────────────────────────────────────────────┘
+     │
+     ├─── 是 ──→ 【L0 · 元批判层】
+     │            列维纳斯：&quot;伦理先于存在论&quot;
+     │            ▸ 不提供 L1 答案，打断 L1 问题本身
+     │            ▸ 后续分析仍需在 L1-A～E 中选一个&quot;被打断的&quot;基底
+     │
+     └─── 否 ──→ 进入节点 1
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 节点 0.5：是否属于晚期[[拉康]]&quot;实在界&quot;分析？（精神分析内部子树）       │
+└─────────────────────────────────────────────────────────────────┘
+     │
+     ├─── 分析的是符号系统如何构成主体？（缝合/缺失/镜像认同）
+     │    → 早期[[拉康]]路径 → 进入 L1-B → 节点 1
+     │
+     └─── 分析的是符号系统内部**无法被象征化的裂口**？
+          （创伤/享乐/object a/幻象作为实在界填补）
+          → 晚期[[拉康]]路径（Žižek线）→ 否定性实在界本体论
+            ▸ 不归 L1-B，处于 L1-B 的内部死锁或 L1-C 的极限形式
+            ▸ L2 路径：症状阅读，但目标是那个**抵抗一切阅读的核心**
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 节点 1：底层本体论类型（互斥选择）                                │
+└─────────────────────────────────────────────────────────────────┘
+     │
+     ├─── 意义起源于肉身感知的意向性？主体不可消除？
+     │    → 【L1-A 主体感知本体论】
+     │      现象学 / 4E 认知 / 解释学 / Böhme 气氛美学
+     │
+     ├─── 意义由形式化差异系统产生？无预设主体实体？
+     │    → 【L1-B 结构差异本体论】
+     │      [[符号学]]（[[索绪尔]]系）/ 经典叙事学 / 结构主义 / 早期[[拉康]]（符号界）
+     │      ⚠️ 后结构主义（德里达、巴特勒）是对 L1-B 的拆解 → 归 L1-C
+     │      ⚠️ 晚期[[拉康]]实在界 → 越出 L1-B，见节点 0.5
+     │
+     ├─── 现实是物质与强度的差异化生成？废除先验主体和封闭系统？
+     │    → 【L1-C 内在性流变本体论】
+     │      [[德勒兹]]主义 / 情动理论 / 巴特勒（德里达引用性）/ 德里达解构
+     │
+     ├─── 客体独立于一切感知或关系，具有不可穷尽的撤退内核？
+     │    → 【L1-D 对象撤退本体论】
+     │      OOO（**哈曼**）
+     │      ⚠️ 梅亚苏≠L1-D：绝对偶然性+数学可知性，反对任何&quot;撤退内核&quot;
+     │
+     ├─── 生产方式与社会关系是意义和文化的物质基底？
+     │    → 【L1-E 社会物质实践本体论】
+     │      历史唯物主义（马克思）/ 列斐伏尔（空间生产）/ 阿尔都塞
+     │
+     ├─── 媒介装置是存在的技术先天条件？感知主体是媒介系统的功能性产物？
+     │    → 【L1-G 媒介装置本体论 · 待确认升级】
+     │      基特勒（&quot;媒介决定我们的处境&quot;）
+     │      ▸ 目前在坐标系中被低估为 L2；其理论宣称处于 L1 级别
+     │
+     └─── 存在的基本形态是连续高维概率分布？任何实例=从潜在流形采样？
+          → 【L1-F · 待议：AI 概率拓扑本体论】
+            AI 扩散模型的潜在空间本体论（非马诺维奇——马诺维奇=L1-B 延伸）
+            ▸ 尚无成熟哲学体系，但与量子场论本体论/信息本体论有接近论述
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 节点 2：认识论路径（L2）——在 L1 确认之后（四选一，互斥）          │
+└─────────────────────────────────────────────────────────────────┘
+     │
+     ├─── 悬置预设，[[还原]]至事物的直接显现？
+     │    → 【L2-α 现象学[[还原]]】
+     │      适配 L1-A；也可用于 L1-C（内在性描述）
+     │
+     ├─── 拒绝目的论，挖掘历史断裂与偶然性？
+     │    → 【L2-β 谱系学 / 考古学】
+     │      福柯系；适配 L1-C / L1-E
+     │
+     ├─── 不预设结构，追踪人与非人的实际纠缠？
+     │    → 【L2-γ 拓扑网络追踪】
+     │      ANT / 系统论；L1 基底灵活（多与 L1-C 配合）
+     │
+     ├─── 穿透表象，定位被压抑的无意识结构或意识形态机制？
+     │    → 【L2-δ 症状阅读 / 揭露】
+     │      精神分析 / 批判理论；适配 L1-B（早期[[拉康]]）及否定性实在界路径
+     │
+     └─── 精确定义概念、提出可证伪命题、用思想实验检验？
+          → 【L2-ε 概念分析 / 认知建构】
+            分析美学 / 认知主义[[电影理论]]（Carroll / Bordwell / Goodman / Murray Smith）
+            ▸ 适配 L1-A（认知主体）和 L1-B（制度结构）
+            ▸ 明确**拒绝** L2-α（现象学悬置）和 L2-δ（不可证伪的症状读法）
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 节点 3：应用域（L3）——必须先完成 L1+L2 声明才能进入             │
+└─────────────────────────────────────────────────────────────────┘
+     │
+     ├─── 身体 / 感知 / 空间实践？
+     │    → 【L3-α】
+     │      球域学 / 空间理论（须声明 L1-E 或 L1-A）/ 气氛美学 / 谢克纳
+     │
+     ├─── 权力 / 主体化 / 话语？
+     │    → 进入节点 3-β
+     │      ├─── 葛兰西霸权 / 社会权力？→ 【L3-β1】伯明翰文化研究（L1-E+L2-β）
+     │      └─── [[拉康]]象征秩序 / 话语主体？→ 【L3-β2】精神分析女性主义（L1-B or C）
+     │           ⚠️ 巴特勒在 L3-β2 但根在 L1-C，与 L1-B 的阿尔都塞不可混同
+     │
+     └─── 界面 / 物质 / 算法？
+          → 【L3-γ】
+            媒介理论 / 新物质主义 / 技术哲学 / 加速主义
+            ⚠️ Land 超迷信含 L1 级时间本体论挑战，勿当普通应用域工具用</pre>
+<hr>
+<h2>七、对创作者（自己）的用法（扩展版）</h2>
+<div class="table-wrap"><table><thead><tr><th>理论系</th><th>创作层面的提问</th><th>创作操作入口</th></tr></thead><tbody><tr><td><strong>现象学</strong></td><td>观众用整个身体感到了什么？</td><td>触感设计：声音肌理、运动节奏、皮肤感</td></tr><tr><td><strong><span class="wl">符号学</span></strong></td><td>观众读到了什么符码？</td><td>视觉母题、色彩象征、剪辑语法</td></tr><tr><td><strong>图像学</strong></td><td>这个影像自己在做什么？</td><td>AI 影像的"自主性"——让图像超出意图</td></tr><tr><td><strong>叙事学</strong></td><td>时间和情节如何组织？</td><td>叙事配置、视点、时序</td></tr><tr><td><strong>情动理论</strong></td><td>影像产生了什么强度/能量？</td><td>节奏、密度、前意识的震动</td></tr><tr><td><strong><span class="wl">德勒兹的空间理论</span>主义</strong></td><td>运动-影像还是时间-影像？</td><td>区分"行动驱动剪辑"和"纯粹感知情境"</td></tr><tr><td><strong>技术哲学</strong></td><td>AI 是工具、假体，还是共生体？</td><td>人机协作的"具身关系"定位</td></tr><tr><td><strong>媒介理论</strong></td><td>这个媒介如何塑造观众感知？</td><td>屏幕尺寸、帧率、分辨率的感知政治</td></tr><tr><td><strong>新物质主义</strong></td><td>影像的物质性本身说了什么？</td><td>AI 生成的噪点、伪影、幻觉——不要消除，让它说话</td></tr><tr><td><strong>后人类主义</strong></td><td>谁是这部影片的"作者"？</td><td>人—AI—影像三角的共同生成声明</td></tr><tr><td><strong>批判理论</strong></td><td>这个影像参与了什么意识形态？</td><td>对抗性美学 / 还是参与文化工业？</td></tr><tr><td><strong>文化研究</strong></td><td>影像里的身体属于谁？</td><td>种族/性别/阶级的视觉政治</td></tr><tr><td><strong>美学</strong></td><td>这个影像的感性逻辑是什么？</td><td>气氛（Böhme）vs 感性分配（Rancière）</td></tr><tr><td><strong>4E 认知</strong></td><td>观众大脑—身体—环境如何耦合？</td><td>动觉共鸣、镜像神经元、身体图式激活</td></tr><tr><td><strong>装置/配置理论</strong></td><td>这部短片构建了什么主体效果？谁被这套装置"捕获"？</td><td>屏幕/算法/平台=当代电影装置，分析 AI 算法如何生产主体位置</td></tr><tr><td><strong><span class="wl">生命政治</span></strong></td><td>影像里谁的身体被允许生存/被驱逐/被管控？</td><td>对影像中身体可见性的批判：谁的身体被赋予了"生命"？</td></tr><tr><td><strong>球域学</strong></td><td>这部影片创造了什么样的共居气泡？观众进入了什么球域？</td><td>沉浸感设计：影院/屏幕=人造气泡；AI 动画的"内圆"感</td></tr><tr><td><strong>OOO</strong></td><td>影像对象有什么是永远撤退、无法被我完全把握的？</td><td>AI 生成的"超出意图"之处——幻觉、伪影——作为对象撤退维度的美学利用</td></tr><tr><td><strong>ANT</strong></td><td>这部影片的"作者"是什么样的异质网络？</td><td>人—AI模型—提示词—GPU—数据集=共同编剧；追踪网络而非归因单一作者</td></tr><tr><td><strong>加速主义</strong></td><td>AI 影像是资本/技术解域化的产物吗？还是可以逆用？</td><td>创作立场：是加速（顺流）还是反加速（战术挪用 L/ACC 的减速空间）？</td></tr><tr><td><strong>空间理论</strong></td><td>影像空间如何被社会生产？什么样的空间实践在里面？</td><td>空间三元：AI 生成景观的"空间实践/再现空间/空间的再现"分析</td></tr><tr><td><strong>表演性理论</strong></td><td>影像里的身份是如何通过重复表演被构成的？</td><td>AI 生成人物的"性别/身份表演性"——每次生成=一次微小重复</td></tr><tr><td><strong>后殖民/解殖民</strong></td><td>影像里谁的身体/景观被生产为"他者"？</td><td>AI 训练数据的殖民性：模型内化的主流审美是谁的视角？</td></tr></tbody></table></div>
+<div class="callout" style="border-color:#607d8b;background:#f5f5f5"><div class="ct" style="color:#607d8b">核心判断（二十七系版）</div><div class="cb">AI 动画短片同时激活了以下理论坐标的最密集交叉：<br>- <strong>图像学 + OOO</strong>：AI 影像有超出意图的自主性，"撤退"维度是美学资源<br>- <strong>技术哲学 + ANT</strong>：不是"人用工具"，而是人—AI—算法—数据的异质网络共同生成<br>- <strong>新物质主义 + 后人类主义</strong>：影像的物质性（噪点/幻觉/幻觉）和作者的后人类属性<br>- <strong>装置理论 + <span class="wl">生命政治</span></strong>：AI 平台=当代装置，哪些身体被生成？哪些被驱逐？<br>- <strong>后殖民理论</strong>：AI 训练数据的殖民性是这种创作形式无法回避的伦理坐标<br><br>这五重交叉构成一种<strong>理论密度极高的创作形式</strong>——每一个生成的帧都是理论战场。</div></div>
+<hr>
+<h2>八、To-Do（延伸计划）</h2>
+<p><strong>原有计划（前18系）</strong></p>
+<ul><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">皮尔斯[[符号学</span>为什么能与现象学兼容]]</span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">Ricoeur《时间与叙事》笔记-mimesis三层</span></span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">图像学两派辨析-Panofsky与Bildwissenschaft</span></span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">情动理论与现象学的边界-Massumi批判梅洛-庞蒂</span></span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">德勒兹电影哲学-运动影像与时间影像</span></span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">AI创作的技术哲学定位-具身关系与共同生成</span></span></li></ul>
+<p><strong>新增系专论（19-27）</strong></p>
+<ul><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">装置与配置-福柯阿甘本[[德勒兹的空间理论</span>三种读法]]</span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">球域学-斯洛特戴克的三部曲与电影沉浸</span></span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">OOO思辨实在论-对象撤退与艺术的触达</span></span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">ANT行动者网络-拉图尔如何重画AI动画的作者图</span></span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">法农与现象学-种族化身体对梅洛-庞蒂的挑战</span></span></li><li class="task-item"><input type="checkbox" disabled><span>单独笔记：<span class="wl">加速主义谱系-从[[德勒兹的空间理论</span>到Nick Land到e/acc]]</span></li></ul>
+<p><strong>可视化</strong></p>
+<ul><li class="task-item"><input type="checkbox" disabled checked><span class="done">将本图转成 <span class="wl">理论坐标.canvas</span>，三层架构 × 五种本体论颜色，焊接点红边，争论橙边，内在颠覆紫边</span></li><li class="task-item"><input type="checkbox" disabled><span>为每条主要争论写一则对照阅读清单</span></li></ul>
+<hr>
+<h2>九、每系核心入口（最少一本）</h2>
+<div class="table-wrap"><table><thead><tr><th>系</th><th>最短入口文本</th><th>进阶</th></tr></thead><tbody><tr><td>现象学</td><td>Merleau-Ponty《电影与新心理学》1945</td><td>Sobchack《The Address of the Eye》1992</td></tr><tr><td><span class="wl">符号学</span></td><td>Barthes《神话学》1957</td><td>Metz《电影语言》1968</td></tr><tr><td>图像学</td><td>Mitchell《图像想要什么？》2005</td><td>Belting《图像人类学》2001</td></tr><tr><td>解释学</td><td>Gadamer《真理与方法》序言</td><td>Ricoeur《时间与叙事》卷一</td></tr><tr><td>叙事学</td><td>Barthes《叙事作品结构分析导论》1966</td><td>Genette《辞格 III》1972</td></tr><tr><td>美学</td><td>康德《判断力批判》§1–§5（崇高与美）</td><td>Böhme《气氛：新美学论文》1995</td></tr><tr><td>精神分析</td><td>Mulvey《视觉愉悦与叙事电影》1975</td><td>Žižek《意识形态的崇高客体》1989</td></tr><tr><td>批判理论</td><td>Benjamin《机械复制时代的艺术作品》1935</td><td>Adorno《美学理论》1970</td></tr><tr><td>情动理论</td><td>Massumi《情动的释义》序言 2002</td><td>Shaviro《后电影情动》2010</td></tr><tr><td><span class="wl">德勒兹的空间理论</span>主义</td><td>德勒兹《电影 1》导论</td><td>姜宇辉《后电影状态》2017（中文，本库）</td></tr><tr><td>技术哲学</td><td><span class="wl">考研日记/啊 艺术概论/海德格尔</span>《技术的追问》1954</td><td>斯蒂格勒《技术与时间》卷一 1994</td></tr><tr><td>媒介理论</td><td>麦克卢汉《理解媒介》第一章</td><td>基特勒《留声机 电影 打字机》导论</td></tr><tr><td>媒介考古学</td><td>施畅《媒介考古学的兴起》2019（中文，本库）</td><td>Parikka《媒介考古学》2012</td></tr><tr><td>系统论</td><td>维纳《控制论》导言 1948</td><td>卢曼《社会的社会》导言 1997</td></tr><tr><td>4E 认知</td><td>瓦雷拉等《具身心智》导言 1991</td><td>扎哈维《胡塞尔的现象学》2003</td></tr><tr><td>新物质主义</td><td>本尼特《有活力的物质》序言 2010</td><td>巴拉德《与宇宙相遇》第一章 2007</td></tr><tr><td>后人类主义</td><td>哈拉维《<span class="wl">赛博格</span>宣言》1985</td><td>Hayles《我们如何成为后人类》1999</td></tr><tr><td>文化研究</td><td>Hall《编码/解码》1980</td><td>Mulvey《视觉愉悦与叙事电影》1975</td></tr><tr><td>装置/配置理论</td><td>阿甘本《什么是装置？》2009（短文，20页）</td><td>福柯"装置"访谈 1977；Baudry《基本电影装置的意识形态效果》1974</td></tr><tr><td><span class="wl">生命政治</span></td><td>福柯《性史》卷一第五章（"杀死的权力与让活的权力"）</td><td>阿甘本《神圣人：主权权力与裸命》1995</td></tr><tr><td>球域学</td><td>斯洛特戴克《球域》卷一（Bubbles）导言</td><td>罗萨《共鸣》（Resonanz）2016 导言</td></tr><tr><td>OOO / 思辨实在论</td><td>梅亚苏《有限性之后》第一章（关联主义批判）</td><td>哈曼《艺术与对象》2020</td></tr><tr><td>ANT</td><td>拉图尔《重新聚集社会》导言 2005</td><td>卡隆《翻译社会学：扇贝、渔民与圣布里厄湾的科学家》1984（经典案例论文）</td></tr><tr><td>加速主义</td><td>威廉斯 & 斯尔尼塞克《加速宣言》2013（网络可查原文）</td><td>Nick Land《钢铁进步》收录于《虚空的填充物》2012</td></tr><tr><td>空间理论</td><td>列斐伏尔《空间的生产》导言（三元概念部分）</td><td>德·塞托《日常生活实践》第三章（战术 vs 战略）</td></tr><tr><td>表演性理论</td><td>巴特勒《性别麻烦》第三章（"亚文化身体政治"，表演性论述核心）</td><td>费舍尔-利希特《表演美学》2004 导言</td></tr><tr><td>后殖民/解殖民</td><td>法农《黑皮肤白面具》第五章（"有色人种的感知经验"，直接与梅洛-庞蒂对话）</td><td>萨义德《东方主义》导论</td></tr></tbody></table></div>
+<hr>
+<h2>相关笔记</h2>
+<ul><li><span class="wl">电影现象学整体谱系-总地图</span> — 现象学专深谱系</li><li><span class="wl">薇薇安索布恰克电影身体研究知识谱系</span> — Sobchack 专论</li><li><span class="wl">MOC-电影身体研究</span> — 文件夹索引</li></ul>
+<hr>
+<h2>附：结构性缺陷审计记录（2026-04-20）</h2>
+<div class="callout" style="border-color:#607d8b;background:#eceff1"><div class="ct" style="color:#607d8b">原始批审意见（保留以备修订参考）</div><div class="cb">以下为对初版二十七系图的结构缺陷诊断，对应修复已落实于正文各节。</div></div>
+<p>这份报告旨在指出现有《理论坐标总图》在学术严谨性、逻辑一致性及认识论深度上的核心漏洞。该图表目前呈现出“理论超市”的扁平化特征，削弱了其作为专业判断工具的效力。</p>
+<hr>
+<h2>一、核心结构缺陷：范畴合并的暴力</h2>
+<ol><li><strong>马克思主义与唯物史观的消解</strong>：</li><li>现有架构将批判理论等同于<span class="wl">法兰克福学派</span>，导致经典马克思主义<span class="wl">电影理论</span>以及阿尔都塞的结构主义马克思主义失去了独立的存在论基础。</li><li>阿尔都塞被降级为旁支，直接抹杀了其在七十年代<span class="wl">电影理论</span>（如《电影手册》时期）中的轴心地位。</li></ol>
+<ol><li><strong>女性主义与文化研究的强行捆绑</strong>：</li><li>将文化研究与女性主义合并（第 18 系）是严重的归类失误。</li><li>这种做法掩盖了精神分析女性主义（侧重无意识机制）与伯明翰学派（侧重阶级受众研究）之间截然不同的认识论起点。</li></ol>
+<h2>二、认识论层面的盲点与断裂</h2>
+<ol><li><strong>历史深度与经典本体论的缺位</strong>：</li><li>地图在追求当代前沿时，遗漏了克拉考尔的物质现实复原论与巴拉兹的微相学。</li><li>缺少早期<span class="wl">电影理论</span>对摄影机作为物质记录工具的探讨，导致谱系缺乏历史纵深。</li></ol>
+<ol><li><strong>数字与计算本体论的真空</strong>：</li><li>在向人工智能动画过渡时，图谱直接从媒介理论跳跃至后人类主义，忽略了列夫·马诺维奇等人的新媒体语言与软件研究。</li><li>缺乏对数字影像算法与数据库本体论的界定，导致对 AI 影像的讨论流于悬空的思辨。</li></ol>
+<ol><li><strong>认识论断裂的强行缝合</strong>：</li><li><span class="wl">符号学</span>、叙事学与<span class="wl">德勒兹的空间理论</span>主义、装置理论被并列，掩盖了后结构主义对结构主义的认识论摧毁。</li><li>无视这种知识型的根本转换，会导致理论使用者的工具误用。</li></ol>
+<ol><li><strong>身体维度的均质化处理</strong>：</li><li>图表为各系强行分配统一的身体观维度，抹平了各学科间不可通约的差异。</li><li>4 E 认知科学的生物神经身体与文化研究的话语建构身体，在概念层级上完全不同。</li></ol>
+<h2>三、建议剔除与降级的范畴</h2>
+<p>为确立认识论的排他性边界，建议进行以下清理：</p>
+<ol><li><strong>实用主义的目的论收束</strong>：</li><li></li><li>这种做法将复杂的空间哲学（球域学）沦为了简单的视觉设计词汇。</li></ol>
+<ol><li><strong>西方中心主义的本体预设</strong>：</li><li>后殖民与解殖民理论被置于末端边缘，未能吸收南方认识论的原创性，导致坐标图仍处于西方学理的内循环中。</li></ol>
+<hr>
+<p><strong>结论</strong>：重构需建立硬性的认识论屏障，明确标注各理论路径之间的排他性，拒绝平滑的“理论超市”模式。</p>
+<hr>
+<h2>一、垂直架构模型 (The 3-Tier Stack)</h2>
+<p>每个地方体系的位置有所不同，用下面的模型来对模型进行解释和分类</p>
+<h3>Level 1: 第一哲学与底层本体论 (Ontological Foundation)</h3>
+<p><strong>核心提问</strong>：世界的基本构成是什么？意义的起源在哪里？</p>
+<ul><li><strong>主体感知本体论 (Subject-Perception)</strong>：</li><li><em>代表</em>：现象学。</li><li><em>基底</em>：肉身感知的意向性是意义的绝对起点。</li><li><strong>结构差异本体论 (Structural-Difference)</strong>：</li><li><em>代表</em>：<span class="wl">符号学</span>、叙事学、结构主义。</li><li><em>基底</em>：意义仅存在于形式化的系统差异中，不存在预设实体。</li><li><strong>内在性流变本体论 (Immanence-Becoming)</strong>：</li><li><em>代表</em>：<span class="wl">德勒兹的空间理论</span>主义、情动理论。</li><li><em>基底</em>：废除先验主体，确立物质与强度的差异化生成。</li><li><strong>对象撤退本体论 (Withdrawal-Realism)</strong>：</li><li><em>代表</em>：OOO、思辨实在论。</li><li><em>基底</em>：客体独立于任何感知或关系，具有无法被穷尽的撤退内核。</li></ul>
+<h3>Level 2: 认识论与方法论路径 (Epistemological Path)</h3>
+<p><strong>核心提问</strong>：我们如何获取知识？逻辑运作的路径是什么？</p>
+<ul><li><strong>谱系学与考古学 (Genealogy/Archaeology)</strong>：拒绝目的论，寻找历史的断裂与话语的形成规律（如媒介考古学）。</li><li><strong>拓扑网络追踪 (Network Tracking)</strong>：拒绝预设宏观结构，追踪人类与非人类实体的实时纠缠（如 ANT）。</li><li><strong>症状阅读与揭露 (Symptomatic Reading)</strong>：穿透影像表象，定位被压抑的无意识或意识形态（如精神分析、批判理论）。</li><li><strong>现象学<span class="wl">还原</span> (Phenomenological Reduction)</strong>：悬置判断，回归“事物本身”的直接显现。</li></ul>
+<h3>Level 3: 区域研究与应用透镜 (Regional Lenses)</h3>
+<p><strong>核心提问</strong>：针对具体客体（影像、身体、空间）的操作策略。</p>
+<ul><li><strong>空间/共居维度</strong>：球域学、空间理论。</li><li><strong>权力/主体化维度</strong>：<span class="wl">生命政治</span>、<span class="wl">身份政治</span>、后殖民理论。</li><li><strong>界面/物质维度</strong>：媒介理论、后人类主义、新物质主义。</li></ul>
+<h2>二、核心重构原则</h2>
+<ol><li><strong>强制性声明 (Mandatory Declaration)</strong>：</li><li>当讨论“后人类主义”时，必须明确：你是站在“<span class="wl">德勒兹的空间理论</span>式的生成本体论”基础上的，还是站在“OOO 的对象本体论”基础上的？这两者导致的后人类影像分析截然不同。</li></ol>
+<ol><li><strong>认识论断裂标记 (Epistemological Rupture)</strong>：</li><li>在地图中，必须用明确的物理边界划分“主体中心理论”（现象学、4 E）与“去中心化理论”（<span class="wl">德勒兹的空间理论</span>、ANT、OOO）。禁止在不说明兼容逻辑的情况下跨界提取工具。</li></ol>
+<ol><li><strong>处理复合概念（以装置理论为例）</strong>：</li><li><em>装置（Apparatus/<span class="wl">拉康</span>系）</em>：应锚定在“结构差异本体论”+“症状阅读认识论”下。</li><li><em>装置（Dispositif/福柯系）</em>：应锚定在“内在性平面”+“谱系学认识论”下。</li><li>通过这种分层，可以彻底解决术语混淆问题。</li></ol>
+<h2>三、判定法升级：五重深度问询</h2>
+<p>遇到任何理论文本，依次问询：</p>
+<ol><li><strong>第一哲学基底</strong>：它承认先验主体吗？</li><li><strong>形而上逻辑</strong>：它认为关系先于实体，还是实体先于关系？</li><li><strong>认识论路径</strong>：它是通过“揭露症状”还是“追踪网络”来建立论据的？</li><li><strong>本体论承诺</strong>：它赋予非人类对象（如 AI 算法）独立的存在地位吗？</li><li><strong>目的论指向</strong>：它是在进行政治解殖，还是在进行纯粹的感知<span class="wl">还原</span>？</li></ol>
+    </article>
+    <div class="bottom-actions">
+        <a href="#" class="action-btn">PREV: </a>
+        <a href="javascript:window.scrollTo({top:0,behavior:'smooth'})" class="action-btn">BACK TO TOP &#8593;</a>
+        <a href="#" class="action-btn">NEXT: </a>
+    </div>
+    <div class="footer-tag">END OF DOCUMENT / NODE_01_SUCCESS</div>
+</div>
+<script>var poster=document.getElementById('poster');var tx=0,ty=0,cx=0,cy=0;if(window.innerWidth>1024){window.addEventListener('mousemove',function(e){tx=(e.clientX/window.innerWidth-0.5)*15;ty=(e.clientY/window.innerHeight-0.5)*15;});}function raf(){cx+=(tx-cx)*0.1;cy+=(ty-cy)*0.1;poster.style.transform='rotateY('+cx+'deg) rotateX('+(-cy)+'deg)';requestAnimationFrame(raf);}raf();setInterval(function(){var n=new Date();document.getElementById('time-code').textContent=n.toLocaleTimeString('en-GB')+':'+('0'+Math.floor(n.getMilliseconds()/10)).slice(-2);},40);var pc=document.getElementById('particles');for(var i=0;i<40;i++){var d=document.createElement('div');d.className='dot';var s=Math.random()*2;d.style.cssText='width:'+s+'px;height:'+s+'px;left:'+(Math.random()*100)+'%;top:'+(Math.random()*100)+'%;--z:'+(Math.random()*1000-500)+'px;--duration:'+(2+Math.random()*3)+'s;';pc.appendChild(d);}</script>
+</body>
+</html>
