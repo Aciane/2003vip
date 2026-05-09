@@ -137,41 +137,41 @@
         <div class="sub-tag">Moving Images & Documentaries</div>
 
         <div class="video-grid">
-            <div class="video-card" onclick="openVideo('BV1KpgfebEGQ')">
+            <div class="video-card" data-bvid="BV1KpgfebEGQ" onclick="openVideo('BV1KpgfebEGQ')">
                 <div class="cover-box">
-                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/7d6a50352554746ec1007a905a5a22d765870b2e.jpg" alt="云梦紫歌">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200'%3E%3Crect fill='%231a1a2e' width='320' height='200'/%3E%3Ctext x='160' y='105' text-anchor='middle' fill='%23555' font-family='monospace' font-size='12'%3ELOADING%3C/text%3E%3C/svg%3E" alt="云梦紫歌">
                     <div class="cover-stat"><span>DOCU</span><span>[01]</span></div>
                 </div>
                 <div class="video-title">纪录短片：云梦紫歌</div>
             </div>
 
-            <div class="video-card" onclick="openVideo('BV1WdkRYGEL6')">
+            <div class="video-card" data-bvid="BV1WdkRYGEL6" onclick="openVideo('BV1WdkRYGEL6')">
                 <div class="cover-box">
-                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/f7d3e6480e6097560875e478564c7873528b1e06.jpg" alt="送你去远方">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200'%3E%3Crect fill='%231a1a2e' width='320' height='200'/%3E%3Ctext x='160' y='105' text-anchor='middle' fill='%23555' font-family='monospace' font-size='12'%3ELOADING%3C/text%3E%3C/svg%3E" alt="送你去远方">
                     <div class="cover-stat"><span>FILM</span><span>[02]</span></div>
                 </div>
                 <div class="video-title">微电影：送你去远方</div>
             </div>
 
-            <div class="video-card" onclick="openVideo('BV1AjvkBLENx')">
+            <div class="video-card" data-bvid="BV1AjvkBLENx" onclick="openVideo('BV1AjvkBLENx')">
                 <div class="cover-box">
-                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/4785f29917300438ec3011a681d45c6020c02f1a.jpg" alt="防尘">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200'%3E%3Crect fill='%231a1a2e' width='320' height='200'/%3E%3Ctext x='160' y='105' text-anchor='middle' fill='%23555' font-family='monospace' font-size='12'%3ELOADING%3C/text%3E%3C/svg%3E" alt="防尘">
                     <div class="cover-stat"><span>EXPT</span><span>[03]</span></div>
                 </div>
                 <div class="video-title">独立实验超短片：防 尘</div>
             </div>
 
-            <div class="video-card" onclick="openVideo('BV16eM1zKEQ1')">
+            <div class="video-card" data-bvid="BV16eM1zKEQ1" onclick="openVideo('BV16eM1zKEQ1')">
                 <div class="cover-box">
-                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/c78167f4c398327c53f6a297924e2c884693a17e.jpg" alt="毕业设计">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200'%3E%3Crect fill='%231a1a2e' width='320' height='200'/%3E%3Ctext x='160' y='105' text-anchor='middle' fill='%23555' font-family='monospace' font-size='12'%3ELOADING%3C/text%3E%3C/svg%3E" alt="毕业设计">
                     <div class="cover-stat"><span style="color:#ff3b30">ERROR</span><span>[04]</span></div>
                 </div>
                 <div class="video-title">多媒体纪录片：开门指南</div>
             </div>
 
-            <div class="video-card" onclick="openVideo('BV1rZ421u7aX')">
+            <div class="video-card" data-bvid="BV1rZ421u7aX" onclick="openVideo('BV1rZ421u7aX')">
                 <div class="cover-box">
-                    <img src="https://images.weserv.nl/?url=i0.hdslb.com/bfs/archive/e8615c4d638927902d1d0728c40751e7a5c719e5.jpg" alt="大广赛">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='200'%3E%3Crect fill='%231a1a2e' width='320' height='200'/%3E%3Ctext x='160' y='105' text-anchor='middle' fill='%23555' font-family='monospace' font-size='12'%3ELOADING%3C/text%3E%3C/svg%3E" alt="大广赛">
                     <div class="cover-stat"><span>PROD</span><span>[05]</span></div>
                 </div>
                 <div class="video-title">大广赛：你可以的！</div>
@@ -221,6 +221,33 @@
         setInterval(() => {
             document.getElementById('time-code').textContent = new Date().toLocaleTimeString('en-GB', { hour12: false });
         }, 1000);
+
+        // 动态加载 Bilibili 封面图
+        function formatDuration(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${m}:${s.toString().padStart(2,'0')}`;
+        }
+
+        document.querySelectorAll('.video-card[data-bvid]').forEach(card => {
+            const bvid = card.dataset.bvid;
+            const img = card.querySelector('.cover-box img');
+            const statSpan = card.querySelector('.cover-stat span:first-child');
+
+            fetch(`https://api.bilibili.com/x/web-interface/view?bvid=${bvid}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.code === 0 && data.data.pic) {
+                        const picUrl = data.data.pic.replace('http://', '');
+                        img.src = `https://images.weserv.nl/?url=${picUrl}`;
+                        img.style.opacity = '1';
+                        if (data.data.duration) {
+                            statSpan.textContent = formatDuration(data.data.duration);
+                        }
+                    }
+                })
+                .catch(() => {});
+        });
 
         // 粒子系统
         const partContainer = document.getElementById('particles');
