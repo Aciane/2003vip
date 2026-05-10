@@ -144,6 +144,47 @@ _CALLOUT = {
 }
 
 
+# ── Callout body renderer (supports embedded tables) ─────────────────────────
+
+def _render_callout_body(content_text):
+    """Render callout / blockquote body with support for embedded pipe tables,
+    code spans, and basic Obsidian inline syntax."""
+    if not content_text:
+        return ''
+    lines = content_text.split('\n')
+    out   = ''
+    i     = 0
+    while i < len(lines):
+        line = lines[i]
+        # ── Embedded pipe table: need ≥2 consecutive | lines
+        if (line.strip().startswith('|') and
+                i + 1 < len(lines) and lines[i + 1].strip().startswith('|')):
+            tbl_lines = []
+            while i < len(lines) and lines[i].strip().startswith('|'):
+                tbl_lines.append(lines[i])
+                i += 1
+            if len(tbl_lines) >= 2:
+                tbl = _parse_table(tbl_lines)
+                out += '<div class="table-wrap"><table><thead><tr>'
+                for h in tbl['headers']:
+                    out += f'<th>{h}</th>'
+                out += '</tr></thead><tbody>'
+                for row in tbl['rows']:
+                    out += '<tr>'
+                    for cell in row:
+                        out += f'<td>{cell}</td>'
+                    out += '</tr>'
+                out += '</tbody></table></div>'
+        else:
+            rendered = inline_md(line)
+            if rendered.strip():
+                out += rendered + '<br>'
+            else:
+                out += '<br>'   # blank line as spacing
+            i += 1
+    return out.rstrip('<br>')
+
+
 # ── Main Markdown parser ──────────────────────────────────────────────────────
 
 def parse_md(text):
@@ -389,7 +430,7 @@ def _render_blocks(blocks):
         elif t == 'callout':
             bc, bg = _CALLOUT.get(b['ctype'], ('#607d8b', '#f5f5f5'))
             title   = inline_md(b['title'])
-            content = inline_md(b['content']).replace('\n', '<br>')
+            content = _render_callout_body(b['content'])
             out += (f'\n<div class="callout" style="border-color:{bc};background:{bg}">'
                     f'<div class="ct" style="color:{bc}">{title}</div>'
                     f'<div class="cb">{content}</div></div>')
@@ -417,14 +458,6 @@ def build_html(meta, blocks):
         )
 
     inner_js = (
-        "var poster=document.getElementById('poster');"
-        "var tx=0,ty=0,cx=0,cy=0;"
-        "if(window.innerWidth>1024){window.addEventListener('mousemove',function(e){"
-        "tx=(e.clientX/window.innerWidth-0.5)*15;"
-        "ty=(e.clientY/window.innerHeight-0.5)*15;});}"
-        "function raf(){cx+=(tx-cx)*0.1;cy+=(ty-cy)*0.1;"
-        "poster.style.transform='rotateY('+cx+'deg) rotateX('+(-cy)+'deg)';"
-        "requestAnimationFrame(raf);}raf();"
         "setInterval(function(){var n=new Date();"
         "document.getElementById('time-code').textContent="
         "n.toLocaleTimeString('en-GB')+':'+('0'+Math.floor(n.getMilliseconds()/10)).slice(-2);},40);"
@@ -458,7 +491,7 @@ body{{background:var(--bg);color:var(--dark);font-family:"PingFang SC","Hiragino
 .top-nav{{position:fixed;top:0;width:100%;z-index:100;background:rgba(245,245,247,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.07);padding:10px 20px;display:flex;justify-content:space-between;align-items:center;}}
 .back-link{{font-size:12px;font-weight:800;color:var(--red);text-decoration:none;letter-spacing:1px;}}
 .nav-info{{font-size:10px;color:var(--dim);font-family:monospace;}}
-.wrap{{position:relative;z-index:10;margin:80px auto 40px;width:92%;max-width:800px;background:var(--paper);box-shadow:0 40px 100px rgba(0,0,0,.5);padding:40px 30px;min-height:100vh;transition:transform .4s cubic-bezier(.2,0,.2,1);}}
+.wrap{{position:relative;z-index:10;margin:80px auto 40px;width:92%;max-width:800px;background:var(--paper);box-shadow:0 40px 100px rgba(0,0,0,.5);padding:40px 30px;min-height:100vh;}}
 @media(max-width:600px){{.wrap{{width:100%;margin:60px 0 0;padding:30px 20px;box-shadow:none;}}h1.at{{font-size:24px!important;}}}}
 /* Header */
 .ah{{border-bottom:2px solid var(--red);padding-bottom:20px;margin-bottom:30px;}}
@@ -840,7 +873,8 @@ class BlogForge:
         self._btn(br, "▼ SAVE / 保存",    TEAL,  self._save   ).pack(side=tk.LEFT, padx=(0, 6))
         self._btn(br, "◻ COPY / 复制",    GOLD,  self._copy   ).pack(side=tk.LEFT, padx=(0, 6))
         self._btn(br, "⊕ BROWSER / 预览", GREEN, self._open   ).pack(side=tk.LEFT, padx=(0, 6))
-        self._btn(br, "▲ PUBLISH / 发布", RED,   self._publish).pack(side=tk.LEFT)
+        self._btn(br, "▲ PUBLISH / 发布", RED,   self._publish).pack(side=tk.LEFT, padx=(0, 6))
+        self._btn(br, "◈ DIR EDIT",       BORDER, self._open_dir_editor).pack(side=tk.LEFT)
 
         tk.Frame(right, bg=BORDER, height=1).pack(fill=tk.X)
 
@@ -1258,6 +1292,261 @@ class BlogForge:
                     text="git error", fg=RED))
 
         threading.Thread(target=_git_push, daemon=True).start()
+
+    # ── Directory Editor ──────────────────────────────────────────────────────
+
+    def _open_dir_editor(self):
+        """Visual editor for 2.html and 3.html directory indexes."""
+        win = tk.Toplevel(self.root)
+        win.title("★ DIRECTORY EDITOR ★  目录编辑器")
+        win.configure(bg=BG)
+        win.geometry("960x660")
+        win.minsize(720, 480)
+
+        _entries = []          # list of dicts: href, date, title
+        _which   = tk.StringVar(value="2")
+
+        # ── helpers ──────────────────────────────────────────────
+
+        def _parse_entries(html_text):
+            pat = (r'<a href="([^"]+)" class="list-item">\s*'
+                   r'<div class="item-meta"><span>[^<]+</span>'
+                   r'<span>([^<]+)</span></div>\s*'
+                   r'<div class="item-title">([^<]+)</div>\s*</a>')
+            return [{'href': m.group(1), 'date': m.group(2), 'title': m.group(3)}
+                    for m in re.finditer(pat, html_text, re.DOTALL)]
+
+        def _sync_vars():
+            for e in _entries:
+                if '_v_title' in e: e['title'] = e['_v_title'].get()
+                if '_v_href'  in e: e['href']  = e['_v_href'].get()
+                if '_v_date'  in e: e['date']  = e['_v_date'].get()
+
+        def _set_status(msg, color=DIM):
+            status_lbl.configure(text=msg, fg=color)
+
+        def _refresh_rows():
+            for w in inner.winfo_children():
+                w.destroy()
+            for i, entry in enumerate(_entries):
+                _build_row(i, entry)
+            inner.update_idletasks()
+            canvas.configure(scrollregion=canvas.bbox("all"))
+
+        def _build_row(i, entry):
+            row_bg = RAISED if i % 2 == 0 else PANEL
+            row = tk.Frame(inner, bg=row_bg)
+            row.pack(fill=tk.X, pady=1, padx=2)
+
+            # Index badge
+            tk.Label(row, text=f"{i+1:02d}", bg=row_bg, fg=DIM,
+                     font=F_XS, width=3).pack(side=tk.LEFT, padx=(6, 2))
+
+            # ▲▼ buttons
+            tk.Button(row, text="▲", bg=row_bg, fg=DIM, font=F_XS,
+                      relief=tk.FLAT, bd=0, padx=3, pady=2, cursor="hand2",
+                      command=lambda idx=i: _move(idx, -1)).pack(side=tk.LEFT)
+            tk.Button(row, text="▼", bg=row_bg, fg=DIM, font=F_XS,
+                      relief=tk.FLAT, bd=0, padx=3, pady=2, cursor="hand2",
+                      command=lambda idx=i: _move(idx, +1)).pack(side=tk.LEFT, padx=(0, 6))
+
+            # Title entry (widest)
+            v_title = tk.StringVar(value=entry['title'])
+            entry['_v_title'] = v_title
+            tk.Entry(row, textvariable=v_title, bg=INPUT, fg=TEXT, font=F_SM,
+                     relief=tk.FLAT, insertbackground=GOLD,
+                     highlightthickness=1, highlightbackground=BORDER,
+                     highlightcolor=GOLD).pack(side=tk.LEFT, fill=tk.X,
+                                               expand=True, padx=(0, 4), ipady=3)
+
+            # Href entry (medium)
+            v_href = tk.StringVar(value=entry['href'])
+            entry['_v_href'] = v_href
+            tk.Entry(row, textvariable=v_href, bg=INPUT, fg=TEAL, font=F_XS,
+                     relief=tk.FLAT, insertbackground=GOLD,
+                     highlightthickness=1, highlightbackground=BORDER,
+                     highlightcolor=GOLD, width=26).pack(side=tk.LEFT,
+                                                         padx=(0, 4), ipady=3)
+
+            # Date entry (small)
+            v_date = tk.StringVar(value=entry['date'])
+            entry['_v_date'] = v_date
+            tk.Entry(row, textvariable=v_date, bg=INPUT, fg=GOLD, font=F_XS,
+                     relief=tk.FLAT, insertbackground=GOLD,
+                     highlightthickness=1, highlightbackground=BORDER,
+                     highlightcolor=GOLD, width=12).pack(side=tk.LEFT,
+                                                          padx=(0, 4), ipady=3)
+
+            # Delete
+            tk.Button(row, text="✕", bg=row_bg, fg=RED, font=F_SM,
+                      relief=tk.FLAT, bd=0, padx=6, pady=2, cursor="hand2",
+                      command=lambda idx=i: _delete(idx)).pack(side=tk.LEFT, padx=(0, 4))
+
+        def _move(idx, delta):
+            _sync_vars()
+            new_i = idx + delta
+            if 0 <= new_i < len(_entries):
+                _entries[idx], _entries[new_i] = _entries[new_i], _entries[idx]
+                _refresh_rows()
+
+        def _delete(idx):
+            _sync_vars()
+            removed = _entries.pop(idx)
+            _refresh_rows()
+            _set_status(f"已删除: {removed['title'][:40]}", RED)
+
+        def _add_entry():
+            _sync_vars()
+            _entries.append({'href': 'new-article.html',
+                             'date': datetime.now().strftime('%Y/%m/%d'),
+                             'title': '新条目'})
+            _refresh_rows()
+            canvas.after(60, lambda: canvas.yview_moveto(1.0))
+            _set_status("已添加新条目 · 请填写标题和链接", TEAL)
+
+        def _load_file(which):
+            _entries.clear()
+            path = os.path.join(REPO_DIR, f"{which}.html")
+            if not os.path.isfile(path):
+                _set_status(f"⚠ 找不到 {which}.html", RED)
+                _refresh_rows()
+                return
+            with open(path, encoding='utf-8') as f:
+                html_text = f.read()
+            _entries.extend(_parse_entries(html_text))
+            _refresh_rows()
+            _update_tabs(which)
+            _set_status(f"已加载 {which}.html  ·  {len(_entries)} 条目")
+
+        def _switch_file(which):
+            _sync_vars()
+            _which.set(which)
+            _load_file(which)
+
+        def _update_tabs(which):
+            for v, btn in tab_btns.items():
+                btn.configure(bg=RAISED if v == which else PANEL,
+                              fg=GOLD  if v == which else TEXT)
+
+        def _save():
+            _sync_vars()
+            which = _which.get()
+            path  = os.path.join(REPO_DIR, f"{which}.html")
+            with open(path, encoding='utf-8') as f:
+                html_text = f.read()
+
+            new_items = ''
+            for i, e in enumerate(_entries, 1):
+                idx  = f'INDEX_{i:02d}'
+                href = e['href'].strip()
+                date = e['date'].strip()
+                title = e['title'].strip()
+                new_items += (
+                    f'\n            <a href="{href}" class="list-item">'
+                    f'\n                <div class="item-meta">'
+                    f'<span>{idx}</span><span>{date}</span></div>'
+                    f'\n                <div class="item-title">{title}</div>'
+                    f'\n            </a>'
+                )
+
+            new_html = re.sub(
+                r'(<div class="list-container">)(.*?)'
+                r'(</div>\s*\n\s*<div class="footer">)',
+                r'\1' + new_items + '\n        </div>\n\n        <div class="footer">',
+                html_text, flags=re.DOTALL
+            )
+
+            if new_html == html_text:
+                _set_status("⚠ 未找到 list-container 区域", RED)
+                return
+
+            with open(path, 'w', encoding='utf-8') as f:
+                f.write(new_html)
+            _set_status(f"✓ 已保存 {which}.html  ·  {len(_entries)} 条目", GREEN)
+
+        # ── Title bar ─────────────────────────────────────────────
+
+        bar = tk.Frame(win, bg=RAISED, height=44)
+        bar.pack(fill=tk.X)
+        bar.pack_propagate(False)
+        tk.Label(bar, text="▓▒░  ★ DIRECTORY EDITOR ★  ░▒▓",
+                 bg=RAISED, fg=GOLD, font=F_LG).pack(side=tk.LEFT, padx=12)
+        tk.Label(bar, text="可视化目录编辑器",
+                 bg=RAISED, fg=TEXT, font=F_SM).pack(side=tk.LEFT)
+
+        # ── File tabs ─────────────────────────────────────────────
+
+        tab_f = tk.Frame(win, bg=PANEL)
+        tab_f.pack(fill=tk.X)
+        tk.Frame(win, bg=BORDER, height=1).pack(fill=tk.X)
+
+        tab_btns = {}
+        for val, label in [("2", "  2.html  ·  理论 / 影评  "),
+                            ("3", "  3.html  ·  创作 / 其他  ")]:
+            btn = tk.Button(tab_f, text=label, bg=PANEL, fg=TEXT, font=F_SM,
+                            relief=tk.FLAT, bd=0, padx=8, pady=7,
+                            cursor="hand2", command=lambda v=val: _switch_file(v))
+            btn.pack(side=tk.LEFT)
+            tab_btns[val] = btn
+
+        # ── Column header ─────────────────────────────────────────
+
+        hdr = tk.Frame(win, bg=RAISED, pady=4)
+        hdr.pack(fill=tk.X, padx=10)
+        tk.Label(hdr, text="#  ▲▼", bg=RAISED, fg=DIM, font=F_XS,
+                 width=8).pack(side=tk.LEFT)
+        tk.Label(hdr, text="TITLE / 标题", bg=RAISED, fg=GOLD,
+                 font=F_XS).pack(side=tk.LEFT, fill=tk.X, expand=True)
+        tk.Label(hdr, text="HREF / 链接", bg=RAISED, fg=TEAL,
+                 font=F_XS, width=26).pack(side=tk.LEFT)
+        tk.Label(hdr, text="DATE", bg=RAISED, fg=GOLD,
+                 font=F_XS, width=12).pack(side=tk.LEFT)
+        tk.Label(hdr, text="DEL", bg=RAISED, fg=DIM,
+                 font=F_XS, width=5).pack(side=tk.LEFT)
+        tk.Frame(win, bg=BORDER, height=1).pack(fill=tk.X)
+
+        # ── Scrollable list area ───────────────────────────────────
+
+        list_outer = tk.Frame(win, bg=PANEL)
+        list_outer.pack(fill=tk.BOTH, expand=True, padx=8, pady=4)
+
+        vsb_e = tk.Scrollbar(list_outer, orient=tk.VERTICAL,
+                             bg=RAISED, troughcolor=PANEL, activebackground=GOLD)
+        vsb_e.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas = tk.Canvas(list_outer, bg=PANEL, bd=0, highlightthickness=0,
+                           yscrollcommand=vsb_e.set)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        vsb_e.config(command=canvas.yview)
+
+        inner = tk.Frame(canvas, bg=PANEL)
+        win_id = canvas.create_window((0, 0), window=inner, anchor=tk.NW)
+
+        inner.bind("<Configure>",
+                   lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        canvas.bind("<Configure>",
+                    lambda e: canvas.itemconfig(win_id, width=e.width))
+        canvas.bind("<MouseWheel>",
+                    lambda e: canvas.yview_scroll(int(-1*(e.delta/120)), "units"))
+
+        # ── Bottom bar ────────────────────────────────────────────
+
+        tk.Frame(win, bg=BORDER, height=1).pack(fill=tk.X)
+        bot = tk.Frame(win, bg=RAISED, height=44)
+        bot.pack(fill=tk.X, side=tk.BOTTOM)
+        bot.pack_propagate(False)
+
+        tk.Button(bot, text="＋ ADD ENTRY", bg=GREEN, fg=BG, font=F_SM,
+                  relief=tk.FLAT, bd=0, padx=12, pady=5, cursor="hand2",
+                  command=_add_entry).pack(side=tk.LEFT, padx=(8, 4), pady=6)
+        tk.Button(bot, text="▲ SAVE FILE", bg=RED, fg=TEXT, font=F_SM,
+                  relief=tk.FLAT, bd=0, padx=12, pady=5, cursor="hand2",
+                  command=_save).pack(side=tk.RIGHT, padx=(4, 8), pady=6)
+
+        status_lbl = tk.Label(bot, text="", bg=RAISED, fg=DIM, font=F_XS)
+        status_lbl.pack(side=tk.LEFT, padx=8)
+
+        # ── Initial load ──────────────────────────────────────────
+        _load_file("2")
 
 
 # ── Entry ─────────────────────────────────────────────────────────────────────
