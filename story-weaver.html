@@ -5,292 +5,461 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>故事织体 · 剧本素材选择填入框架</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
   :root {
-    --bg: #f5f0e8;
-    --panel: #fffef9;
-    --border: #d4c5a9;
-    --text: #2c2416;
-    --muted: #6b5e4a;
-    --accent: #8b4513;
+    --bg: #d4e8b4;
+    --bg2: #e8dcc8;
+    --panel: #fff8e7;
+    --panel2: #fef5e0;
+    --wood: #8b5a3c;
+    --wood-dark: #5c3317;
+    --wood-light: #c49a6c;
+    --grass: #7ab648;
+    --grass-dark: #5a8a2f;
+    --sky: #87ceeb;
+    --water: #5b8cbd;
+    --sun: #ffd966;
+    --sun-dark: #e6b800;
+    --earth: #c65d35;
+    --earth-dark: #8b3a1a;
+    --stone: #8b8680;
+    --text: #3e2723;
+    --muted: #6b5544;
+    --accent: #c65d35;
     --accent2: #c0392b;
-    --voice-identity: #e74c3c;
-    --voice-desire: #e67e22;
-    --voice-action: #2ecc71;
-    --voice-problem: #3498db;
-    --voice-obstacle: #9b59b6;
-    --voice-result: #1abc9c;
-    --voice-theme: #f39c12;
-    --tag-bg: #f0e6d3;
-    --highlight: #fff3cd;
-    --danger: #f8d7da;
-    --sidebar-w: 300px;
+    --v-id: #e74c3c;
+    --v-de: #e67e22;
+    --v-ac: #27ae60;
+    --v-pr: #3498db;
+    --v-ob: #8e44ad;
+    --v-re: #16a085;
+    --v-th: #f39c12;
+    --chip-bg: #f0e6d3;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: "Noto Serif SC", "Songti SC", "SimSun", serif; background: var(--bg); color: var(--text); line-height: 1.7; min-height: 100vh; }
+  body {
+    font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle, rgba(122,182,72,0.12) 10%, transparent 10%),
+      radial-gradient(circle, rgba(139,90,60,0.06) 8%, transparent 8%);
+    background-size: 48px 48px, 64px 64px;
+    background-position: 0 0, 24px 24px;
+    color: var(--text); line-height: 1.7; min-height: 100vh;
+    image-rendering: pixelated;
+  }
 
-  /* Header */
+  /* Pixel header bar */
   .app-header {
-    background: linear-gradient(135deg, #3e2723, #5d4037);
-    color: #f5f0e8; padding: 12px 24px;
+    background: linear-gradient(180deg, #5a8a2f 0%, #4a7a20 40%, #3d5c3a 100%);
+    color: #fff8e7; padding: 12px 20px;
     display: flex; align-items: center; justify-content: space-between;
-    position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 4px solid var(--wood-dark);
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    image-rendering: pixelated;
   }
-  .app-header h1 { font-size: 1.3rem; font-weight: 700; letter-spacing: 2px; }
-  .app-header .subtitle { font-size: 0.75rem; opacity: 0.75; margin-left: 12px; }
-  .header-actions { display: flex; gap: 8px; }
+  .app-header h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.85rem; letter-spacing: 0; text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+    image-rendering: pixelated;
+  }
+  .app-header .subtitle { font-size: 0.65rem; opacity: 0.85; margin-left: 12px; letter-spacing: 0.5px; }
+  .header-actions { display: flex; gap: 6px; }
   .header-actions button {
-    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25);
-    color: #f5f0e8; padding: 6px 14px; border-radius: 4px; cursor: pointer;
-    font-family: inherit; font-size: 0.8rem; transition: all 0.2s;
+    font-family: 'Press Start 2P', monospace; font-size: 0.4rem;
+    background: linear-gradient(180deg, #c49a6c 0%, #a0724a 100%);
+    border: 2px solid var(--wood-dark); color: #fff8e7;
+    padding: 6px 12px; cursor: pointer;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+    transition: all 0.08s; text-shadow: 1px 1px 0 rgba(0,0,0,0.4);
+    image-rendering: pixelated;
   }
-  .header-actions button:hover { background: rgba(255,255,255,0.25); }
+  .header-actions button:hover {
+    background: linear-gradient(180deg, #d4aa7a 0%, #b0825a 100%);
+  }
+  .header-actions button:active {
+    box-shadow: 0px 1px 0 rgba(0,0,0,0.3);
+    transform: translateY(2px);
+  }
 
-  /* Layout */
-  .app-body { display: flex; height: calc(100vh - 56px); }
+  .main { max-width: 960px; margin: 0 auto; padding: 20px 20px 40px; }
 
-  /* Sidebar - Material Library */
-  .sidebar {
-    width: var(--sidebar-w); background: var(--panel); border-right: 1px solid var(--border);
-    overflow-y: auto; padding: 16px; flex-shrink: 0;
+  /* Tabs - like inventory tabs */
+  .tabs {
+    display: flex; gap: 0; margin-bottom: 0; flex-wrap: wrap;
+    padding: 0 4px;
   }
-  .sidebar h2 { font-size: 1rem; color: var(--accent); margin-bottom: 12px; padding-bottom: 8px; border-bottom: 2px solid var(--accent); }
-  .lib-category { margin-bottom: 16px; }
-  .lib-category h3 {
-    font-size: 0.85rem; color: var(--muted); cursor: pointer;
-    padding: 6px 0; display: flex; align-items: center; gap: 6px;
-    user-select: none;
-  }
-  .lib-category h3::before { content: "▸"; font-size: 0.7rem; transition: transform 0.2s; display: inline-block; width: 14px; }
-  .lib-category.open h3::before { transform: rotate(90deg); }
-  .lib-items { display: none; flex-wrap: wrap; gap: 4px; padding-left: 4px; }
-  .lib-category.open .lib-items { display: flex; }
-  .lib-chip {
-    background: var(--tag-bg); border: 1px solid var(--border); border-radius: 3px;
-    padding: 3px 8px; font-size: 0.75rem; cursor: pointer; transition: all 0.15s;
-    white-space: nowrap;
-  }
-  .lib-chip:hover { background: var(--highlight); border-color: var(--accent); color: var(--accent); }
-  .lib-chip.used { opacity: 0.4; text-decoration: line-through; }
-  .sidebar .add-custom {
-    width: 100%; margin-top: 6px; padding: 4px 8px; font-size: 0.75rem;
-    border: 1px dashed var(--border); background: transparent; border-radius: 3px;
-    cursor: pointer; font-family: inherit; color: var(--muted);
-  }
-  .sidebar .add-custom:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* Main */
-  .main { flex: 1; overflow-y: auto; padding: 20px 28px; }
-
-  /* Tabs */
-  .tabs { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
   .tab {
-    padding: 10px 18px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
-    border: 1px solid transparent; border-bottom: none; border-radius: 6px 6px 0 0;
-    color: var(--muted); background: transparent; transition: all 0.2s;
-    font-family: inherit; white-space: nowrap; position: relative;
+    font-family: 'Press Start 2P', monospace;
+    padding: 10px 14px 8px; cursor: pointer; font-size: 0.38rem;
+    border: 3px solid transparent; border-bottom: none; border-radius: 0;
+    color: var(--muted); background: rgba(255,255,255,0.4);
+    transition: all 0.08s; white-space: nowrap;
+    position: relative; margin-right: -3px;
+    clip-path: polygon(6px 0%, calc(100% - 6px) 0%, 100% 100%, 0% 100%);
+    image-rendering: pixelated; letter-spacing: 0;
   }
-  .tab:hover { color: var(--accent); background: rgba(139,69,19,0.05); }
-  .tab.active { color: var(--accent); background: var(--panel); border-color: var(--border); position: relative; }
-  .tab.active::after { content: ""; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--panel); }
+  .tab:hover {
+    color: var(--text); background: rgba(255,255,255,0.7);
+    border-color: var(--wood);
+  }
+  .tab.active {
+    color: var(--text); background: var(--panel);
+    border-color: var(--wood) var(--wood) transparent var(--wood);
+    z-index: 2;
+  }
+  .tab.active::after {
+    content: ""; position: absolute; bottom: -3px; left: 0; right: 0; height: 3px; background: var(--panel);
+  }
 
-  /* Panels */
-  .panel { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 24px; }
+  .panel { display: none; }
   .panel.active { display: block; }
-  .panel h2 { font-size: 1.1rem; color: var(--accent); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
-  .panel h3 { font-size: 0.95rem; color: #5d4037; margin: 16px 0 8px; }
 
-  /* Forms */
-  .form-group { margin-bottom: 14px; }
-  .form-group label {
-    display: block; font-size: 0.8rem; font-weight: 600; color: var(--muted);
-    margin-bottom: 4px; letter-spacing: 0.5px;
+  /* Section blocks - like game dialogue boxes */
+  .section {
+    background: var(--panel);
+    border: 4px solid var(--wood-dark);
+    border-radius: 0;
+    padding: 20px 22px; margin-bottom: 16px;
+    box-shadow:
+      inset 0 0 0 3px var(--wood-light),
+      4px 4px 0 rgba(0,0,0,0.15);
+    position: relative;
   }
-  .form-group input, .form-group textarea, .form-group select {
-    width: 100%; padding: 8px 12px; border: 1px solid var(--border); border-radius: 4px;
-    font-family: inherit; font-size: 0.9rem; background: #fffef9; color: var(--text);
-    transition: border-color 0.2s;
+  .section::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--wood-dark) 0%, var(--wood-light) 30%, var(--wood-light) 70%, var(--wood-dark) 100%);
   }
-  .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px rgba(139,69,19,0.1); }
-  .form-group textarea { resize: vertical; min-height: 50px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .section h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.6rem; color: var(--wood-dark); margin-bottom: 10px;
+    padding-bottom: 6px; border-bottom: 2px dashed var(--wood);
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+    image-rendering: pixelated;
+  }
+  .section h3 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.45rem; color: var(--wood-dark); margin: 16px 0 8px;
+    image-rendering: pixelated;
+  }
+  .section .sec-desc { font-size: 0.75rem; color: var(--muted); margin-bottom: 12px; }
 
-  /* One-sentence story display */
+  /* Input fields - like text boxes */
+  .field { margin-bottom: 12px; }
+  .field label {
+    display: block; font-size: 0.75rem; font-weight: 600; color: var(--wood-dark);
+    margin-bottom: 4px; letter-spacing: 0.3px;
+  }
+  .field textarea, .field input[type="text"] {
+    width: 100%; padding: 8px 10px;
+    border: 3px solid var(--wood);
+    background: #fefdf6;
+    color: var(--text); resize: vertical;
+    font-family: inherit; font-size: 0.83rem;
+    box-shadow: inset 2px 2px 0 rgba(0,0,0,0.08);
+    transition: border-color 0.1s;
+    image-rendering: pixelated;
+  }
+  .field textarea { min-height: 44px; }
+  .field textarea:focus, .field input:focus {
+    outline: none; border-color: var(--earth);
+    box-shadow: inset 2px 2px 0 rgba(198,93,53,0.1), 0 0 0 3px rgba(198,93,53,0.15);
+  }
+
+  /* Material chips - like item sprites */
+  .mat-bar { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; align-items: center; }
+  .mat-bar .mat-label {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 0.35rem; color: var(--stone); margin-right: 4px; white-space: nowrap;
+    image-rendering: pixelated;
+  }
+  .mat-chip {
+    background: linear-gradient(180deg, #f5edd8 0%, #e8dcc8 100%);
+    border: 2px solid var(--wood);
+    padding: 3px 8px; font-size: 0.7rem; cursor: pointer; transition: all 0.08s;
+    white-space: nowrap; user-select: none;
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.12);
+    image-rendering: pixelated;
+  }
+  .mat-chip:hover {
+    background: linear-gradient(180deg, #fff3cd 0%, #ffe69c 100%);
+    border-color: var(--earth);
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+  }
+  .mat-chip:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 rgba(0,0,0,0.1); }
+  .mat-chip.used { opacity: 0.3; text-decoration: line-through; pointer-events: none; }
+  .mat-chip.selected {
+    background: linear-gradient(180deg, #d5f5e3 0%, #a8e6c1 100%);
+    border-color: var(--grass); color: var(--grass-dark);
+    box-shadow: 2px 2px 0 rgba(122,182,72,0.3);
+  }
+
+  /* Row layout */
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  @media (max-width: 700px) { .row2, .row3 { grid-template-columns: 1fr; } }
+
+  /* One sentence box - like a quest dialog */
   .one-sentence {
-    background: linear-gradient(135deg, #fff3cd, #ffeaa7); border: 2px solid #f39c12;
-    border-radius: 8px; padding: 16px 20px; margin: 16px 0; font-size: 1rem;
-    line-height: 1.8; text-align: center; min-height: 50px;
+    background: linear-gradient(180deg, #fff8e0 0%, #fef0c0 100%);
+    border: 4px solid var(--sun-dark);
+    padding: 16px 20px; margin: 12px 0; font-size: 0.88rem;
+    line-height: 1.9; text-align: center; min-height: 44px;
+    box-shadow: inset 0 0 0 3px var(--sun), 3px 3px 0 rgba(0,0,0,0.15);
+    position: relative;
   }
-  .one-sentence .placeholder { color: #b8a88a; font-style: italic; }
+  .one-sentence::before {
+    content: "★"; position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+    font-size: 1.4rem; color: var(--sun);
+    text-shadow: 2px 2px 0 var(--sun-dark);
+  }
+  .one-sentence .placeholder { color: #b8a070; font-style: italic; }
 
-  /* Seven Voices Table */
-  .voice-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.85rem; }
-  .voice-table th, .voice-table td { border: 1px solid var(--border); padding: 8px 10px; text-align: left; }
-  .voice-table th { background: #f5f0e8; font-weight: 600; font-size: 0.8rem; color: var(--muted); }
-  .voice-table .voice-label { font-weight: 600; text-align: center; width: 80px; }
-  .voice-table .voice-label.id { border-left: 4px solid var(--voice-identity); }
-  .voice-table .voice-label.de { border-left: 4px solid var(--voice-desire); }
-  .voice-table .voice-label.ac { border-left: 4px solid var(--voice-action); }
-  .voice-table .voice-label.pr { border-left: 4px solid var(--voice-problem); }
-  .voice-table .voice-label.ob { border-left: 4px solid var(--voice-obstacle); }
-  .voice-table .voice-label.re { border-left: 4px solid var(--voice-result); }
-  .voice-table .voice-label.th { border-left: 4px solid var(--voice-theme); }
-  .voice-table input { width: 100%; border: none; background: transparent; font-family: inherit; font-size: 0.85rem; padding: 4px; color: var(--text); }
-  .voice-table input:focus { outline: none; background: #fffef9; }
-  .voice-table .contrast-indicator { font-size: 0.7rem; color: var(--muted); text-align: center; }
+  /* Seven voices table */
+  .voice-table {
+    width: 100%; border-collapse: collapse; font-size: 0.78rem;
+    border: 3px solid var(--wood-dark);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.12);
+  }
+  .voice-table th, .voice-table td {
+    border: 2px solid var(--wood-light); padding: 7px 8px; text-align: left; vertical-align: top;
+  }
+  .voice-table th {
+    background: linear-gradient(180deg, #e8dcc8 0%, #ddd0b8 100%);
+    font-family: 'Press Start 2P', monospace; font-size: 0.35rem; color: var(--wood-dark);
+    image-rendering: pixelated;
+  }
+  .voice-table .vl {
+    font-weight: 600; text-align: center; width: 55px; font-size: 0.73rem;
+    color: var(--wood-dark); background: rgba(0,0,0,0.03);
+  }
+  .voice-table .vl.id { border-left: 5px solid var(--v-id); }
+  .voice-table .vl.de { border-left: 5px solid var(--v-de); }
+  .voice-table .vl.ac { border-left: 5px solid var(--v-ac); }
+  .voice-table .vl.pr { border-left: 5px solid var(--v-pr); }
+  .voice-table .vl.ob { border-left: 5px solid var(--v-ob); }
+  .voice-table .vl.re { border-left: 5px solid var(--v-re); }
+  .voice-table .vl.th { border-left: 5px solid var(--v-th); }
+  .voice-table .ci { font-size: 0.65rem; color: var(--muted); text-align: center; width: 55px; }
+  .voice-table textarea, .voice-table input {
+    width: 100%; border: none; background: transparent; font-family: inherit; font-size: 0.76rem;
+    padding: 4px; color: var(--text);
+  }
+  .voice-table textarea:focus, .voice-table input:focus {
+    outline: none; background: #fefdf6;
+    box-shadow: inset 0 0 0 2px var(--earth);
+  }
+  .voice-table .mat-bar { padding: 3px 4px; }
+
+  /* Act diagram - like a pixel path */
+  .act-diagram {
+    display: flex; gap: 0; margin: 12px 0;
+    border: 4px solid var(--wood-dark);
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.15);
+    overflow: hidden;
+  }
+  .act-block {
+    flex: 1; padding: 14px 10px; text-align: center; font-size: 0.73rem;
+    border-right: 2px solid rgba(0,0,0,0.1);
+  }
+  .act-block:last-child { border-right: none; }
+  .act-block.a1 { background: linear-gradient(180deg, #ffe8c8 0%, #fdd9a8 100%); }
+  .act-block.a2a { background: linear-gradient(180deg, #d5f5e3 0%, #b8e8cc 100%); }
+  .act-block.a2b { background: linear-gradient(180deg, #d6eaf8 0%, #b8d8f0 100%); }
+  .act-block.a3 { background: linear-gradient(180deg, #fadbd8 0%, #f5b8b0 100%); }
+  .act-block .an {
+    font-family: 'Press Start 2P', monospace; font-size: 0.45rem;
+    margin-bottom: 4px; image-rendering: pixelated;
+  }
+  .act-block .at { font-size: 0.65rem; color: var(--muted); }
 
   /* Timeline */
-  .timeline { position: relative; padding: 20px 0; }
+  .timeline { position: relative; padding: 8px 0; }
   .timeline::before {
-    content: ""; position: absolute; left: 80px; top: 0; bottom: 0;
-    width: 3px; background: var(--border); border-radius: 2px;
+    content: ""; position: absolute; left: 72px; top: 0; bottom: 0;
+    width: 4px; background: repeating-linear-gradient(0deg, var(--wood) 0px, var(--wood) 6px, transparent 6px, transparent 12px);
   }
-  .tl-event {
-    display: flex; align-items: flex-start; margin-bottom: 8px;
-    position: relative; padding: 6px 0;
+  .tl-ev { display: flex; align-items: flex-start; margin-bottom: 5px; position: relative; padding: 5px 0; }
+  .tl-ev .tl-tm {
+    width: 62px; text-align: right; padding-right: 18px;
+    font-family: 'Press Start 2P', monospace; font-size: 0.3rem;
+    color: var(--wood-dark); flex-shrink: 0; padding-top: 5px;
+    image-rendering: pixelated;
   }
-  .tl-event .tl-time {
-    width: 70px; text-align: right; padding-right: 20px; font-size: 0.75rem;
-    color: var(--muted); font-weight: 600; flex-shrink: 0; padding-top: 8px;
+  .tl-ev .tl-dot {
+    width: 14px; height: 14px; flex-shrink: 0;
+    position: absolute; left: 66px; top: 9px; z-index: 2;
+    border: 3px solid var(--wood-dark); background: var(--wood-light);
+    box-shadow: 2px 2px 0 rgba(0,0,0,0.15);
   }
-  .tl-event .tl-dot {
-    width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
-    position: absolute; left: 73px; top: 12px; z-index: 2;
-    border: 2px solid #fff;
+  .tl-ev.kp .tl-dot {
+    background: var(--accent2);
+    width: 18px; height: 18px; left: 64px; top: 7px;
+    border-color: #8b1a1a;
+    animation: pulse-dot 1.5s ease-in-out infinite;
   }
-  .tl-event.kp .tl-dot { background: var(--accent2); width: 18px; height: 18px; left: 71px; top: 10px; }
-  .tl-event .tl-card {
-    margin-left: 28px; flex: 1; background: var(--panel); border: 1px solid var(--border);
-    border-radius: 6px; padding: 10px 14px;
+  @keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(192,57,43,0.5); }
+    50% { box-shadow: 0 0 0 8px rgba(192,57,43,0); }
   }
-  .tl-event.kp .tl-card { border-color: var(--accent2); border-width: 2px; }
-  .tl-card .tl-name { font-weight: 700; font-size: 0.9rem; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-  .tl-card .tl-desc { font-size: 0.75rem; color: var(--muted); margin-bottom: 8px; }
-  .tl-card .tl-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
+  .tl-ev .tl-card {
+    margin-left: 26px; flex: 1;
+    background: var(--panel2);
+    border: 3px solid var(--wood-light);
+    padding: 10px 14px;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+    transition: border-color 0.1s;
+  }
+  .tl-ev.kp .tl-card {
+    border-color: var(--accent2); border-width: 3px;
+    box-shadow: 3px 3px 0 rgba(192,57,43,0.2);
+  }
+  .tl-card .tl-nm { font-weight: 700; font-size: 0.82rem; display: flex; align-items: center; gap: 6px; }
+  .tl-card .tl-ds { font-size: 0.68rem; color: var(--muted); margin-bottom: 5px; }
+  .tl-card .tl-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 5px; }
   .tl-card .tl-tag {
-    font-size: 0.65rem; background: var(--tag-bg); border-radius: 2px;
-    padding: 1px 6px; color: var(--muted);
+    font-size: 0.6rem; background: var(--chip-bg); padding: 2px 6px;
+    color: var(--muted); border: 1px solid var(--wood-light);
+  }
+  .key-badge {
+    background: var(--accent2); color: #fff; font-size: 0.55rem;
+    padding: 2px 6px; font-family: 'Press Start 2P', monospace;
+    image-rendering: pixelated;
   }
   .tl-card textarea {
-    width: 100%; border: 1px dashed var(--border); border-radius: 3px;
-    padding: 6px 10px; font-family: inherit; font-size: 0.8rem; resize: vertical;
-    min-height: 40px; background: #fefdf8; color: var(--text);
+    width: 100%; border: 2px dashed var(--wood-light);
+    padding: 6px 8px; font-family: inherit; font-size: 0.73rem;
+    resize: vertical; min-height: 36px; background: #fefdf6;
+    box-shadow: inset 1px 1px 0 rgba(0,0,0,0.04);
   }
-  .tl-card textarea:focus { outline: none; border-color: var(--accent); }
-  .tl-card .tl-hint { font-size: 0.7rem; color: #c0b090; margin-top: 2px; }
-
-  /* Key event highlight */
-  .key-event-badge { background: var(--accent2); color: #fff; font-size: 0.65rem; padding: 1px 6px; border-radius: 2px; }
-
-  /* Act labels on timeline */
-  .act-label {
-    position: absolute; left: 0; font-size: 0.7rem; font-weight: 700;
-    color: var(--accent); writing-mode: vertical-lr; letter-spacing: 2px;
-    opacity: 0.6;
-  }
+  .tl-card textarea:focus { outline: none; border-color: var(--earth); }
 
   /* Sequence grid */
-  .seq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin: 16px 0; }
+  .seq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
   .seq-card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+    background: var(--panel2); border: 3px solid var(--wood-light);
     padding: 12px 14px;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+    transition: border-color 0.1s;
   }
-  .seq-card h4 { font-size: 0.85rem; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-  .seq-card .seq-range { font-size: 0.7rem; color: var(--muted); margin-bottom: 6px; }
-  .seq-card textarea { width: 100%; border: 1px dashed var(--border); border-radius: 3px; padding: 6px; font-family: inherit; font-size: 0.78rem; resize: vertical; min-height: 50px; background: #fefdf8; }
-  .seq-card textarea:focus { outline: none; border-color: var(--accent); }
+  .seq-card:hover { border-color: var(--wood); }
+  .seq-card h4 { font-size: 0.78rem; margin-bottom: 3px; color: var(--wood-dark); }
+  .seq-card .sr { font-size: 0.65rem; color: var(--muted); margin-bottom: 5px; }
+  .seq-card textarea {
+    width: 100%; border: 2px dashed var(--wood-light);
+    padding: 5px; font-family: inherit; font-size: 0.7rem;
+    resize: vertical; min-height: 40px; background: #fefdf6;
+  }
+  .seq-card textarea:focus { outline: none; border-color: var(--earth); }
 
-  /* Character atlas */
-  .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+  /* Character cards */
+  .char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
   .char-card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px;
+    background: var(--panel2); border: 3px solid var(--wood-light);
+    padding: 14px;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
   }
-  .char-card h4 { font-size: 0.9rem; margin-bottom: 8px; color: var(--accent); }
-  .char-card .char-field { margin-bottom: 6px; display: flex; align-items: center; gap: 8px; font-size: 0.8rem; }
-  .char-card .char-field label { width: 50px; font-weight: 600; color: var(--muted); flex-shrink: 0; }
-  .char-card .char-field input { flex: 1; border: 1px solid var(--border); border-radius: 3px; padding: 4px 8px; font-family: inherit; font-size: 0.8rem; background: #fefdf8; }
-  .char-card .char-field input:focus { outline: none; border-color: var(--accent); }
+  .char-card h4 {
+    font-family: 'Press Start 2P', monospace; font-size: 0.45rem;
+    margin-bottom: 8px; color: var(--wood-dark);
+    border-bottom: 2px dashed var(--wood-light); padding-bottom: 6px;
+    image-rendering: pixelated;
+  }
+  .char-field { display: flex; align-items: center; gap: 6px; font-size: 0.72rem; margin-bottom: 5px; }
+  .char-field label {
+    width: 48px; font-weight: 600; color: var(--wood-dark);
+    flex-shrink: 0; font-size: 0.68rem;
+  }
+  .char-field input {
+    flex: 1; border: 2px solid var(--wood-light);
+    padding: 4px 6px; font-family: inherit; font-size: 0.73rem;
+    background: #fefdf6; box-shadow: inset 1px 1px 0 rgba(0,0,0,0.04);
+  }
+  .char-field input:focus { outline: none; border-color: var(--earth); }
 
   /* Dynamic check */
-  .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; margin: 16px 0; }
+  .check-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin: 12px 0; }
   .check-item {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 6px;
+    background: var(--panel2); border: 3px solid var(--wood-light);
     padding: 12px; display: flex; align-items: center; gap: 10px;
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
   }
-  .check-item .check-icon { font-size: 1.5rem; }
-  .check-item .check-info { flex: 1; }
-  .check-item .check-name { font-weight: 600; font-size: 0.85rem; }
-  .check-item .check-desc { font-size: 0.7rem; color: var(--muted); }
-  .check-meter {
-    width: 60px; height: 8px; background: #e0d8c8; border-radius: 4px; overflow: hidden;
+  .check-item .ck-icon { font-size: 1.4rem; image-rendering: pixelated; }
+  .check-item .ck-info { flex: 1; }
+  .check-item .ck-name { font-weight: 600; font-size: 0.78rem; color: var(--wood-dark); }
+  .check-item .ck-desc { font-size: 0.65rem; color: var(--muted); }
+  .check-item select {
+    border: 2px solid var(--wood); padding: 4px 6px;
+    font-family: 'Press Start 2P', monospace; font-size: 0.35rem;
+    background: #fefdf6; cursor: pointer; color: var(--text);
+    image-rendering: pixelated;
   }
-  .check-meter .fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
-  .fill.strong { background: var(--voice-action); }
-  .fill.medium { background: var(--voice-desire); }
-  .fill.weak { background: var(--voice-identity); }
+  .check-item select:focus { outline: none; border-color: var(--earth); }
+
+  #dynamicsResult {
+    margin-top: 12px; padding: 14px 16px; font-size: 0.78rem;
+    background: var(--panel2); border: 3px solid var(--wood-light);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+  }
+
+  .diag-list { font-size: 0.78rem; line-height: 2.4; }
+  .diag-list label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+  .diag-list input[type="checkbox"] {
+    width: 14px; height: 14px; accent-color: var(--grass);
+    cursor: pointer;
+  }
+
+  /* Buttons - like game UI */
+  .btn {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 8px 16px; font-family: 'Press Start 2P', monospace;
+    font-size: 0.4rem; cursor: pointer; transition: all 0.08s; font-weight: 400;
+    border: 3px solid; text-shadow: 1px 1px 0 rgba(0,0,0,0.2);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+    image-rendering: pixelated;
+  }
+  .btn:active { transform: translate(1px, 1px); box-shadow: 1px 1px 0 rgba(0,0,0,0.15); }
+  .btn-primary {
+    background: linear-gradient(180deg, var(--earth) 0%, #a04a2a 100%);
+    color: #fff; border-color: var(--earth-dark);
+  }
+  .btn-primary:hover { background: linear-gradient(180deg, #d46d3d 0%, #b05a35 100%); }
+  .btn-outline {
+    background: linear-gradient(180deg, #f5edd8 0%, #e8dcc8 100%);
+    color: var(--text); border-color: var(--wood);
+  }
+  .btn-outline:hover {
+    background: linear-gradient(180deg, #fff3cd 0%, #ffe69c 100%);
+    border-color: var(--earth);
+  }
+  .btn-sm { padding: 4px 8px; font-size: 0.33rem; }
 
   /* Toast */
   .toast {
-    position: fixed; bottom: 24px; right: 24px; background: #3e2723; color: #f5f0e8;
-    padding: 10px 20px; border-radius: 6px; font-size: 0.85rem; z-index: 999;
-    opacity: 0; transform: translateY(10px); transition: all 0.3s;
-    pointer-events: none;
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--wood-dark); color: #f5f0e8;
+    padding: 10px 18px; font-size: 0.75rem; z-index: 999;
+    opacity: 0; transform: translateY(10px); transition: all 0.15s;
+    pointer-events: none; border: 3px solid var(--wood);
+    box-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+    font-family: 'Press Start 2P', monospace; font-size: 0.38rem;
+    image-rendering: pixelated;
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
-  /* Buttons */
-  .btn {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 8px 16px; border-radius: 4px; font-family: inherit; font-size: 0.85rem;
-    cursor: pointer; transition: all 0.2s; font-weight: 600;
-  }
-  .btn-primary { background: var(--accent); color: #fff; border: none; }
-  .btn-primary:hover { background: #6d3410; }
-  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-sm { padding: 4px 10px; font-size: 0.75rem; }
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 12px; }
+  ::-webkit-scrollbar-track { background: var(--wood-light); border-left: 2px solid var(--wood); }
+  ::-webkit-scrollbar-thumb { background: var(--wood); border: 2px solid var(--wood-dark); }
+  ::-webkit-scrollbar-thumb:hover { background: var(--earth); }
 
-  /* Three pillars special card */
-  .pillar-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 16px 0; }
-  .pillar-card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 8px;
-    padding: 18px; text-align: center;
-  }
-  .pillar-card .pillar-icon { font-size: 2rem; margin-bottom: 8px; }
-  .pillar-card h3 { font-size: 0.9rem; color: var(--accent); margin-bottom: 4px; }
-  .pillar-card .pillar-hint { font-size: 0.7rem; color: var(--muted); margin-bottom: 10px; }
-  .pillar-card textarea {
-    width: 100%; min-height: 70px; border: 1px dashed var(--border); border-radius: 4px;
-    padding: 8px; font-family: inherit; font-size: 0.85rem; resize: vertical; background: #fefdf8;
-  }
-  .pillar-card textarea:focus { outline: none; border-color: var(--accent); }
-
-  /* Act structure visual */
-  .act-diagram {
-    display: flex; gap: 0; margin: 16px 0; border-radius: 8px; overflow: hidden;
-    border: 1px solid var(--border);
-  }
-  .act-block {
-    flex: 1; padding: 16px 12px; text-align: center; font-size: 0.8rem; position: relative;
-  }
-  .act-block.act1 { background: #fdebd0; }
-  .act-block.act2a { background: #d5f5e3; }
-  .act-block.act2b { background: #d6eaf8; }
-  .act-block.act3 { background: #fadbd8; }
-  .act-block .act-name { font-weight: 700; font-size: 0.9rem; }
-  .act-block .act-time { font-size: 0.7rem; color: var(--muted); }
-  .act-block .act-events { font-size: 0.7rem; margin-top: 6px; line-height: 1.5; }
-
-  .inline-select {
-    display: inline-block; border: 1px solid var(--border); border-radius: 3px;
-    padding: 2px 6px; font-family: inherit; font-size: 0.78rem; background: #fefdf8;
-    cursor: pointer; color: var(--text);
-  }
-
-  /* Responsive */
-  @media (max-width: 900px) {
-    .sidebar { display: none; }
-    .pillar-cards { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
+  /* Key event animation */
+  @keyframes glow {
+    0%, 100% { border-color: var(--accent2); }
+    50% { border-color: #ff6b6b; }
   }
 </style>
 </head>
@@ -299,993 +468,759 @@
 <div class="app-header">
   <div style="display:flex;align-items:center;">
     <h1>故事织体</h1>
-    <span class="subtitle">剧本素材选择填入框架 · 基于《故事的织体》操作系统</span>
+    <span class="subtitle">剧本素材选择填入框架</span>
   </div>
   <div class="header-actions">
-    <button onclick="saveAll()" title="保存到浏览器">💾 保存</button>
-    <button onclick="exportAll()" title="导出为文本">📋 导出</button>
-    <button onclick="resetAll()" title="清空全部内容">🔄 重置</button>
+    <button type="button" onclick="saveAll()">💾 保存</button>
+    <button type="button" onclick="exportAll()">📋 导出</button>
+    <button type="button" onclick="resetAll()">🔄 重置</button>
   </div>
 </div>
 
-<div class="app-body">
-  <!-- Sidebar: Material Library -->
-  <aside class="sidebar" id="sidebar">
-    <h2>📦 素材库</h2>
-    <div style="margin-bottom:12px;">
-      <input type="text" id="libSearch" placeholder="搜索素材..." style="width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:4px;font-family:inherit;font-size:0.8rem;" oninput="filterLibrary()">
-    </div>
-    <div id="libraryContainer"></div>
-    <button class="add-custom" onclick="addCustomMaterial()">+ 添加自定义素材</button>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main">
-    <!-- Tabs -->
-    <div class="tabs">
-      <button type="button" class="tab active" data-idx="0">① 三支柱</button>
-      <button type="button" class="tab" data-idx="1">② 七声部</button>
-      <button type="button" class="tab" data-idx="2">③ 三幕布局</button>
-      <button type="button" class="tab" data-idx="3">④ 路标时间线</button>
-      <button type="button" class="tab" data-idx="4">⑤ 序列织体</button>
-      <button type="button" class="tab" data-idx="5">⑥ 人物图谱</button>
-      <button type="button" class="tab" data-idx="6">⑦ 动力检查</button>
-    </div>
-
-    <!-- Panel 0: Three Pillars -->
-    <div class="panel active" id="panel-0">
-      <h2>三支柱 & 一句话故事</h2>
-      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:16px;">故事的第一推动力。一句话故事是全部后续工作的总纲，写完再往下走。</p>
-
-      <div class="pillar-cards">
-        <div class="pillar-card">
-          <div class="pillar-icon">👤</div>
-          <h3>主角</h3>
-          <div class="pillar-hint">谁的故事？</div>
-          <textarea id="pillar-hero" placeholder="例如：一个失去味觉的厨师" oninput="autoSave()"></textarea>
-        </div>
-        <div class="pillar-card">
-          <div class="pillar-icon">⚡</div>
-          <h3>主事件</h3>
-          <div class="pillar-hint">围绕什么核心问题展开？</div>
-          <textarea id="pillar-event" placeholder="例如：能否在米其林评审前恢复味觉？" oninput="autoSave()"></textarea>
-        </div>
-        <div class="pillar-card">
-          <div class="pillar-icon">💡</div>
-          <h3>主题</h3>
-          <div class="pillar-hint">想表达什么价值观？</div>
-          <textarea id="pillar-theme" placeholder="例如：真正的创造不依赖感官，而源于内心" oninput="autoSave()"></textarea>
-        </div>
-      </div>
-
-      <h3>一句话故事</h3>
-      <div class="one-sentence" id="oneSentence">
-        <span class="placeholder" id="oneSentenceText">填入三支柱后，一句话故事将自动生成……</span>
-      </div>
-      <div style="font-size:0.75rem;color:var(--muted);text-align:center;">
-        格式：<b>[主角]</b>因为<b>[欲望/处境]</b>，<b>[动作]</b>，面对<b>[核心问题]</b>，遇到<b>[主要障碍]</b>，结果<b>[结果]</b>，表现了<b>[主题]</b>。
-      </div>
-    </div>
-
-    <!-- Panel 1: Seven Voices -->
-    <div class="panel" id="panel-1">
-      <h2>七声部工作表</h2>
-      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:16px;">每一行的开篇状态与高潮状态必须形成<b>反差</b>。差距越大，故事空间越大。</p>
-
-      <table class="voice-table">
-        <thead>
-          <tr>
-            <th style="width:60px;">声部</th>
-            <th>开篇事件状态</th>
-            <th>→</th>
-            <th>高潮事件状态</th>
-            <th>反差评估</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td class="voice-label id">身份</td>
-            <td><input id="v-open-identity" placeholder="开篇时的身份状态…" oninput="autoSave()"></td>
-            <td style="text-align:center;color:var(--muted);">→</td>
-            <td><input id="v-climax-identity" placeholder="高潮时的身份状态…" oninput="autoSave()"></td>
-            <td class="contrast-indicator" id="contrast-identity">—</td>
-          </tr>
-          <tr>
-            <td class="voice-label de">欲望</td>
-            <td><input id="v-open-desire" placeholder="开篇时的欲望…" oninput="autoSave()"></td>
-            <td style="text-align:center;color:var(--muted);">→</td>
-            <td><input id="v-climax-desire" placeholder="高潮时的欲望…" oninput="autoSave()"></td>
-            <td class="contrast-indicator" id="contrast-desire">—</td>
-          </tr>
-          <tr>
-            <td class="voice-label ac">动作</td>
-            <td><input id="v-open-action" placeholder="开篇时的动作方式…" oninput="autoSave()"></td>
-            <td style="text-align:center;color:var(--muted);">→</td>
-            <td><input id="v-climax-action" placeholder="高潮时的动作方式…" oninput="autoSave()"></td>
-            <td class="contrast-indicator" id="contrast-action">—</td>
-          </tr>
-          <tr>
-            <td class="voice-label pr">核心问题</td>
-            <td><input id="v-open-problem" placeholder="开篇时的核心问题…" oninput="autoSave()"></td>
-            <td style="text-align:center;color:var(--muted);">→</td>
-            <td><input id="v-climax-problem" placeholder="高潮时的核心问题…" oninput="autoSave()"></td>
-            <td class="contrast-indicator" id="contrast-problem">—</td>
-          </tr>
-          <tr>
-            <td class="voice-label ob">主要障碍</td>
-            <td><input id="v-open-obstacle" placeholder="开篇时的障碍…" oninput="autoSave()"></td>
-            <td style="text-align:center;color:var(--muted);">→</td>
-            <td><input id="v-climax-obstacle" placeholder="高潮时的障碍…" oninput="autoSave()"></td>
-            <td class="contrast-indicator" id="contrast-obstacle">—</td>
-          </tr>
-          <tr>
-            <td class="voice-label re">结果</td>
-            <td><input id="v-open-result" placeholder="开篇时的结果状态…" oninput="autoSave()"></td>
-            <td style="text-align:center;color:var(--muted);">→</td>
-            <td><input id="v-climax-result" placeholder="高潮时的结果…" oninput="autoSave()"></td>
-            <td class="contrast-indicator" id="contrast-result">—</td>
-          </tr>
-          <tr>
-            <td class="voice-label th">主题/价值</td>
-            <td><input id="v-open-theme" placeholder="开篇时的价值状态…" oninput="autoSave()"></td>
-            <td style="text-align:center;color:var(--muted);">→</td>
-            <td><input id="v-climax-theme" placeholder="高潮时的价值状态…" oninput="autoSave()"></td>
-            <td class="contrast-indicator" id="contrast-theme">—</td>
-          </tr>
-        </tbody>
-      </table>
-      <div style="display:flex;gap:8px;align-items:center;font-size:0.75rem;color:var(--muted);">
-        <span>反差强度：</span>
-        <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#e0d8c8;margin-right:2px;"></span> 弱 &nbsp;
-        <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--voice-desire);margin-right:2px;"></span> 中 &nbsp;
-        <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--voice-action);margin-right:2px;"></span> 强
-        <span style="margin-left:auto;">提示：点击素材库中的项目可填入当前活跃输入框</span>
-      </div>
-    </div>
-
-    <!-- Panel 2: Three-Act Layout -->
-    <div class="panel" id="panel-2">
-      <h2>三幕四部分 · 结构布局</h2>
-
-      <div class="act-diagram">
-        <div class="act-block act1">
-          <div class="act-name">第一幕</div>
-          <div class="act-time">建置 · 起</div>
-          <div class="act-events">开篇事件<br>↓<br>激励事件</div>
-        </div>
-        <div class="act-block act2a">
-          <div class="act-name">第二幕上</div>
-          <div class="act-time">进展 · 承</div>
-          <div class="act-events">进展事件<br>↓<br>转折事件</div>
-        </div>
-        <div class="act-block act2b">
-          <div class="act-name">第二幕下</div>
-          <div class="act-time">转折 · 转</div>
-          <div class="act-events">再转事件<br>↓<br>危机事件</div>
-        </div>
-        <div class="act-block act3">
-          <div class="act-name">第三幕</div>
-          <div class="act-time">解决 · 合</div>
-          <div class="act-events">导入事件<br>↓<br>高潮事件<br>↓<br>结局</div>
-        </div>
-      </div>
-
-      <h3>三个关键事件（每幕的核心发动机）</h3>
-      <p style="font-size:0.75rem;color:var(--muted);margin-bottom:12px;">这三个事件必须具备"决定性意义"——一旦发生，故事不可逆转。</p>
-
-      <div class="form-row">
-        <div class="form-group">
-          <label>🔴 激励事件（核心问题首次正式爆发）</label>
-          <textarea id="act-incentive" placeholder="例如：厨师在重要宴会上因味觉失灵导致菜品被退回，主厨当众宣布如果他不能通过下周的盲品测试就开除他…" oninput="autoSave()"></textarea>
-        </div>
-        <div class="form-group">
-          <label>🟡 转折事件（方向或障碍强度的重大改变）</label>
-          <textarea id="act-turn" placeholder="例如：厨师发现味觉失灵不是因为生理原因，而是被最信任的徒弟长期下药…" oninput="autoSave()"></textarea>
-        </div>
-        <div class="form-group">
-          <label>🔵 危机事件（逼入绝境，别无选择）</label>
-          <textarea id="act-crisis" placeholder="例如：盲品测试前一小时，徒弟偷走了他仅剩的味觉训练笔记…" oninput="autoSave()"></textarea>
-        </div>
-      </div>
-
-      <h3>幕的织体检验</h3>
-      <p style="font-size:0.75rem;color:var(--muted);">能否把每一幕的七要素连成一句通顺的"幕故事"？</p>
-      <div class="form-group"><label>第一幕的一句话故事</label><textarea id="act1-story" placeholder="例如：一个失去味觉的厨师为了保住职位，开始暗中调查味觉丧失的原因……" oninput="autoSave()"></textarea></div>
-      <div class="form-group"><label>第二幕上的一句话故事</label><textarea id="act2a-story" placeholder="…" oninput="autoSave()"></textarea></div>
-      <div class="form-group"><label>第二幕下的一句话故事</label><textarea id="act2b-story" placeholder="…" oninput="autoSave()"></textarea></div>
-      <div class="form-group"><label>第三幕的一句话故事</label><textarea id="act3-story" placeholder="…" oninput="autoSave()"></textarea></div>
-    </div>
-
-    <!-- Panel 3: Timeline with 10 Road-Mark Events -->
-    <div class="panel" id="panel-3">
-      <h2>十个路标事件 · 时间线</h2>
-      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:16px;">
-        以120分钟标准电影为参照。红点为三个关键事件。每个事件填入具体场景构想。
-      </p>
-
-      <div class="timeline" id="timeline"></div>
-    </div>
-
-    <!-- Panel 4: Sequence Weaving -->
-    <div class="panel" id="panel-4">
-      <h2>十个序列织体</h2>
-      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:16px;">以路标事件为核心，填充每段序列的具体内容。</p>
-      <div class="seq-grid" id="seqGrid"></div>
-    </div>
-
-    <!-- Panel 5: Character Atlas -->
-    <div class="panel" id="panel-5">
-      <h2>人物图谱</h2>
-      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:16px;">每个主要人物：身份/欲望/动作的起止点 + 性格/能力/简历。</p>
-
-      <div id="charContainer">
-        <div class="char-grid" id="charGrid"></div>
-        <button class="btn btn-outline btn-sm" style="margin-top:12px;" onclick="addCharacter()">+ 添加人物</button>
-      </div>
-    </div>
-
-    <!-- Panel 6: Dynamic Check -->
-    <div class="panel" id="panel-6">
-      <h2>动力检查</h2>
-      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:16px;">
-        任何时候设计障碍和结果，都要检查动力强度。<b>身份难 / 欲望强 / 动作反 / 障碍大 —— 至少满足两条。</b>
-      </p>
-
-      <div class="check-grid">
-        <div class="check-item">
-          <div class="check-icon">🎭</div>
-          <div class="check-info">
-            <div class="check-name">身份难</div>
-            <div class="check-desc">主角是菜鸟、弱者、矛盾体？</div>
-          </div>
-          <select class="inline-select" id="check-identity" onchange="autoSave();updateDynamics();">
-            <option value="">—</option><option value="strong">强（菜鸟/弱者）</option><option value="medium">中</option><option value="weak">弱（老手/强者）</option>
-          </select>
-        </div>
-        <div class="check-item">
-          <div class="check-icon">🔥</div>
-          <div class="check-info">
-            <div class="check-name">欲望强</div>
-            <div class="check-desc">非此不可，不可替代？</div>
-          </div>
-          <select class="inline-select" id="check-desire" onchange="autoSave();updateDynamics();">
-            <option value="">—</option><option value="strong">强（非此不可）</option><option value="medium">中</option><option value="weak">弱（可有可无）</option>
-          </select>
-        </div>
-        <div class="check-item">
-          <div class="check-icon">🔄</div>
-          <div class="check-info">
-            <div class="check-name">动作反</div>
-            <div class="check-desc">主角动作反而制造障碍？</div>
-          </div>
-          <select class="inline-select" id="check-action" onchange="autoSave();updateDynamics();">
-            <option value="">—</option><option value="strong">强（反向效果）</option><option value="medium">中</option><option value="weak">弱（一路顺畅）</option>
-          </select>
-        </div>
-        <div class="check-item">
-          <div class="check-icon">🧱</div>
-          <div class="check-info">
-            <div class="check-name">障碍大</div>
-            <div class="check-desc">几乎无法逾越？</div>
-          </div>
-          <select class="inline-select" id="check-obstacle" onchange="autoSave();updateDynamics();">
-            <option value="">—</option><option value="strong">强（几乎无法逾越）</option><option value="medium">中</option><option value="weak">弱（轻松克服）</option>
-          </select>
-        </div>
-      </div>
-
-      <div id="dynamicsResult" style="margin-top:16px;padding:12px 16px;border-radius:6px;font-size:0.85rem;background:var(--tag-bg);border:1px solid var(--border);">
-        👆 请设置以上四项，查看动力评估结果。
-      </div>
-
-      <h3>声部诊断清单</h3>
-      <div style="font-size:0.8rem;line-height:2;">
-        <p><b>人物声部：</b></p>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c1" onchange="autoSave()"> 主角身份起点与终点是否形成反差？</label>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c2" onchange="autoSave()"> 欲望是否足够强烈、非此不可？</label>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c3" onchange="autoSave()"> 动作是否在逻辑上由欲望驱动？动作反向设计了吗？</label>
-        <p><b>事件声部：</b></p>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c4" onchange="autoSave()"> 核心问题是否清晰、可用"能否……"表述？</label>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c5" onchange="autoSave()"> 主要障碍是否足够大、真正阻止了欲望实现？</label>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c6" onchange="autoSave()"> 每个结果是否为下一步提供了新动力？</label>
-        <p><b>主题声部：</b></p>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c7" onchange="autoSave()"> 正负价值是否明确对立？</label>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c8" onchange="autoSave()"> 开篇是否从负价值出发？高潮是否集中体现正价值？</label>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c9" onchange="autoSave()"> 每个次事件都服务于中心思想？</label>
-        <p><b>织体整体：</b></p>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c10" onchange="autoSave()"> 七声部起点与终点是否形成足够反差？</label>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c11" onchange="autoSave()"> 三个关键事件是否具备决定性意义？</label>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c12" onchange="autoSave()"> 故事逻辑线是否通顺？</label>
-        <label class="form-group" style="display:flex;align-items:center;gap:8px;"><input type="checkbox" id="diag-c13" onchange="autoSave()"> 每约15分钟有一次情绪峰值？</label>
-      </div>
-    </div>
-  </main>
+<div class="main">
+  <div class="tabs" id="tabBar"></div>
+  <div id="panelsContainer"></div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script>
 // ===== DATA =====
+const TAB_NAMES = ['三支柱', '七声部', '三幕布局', '路标时间线', '序列织体', '人物图谱', '动力检查'];
 
-// Material library
-const materialLibrary = {
-  "情节反转": [
-    "身份反转：乞丐→国王", "身份反转：英雄→叛徒", "身份反转：受害者→加害者",
-    "认知反转：敌人实为恩人", "认知反转：成功实为失败", "认知反转：记忆被篡改",
-    "关系反转：爱人→仇敌", "关系反转：陌生人→血亲", "关系反转：徒弟→幕后黑手",
-    "事件反转：胜利条件变死亡陷阱", "事件反转：救赎之路导向更深罪孽", "事件反转：逃生方向正对危险源头",
-    "时间反转：过去的善举引来今日的灾祸", "时间反转：预言的实现方式完全出乎意料",
-    "力量反转：最弱之人掌握关键权力", "力量反转：依靠的力量突然崩塌"
+// Material database: keyed by context path
+const MAT = {
+  // 三支柱 - 主角类型
+  heroType: [
+    '菜鸟新人', '落魄老兵', '被误解者', '隐退高手', '孤儿/弃儿',
+    '逃亡者', '双重身份者', '普通人在异常处境', '被选中者（抗拒）',
+    '冒充者', '囚徒（字面或比喻）', '寄人篱下者', '背负原罪者', '失去记忆者'
   ],
-  "障碍类型": [
-    "生理障碍：残疾、疾病、衰老", "心理障碍：恐惧、偏见、创伤", "社会障碍：阶级、规则、偏见",
-    "关系障碍：误解、背叛、三角冲突", "时间障碍：倒计时、期限压迫",
-    "空间障碍：被困、隔离、追逐", "道德障碍：两难选择、良心拷问",
-    "信息障碍：秘密、谎言、信息不对等", "制度障碍：官僚、法律、潜规则",
-    "自然障碍：灾难、荒野、极限环境", "自我障碍：主角自身缺点击败自己"
+  // 三支柱 - 主题对立
+  themePair: [
+    '正义 vs 复仇', '自由 vs 安全', '真相 vs 幸福', '爱 vs 控制',
+    '个体 vs 集体', '忠诚 vs 正义', '传统 vs 进步', '生存 vs 道德',
+    '记忆 vs 遗忘', '命运 vs 自由意志', '宽恕 vs 惩罚', '规则 vs 人性',
+    '秩序 vs 混沌', '真实 vs 表演', '占有 vs 成全'
   ],
-  "主角身份起点": [
-    "菜鸟新人", "落魄老兵", "被误解者", "隐退高手", "孤儿/弃儿",
-    "逃亡者", "双重身份者", "普通人在异常处境", "被选中者（抗拒命运）",
-    "冒充者", "囚徒（字面或比喻）", "幸存者"
+  // 核心问题模板
+  coreQuestion: [
+    '能否在期限前完成不可能的任务？', '能否证明自己的清白/价值？',
+    '能否保护所爱之人免于伤害？', '能否在规则与良知间找到出路？',
+    '能否打破命运的预言？', '能否揭开被隐藏的真相？',
+    '能否在绝境中找到生机？', '能否修补不可逆的错误？',
+    '能否赢得一场看似必输的较量？', '能否在两个无法共存的选择中找到第三条路？'
   ],
-  "欲望驱动": [
-    "生存", "复仇", "保护所爱", "证明自我", "寻求真相",
-    "追求自由", "获得认可", "赎罪", "回到原点（回家）", "完成使命",
-    "打破规则", "守护秘密", "超越前人"
+  // 身份开篇状态
+  identityStart: [
+    '籍籍无名的底层', '曾辉煌但已过气', '怀才不遇的边缘人',
+    '身份矛盾的双面人', '逃避过去的隐匿者', '被体制抛弃的人',
+    '初来乍到的外来者', '被谣言毁掉的人', '夹在两个世界之间的混血/跨界者',
+    '被保护得太好的天真者', '被训练成的工具人', '刚刚失去一切的人'
   ],
-  "主题价值对立": [
-    "正义 vs 复仇", "自由 vs 安全", "真相 vs 幸福", "爱 vs 控制",
-    "个体 vs 集体", "忠诚 vs 正义", "传统 vs 进步", "生存 vs 道德",
-    "记忆 vs 遗忘", "命运 vs 自由意志", "宽恕 vs 惩罚", "规则 vs 人性"
+  // 身份高潮（开篇的反面）
+  identityClimax: [
+    '获得认可/地位的人', '找回自我的重生者', '完成复仇/使命的人',
+    '身份得到整合的人', '主动选择命运的人', '成为新秩序创建者',
+    '虽败犹荣的牺牲者', '彻底失去身份的放逐者', '成为自己曾反对的那种人',
+    '摆脱束缚的自由人', '从工具变成有灵魂的人', '守护了重要之物的人'
   ],
-  "结局类型": [
-    "交待性结局：正面收束，人物各得其所", "交待性结局：负面收束，一切归于虚无",
-    "延伸性结局：主题深化，起点即终点但意味不同", "延伸性结局：开放结局，留给观众思考",
-    "转折性结局：最后揭示隐藏信息，一切重新解释", "转折性结局：循环结构，故事回到原点但意味全变",
-    "转折性结局：主角看似胜利实则失败 / 反之亦然"
+  // 欲望驱动
+  desireType: [
+    '生存下去', '复仇', '保护所爱之人', '证明自我价值',
+    '寻求真相', '追求自由', '获得认可/尊重', '赎罪/弥补过错',
+    '回到原点（回家）', '完成使命/承诺', '打破不公的规则',
+    '守护秘密不被发现', '超越前人/对手', '夺回被夺走之物'
   ],
-  "动作模式": [
-    "主动出击型", "被动反应型（先守后攻）", "智取型", "硬刚型",
-    "借力型（组建团队/联盟）", "潜伏型（打入内部）", "交易型（以物易物）",
-    "牺牲型（自损以换目标）", "逃离型", "诱导型（设局让对手自曝）"
+  // 动作模式
+  actionMode: [
+    '主动出击型（追）', '被动反应型（逃/守）', '智取型（谋）',
+    '硬刚型（战）', '借力型（组建联盟）', '潜伏型（打入内部）',
+    '交易型（以物易物）', '牺牲型（自损换目标）', '诱导型（设局）',
+    '伪装型（扮演他人）', '学习型（从弱到强）', '决裂型（割舍旧关系）'
   ],
-  "节拍类型": [
-    "揭示（新信息曝光）", "决定（角色做出选择）", "对抗（两力交锋）",
-    "逆转（局势翻转）", "代价（为选择付出代价）", "领悟（认知升级）",
-    "分离（重要关系断裂）", "联合（新联盟形成）", "牺牲（放弃重要之物）"
+  // 障碍类型
+  obstacleType: [
+    '生理障碍（伤病/残疾/衰老）', '心理障碍（恐惧/创伤/偏见）',
+    '社会障碍（阶级/规则/歧视）', '关系障碍（误解/背叛/三角冲突）',
+    '时间障碍（倒计时/期限压迫）', '空间障碍（被困/隔离/追逐）',
+    '道德障碍（两难选择/良心拷问）', '信息障碍（秘密/谎言/信息不对等）',
+    '制度障碍（官僚/法律/潜规则）', '自然障碍（灾难/荒野/极限）',
+    '自我障碍（主角缺点是最大敌人）', '力量障碍（对手碾压级强大）'
+  ],
+  // 结果类型
+  resultType: [
+    '表面成功，实为失败', '表面失败，实为胜利', '成功但付出巨大代价',
+    '彻底失败（悲剧）', '两败俱伤', '意外的新平衡', '循环回到起点但意味不同',
+    '胜利但关系破裂', '失败但获得觉悟', '开放式——留给角色选择'
+  ],
+  // 价值状态
+  valueState: [
+    '正义占上风', '不义横行', '自由被压制', '爱被辜负',
+    '真相被掩埋', '希望尚存但微弱', '守护成功', '背叛发生',
+    '个体被集体碾压', '忠诚获得回报', '秩序崩坏', '新生出现'
+  ],
+  // 情节反转
+  plotReversal: [
+    '身份反转：凡人→英雄', '身份反转：盟友→叛徒', '身份反转：受害者→加害者',
+    '认知反转：敌人实为恩人', '认知反转：成功实为失败',
+    '认知反转：被保护者才是威胁', '关系反转：爱人→仇敌',
+    '关系反转：陌生人→血亲', '事件反转：胜利条件变死亡陷阱',
+    '事件反转：救赎之路导向更深罪孽', '事件反转：逃生方向正对危险源头',
+    '力量反转：最弱者掌握关键权力', '力量反转：依靠的力量突然崩塌',
+    '时间反转：过去善举引来今日灾祸', '视角反转：故事从另一面看完全不同'
+  ],
+  // 激励事件模式
+  incentivePattern: [
+    '突遭变故（开除/事故/袭击）', '意外发现（秘密/线索/能力）',
+    '重要人物出现（带来机会或威胁）', '被迫选择（胁迫/最后通牒）',
+    '旧账/过去找上门', '规则/环境突然改变', '误打误撞卷入事件',
+    '保护对象陷入危险', '被错误指控/误会', '获得一件改变局势的物品/信息'
+  ],
+  // 转折事件模式
+  turnPattern: [
+    '盟友背叛/立场转变', '关键资源/庇护突然消失', '真相曝光（颠覆认知）',
+    '障碍升级（对手变强/规则改变）', '自身身份/过去被揭露',
+    '保护对象反成累赘/威胁', '战略失败（原计划被识破）',
+    '新力量介入（第三方势力）', '时限突然收紧', '主角犯下不可挽回的错误'
+  ],
+  // 危机事件模式
+  crisisPattern: [
+    '众叛亲离（最需要时无人相助）', '倒计时归零（最后一秒前）',
+    '最后资源/退路被切断', '被迫两难选择（选A失B，选B失A）',
+    '保护对象被夺走/受伤', '主角主动放弃一切', '发现自己是问题根源',
+    '信任之人给出致命一击', '被困绝境（字面或比喻）', '真相是主角无法承受的'
+  ],
+  // 节拍类型
+  beatType: [
+    '揭示（新信息曝光）', '决定（角色做出选择）', '对抗（两力交锋）',
+    '逆转（局势翻转）', '代价（为选择付出代价）', '领悟（认知升级）',
+    '分离（重要关系断裂）', '联合（新联盟形成）', '牺牲（放弃重要之物）',
+    '成长（能力/心智升级）', '崩塌（支撑体系瓦解）'
+  ],
+  // 结局类型
+  endingType: [
+    '交待性结局：各人物命运收束', '延伸性结局：主题深化，余味悠长',
+    '转折性结局：最后揭示隐藏信息', '循环结局：回到起点但意味全变',
+    '开放式结局：留给观众判断', '悲剧结局：英雄陨落但精神不朽',
+    '代价结局：胜利但付出一切', '新生结局：旧世界结束新世界开始'
+  ],
+  // 性格特征
+  personalityTraits: [
+    '执着到偏执', '外冷内热', '表面乐观内心悲观', '原则至上的死脑筋',
+    '灵活但有底线', '自卑与自尊并存', '善良但软弱', '勇敢但鲁莽',
+    '谨慎到优柔寡断', '果断到不计后果', '幽默是防御机制', '沉默但洞察一切'
   ]
 };
 
-// 10 road-mark events data
+// Branching tree: upstream choices affect downstream suggestions
+// key: upstream_field -> { upstream_value: downstream_suggestions }
+const BRANCH = {
+  // heroType -> identityStart refinements
+  'heroType_identityStart': {
+    '菜鸟新人': ['对世界一无所知的新手', '怀揣幻想的入门者', '第一天上班/报到'],
+    '落魄老兵': ['辉煌不再的过气人物', '被新一代取代的前辈', '酗酒/颓废的中年人'],
+    '被误解者': ['被舆论审判的替罪羊', '说了真相但无人相信的人', '好心被当恶意的人'],
+    '隐退高手': ['隐居市井的前大佬', '发誓不再出手的能人', '被旧日追上的逃兵'],
+    '逃亡者': ['跨城/跨国潜逃中', '隐姓埋名的生活', '随时准备再次逃离'],
+    '双重身份者': ['白天一个身份晚上另一个', '两个身份开始互相侵蚀', '被迫在两个世界间切换'],
+    '寄人篱下者': ['依附于某个人/组织生存', '没有话语权的跟随者', '靠讨好维持位置']
+  },
+  // desireType -> actionMode suggestions
+  'desireType_actionMode': {
+    '生存下去': ['被动反应型（逃/守）', '潜伏型（打入内部）', '牺牲型（自损换目标）'],
+    '复仇': ['潜伏型（打入内部）', '智取型（谋）', '诱导型（设局）'],
+    '保护所爱之人': ['硬刚型（战）', '牺牲型（自损换目标）', '借力型（组建联盟）'],
+    '证明自我价值': ['主动出击型（追）', '学习型（从弱到强）', '硬刚型（战）'],
+    '寻求真相': ['智取型（谋）', '伪装型（扮演他人）', '潜伏型（打入内部）'],
+    '追求自由': ['决裂型（割舍旧关系）', '被动反应型（逃/守）', '交易型（以物易物）'],
+    '赎罪/弥补过错': ['牺牲型（自损换目标）', '主动出击型（追）', '交易型（以物易物）']
+  },
+  // themePair -> obstacleType suggestions
+  'themePair_obstacleType': {
+    '正义 vs 复仇': ['道德障碍（两难选择/良心拷问）', '制度障碍（官僚/法律/潜规则）'],
+    '自由 vs 安全': ['社会障碍（阶级/规则/歧视）', '制度障碍（官僚/法律/潜规则）'],
+    '真相 vs 幸福': ['信息障碍（秘密/谎言/信息不对等）', '自我障碍（主角缺点是最大敌人）'],
+    '爱 vs 控制': ['关系障碍（误解/背叛/三角冲突）', '心理障碍（恐惧/创伤/偏见）'],
+    '个体 vs 集体': ['社会障碍（阶级/规则/歧视）', '道德障碍（两难选择/良心拷问）'],
+    '生存 vs 道德': ['道德障碍（两难选择/良心拷问）', '自我障碍（主角缺点是最大敌人）']
+  }
+};
+
+// Ten road-mark events
 const roadMarkEvents = [
-  { id: 1, name: "开篇事件", time: "0-5分钟", desc: "快速抓注意力，启动基本交待", key: false, tags: ["建置"] },
-  { id: 2, name: "切入事件", time: "5-15分钟", desc: "续接交待，导向核心问题", key: false, tags: ["建置"] },
-  { id: 3, name: "激励事件", time: "15-30分钟", desc: "核心问题正式爆发，故事主体启动", key: true, tags: ["第一幕终点"] },
-  { id: 4, name: "进展事件", time: "30-45分钟", desc: "缓和张力后的新推动，积累逻辑", key: false, tags: ["进展"] },
-  { id: 5, name: "转折事件", time: "45-60分钟", desc: "方向或量级的重大改变", key: true, tags: ["第二幕上终点"] },
-  { id: 6, name: "再转事件", time: "60-75分钟", desc: "转折后的变化，导向危机", key: false, tags: ["转折"] },
-  { id: 7, name: "危机事件", time: "75-90分钟", desc: "逼入绝境，主角别无选择", key: true, tags: ["第二幕下终点"] },
-  { id: 8, name: "导入事件", time: "90-100分钟", desc: "为高潮做逻辑与情绪铺垫", key: false, tags: ["导向高潮"] },
-  { id: 9, name: "高潮事件", time: "100-110分钟", desc: "核心问题最终解决，情绪全释放", key: false, tags: ["高潮"] },
-  { id: 10, name: "结局", time: "110-120分钟", desc: "交待人物命运，延伸或转折主题", key: false, tags: ["结局"] }
+  { id:1, name:'开篇事件', time:'0-5min', desc:'快速抓注意力，启动基本交待', key:false },
+  { id:2, name:'切入事件', time:'5-15min', desc:'续接交待，导向核心问题', key:false },
+  { id:3, name:'激励事件', time:'15-30min', desc:'核心问题正式爆发，故事主体启动', key:true },
+  { id:4, name:'进展事件', time:'30-45min', desc:'缓和张力后的新推动，积累逻辑', key:false },
+  { id:5, name:'转折事件', time:'45-60min', desc:'方向或量级的重大改变', key:true },
+  { id:6, name:'再转事件', time:'60-75min', desc:'转折后的变化，导向危机', key:false },
+  { id:7, name:'危机事件', time:'75-90min', desc:'逼入绝境，主角别无选择', key:true },
+  { id:8, name:'导入事件', time:'90-100min', desc:'为高潮做逻辑与情绪铺垫', key:false },
+  { id:9, name:'高潮事件', time:'100-110min', desc:'核心问题最终解决，情绪全释放', key:false },
+  { id:10, name:'结局', time:'110-120min', desc:'交待人物命运，延伸或转折主题', key:false }
 ];
 
 const sequenceData = [
-  { id: 1, name: "开篇序列", range: "0-5分钟", core: "开篇事件" },
-  { id: 2, name: "切入序列", range: "5-15分钟", core: "切入事件" },
-  { id: 3, name: "激励序列", range: "15-30分钟", core: "激励事件" },
-  { id: 4, name: "进展序列", range: "30-45分钟", core: "进展事件" },
-  { id: 5, name: "转折序列", range: "45-60分钟", core: "转折事件" },
-  { id: 6, name: "再转序列", range: "60-75分钟", core: "再转事件" },
-  { id: 7, name: "危机序列", range: "75-90分钟", core: "危机事件" },
-  { id: 8, name: "导向高潮序列", range: "90-100分钟", core: "导入事件" },
-  { id: 9, name: "高潮序列", range: "100-110分钟", core: "高潮事件" },
-  { id: 10, name: "结局序列", range: "110-120分钟", core: "结局" }
+  { id:1, name:'开篇序列', range:'0-5min', core:'开篇事件' },
+  { id:2, name:'切入序列', range:'5-15min', core:'切入事件' },
+  { id:3, name:'激励序列', range:'15-30min', core:'激励事件' },
+  { id:4, name:'进展序列', range:'30-45min', core:'进展事件' },
+  { id:5, name:'转折序列', range:'45-60min', core:'转折事件' },
+  { id:6, name:'再转序列', range:'60-75min', core:'再转事件' },
+  { id:7, name:'危机序列', range:'75-90min', core:'危机事件' },
+  { id:8, name:'导向高潮序列', range:'90-100min', core:'导入事件' },
+  { id:9, name:'高潮序列', range:'100-110min', core:'高潮事件' },
+  { id:10, name:'结局序列', range:'110-120min', core:'结局' }
 ];
-
-// Character template
-const characterTemplate = {
-  id: Date.now(),
-  name: "",
-  role: "",           // 主角/对手/盟友/导师/……
-  identityStart: "",  // 身份起点
-  identityEnd: "",    // 身份终点
-  desireStart: "",    // 欲望起点
-  desireEnd: "",      // 欲望终点
-  actionMode: "",     // 动作模式
-  personality: "",    // 性格特征
-  ability: "",        // 能力/技能
-  background: ""      // 简历/背景
-};
 
 // ===== STATE =====
 let characters = [];
-let activeInputId = null;
+let currentTab = 0;
 
-// ===== INIT =====
-function init() {
-  // Bind tab click events
-  document.querySelectorAll('.tab').forEach(tab => {
-    tab.addEventListener('click', function() {
-      const idx = parseInt(this.getAttribute('data-idx'));
-      if (!isNaN(idx)) switchTab(idx);
-    });
-  });
+// ===== STORY CONTEXT (branching tree tracker) =====
+function getStoryContext() {
+  return {
+    heroType: document.getElementById('pillar-hero')?.value?.trim() || '',
+    mainEvent: document.getElementById('pillar-event')?.value?.trim() || '',
+    theme: document.getElementById('pillar-theme')?.value?.trim() || '',
+    identityOpen: document.getElementById('v-open-identity')?.value?.trim() || '',
+    desireOpen: document.getElementById('v-open-desire')?.value?.trim() || '',
+    actionOpen: document.getElementById('v-open-action')?.value?.trim() || '',
+    problemOpen: document.getElementById('v-open-problem')?.value?.trim() || '',
+    obstacleOpen: document.getElementById('v-open-obstacle')?.value?.trim() || ''
+  };
+}
 
-  buildLibrary();
-  buildTimeline();
-  buildSequences();
-  buildCharacters();
-  loadAll();
+// Given a list of options, find which ones match user's upstream choices
+function branchFilter(upstreamValue, branchKey) {
+  if (!upstreamValue || !BRANCH[branchKey]) return [];
+  const map = BRANCH[branchKey];
+  for (const [key, suggestions] of Object.entries(map)) {
+    if (upstreamValue.includes(key)) return suggestions;
+  }
+  return [];
+}
+
+// ===== BUILD UI =====
+function buildAll() {
+  buildTabs();
+  buildPanels();
+}
+
+function buildTabs() {
+  const bar = document.getElementById('tabBar');
+  bar.innerHTML = TAB_NAMES.map((name, i) =>
+    '<button type="button" class="tab' + (i === 0 ? ' active' : '') + '" data-idx="' + i + '" onclick="switchTab(' + i + ')">' + (i + 1) + '. ' + name + '</button>'
+  ).join('');
+}
+
+function switchTab(idx) {
+  currentTab = idx;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  const t = document.querySelector('.tab[data-idx="' + idx + '"]');
+  if (t) t.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  const p = document.getElementById('panel-' + idx);
+  if (p) p.classList.add('active');
+}
+
+// ===== MATERIAL BAR COMPONENT =====
+function matBar(fieldId, category, label) {
+  const items = MAT[category] || [];
+  if (!items.length) return '';
+  const ctx = getStoryContext();
+  let chips = items.map(item => '<span class="mat-chip" data-field="' + fieldId + '" data-val="' + escAttr(item) + '" onclick="insertMat(this)">' + item + '</span>').join('');
+
+  // Branching: check if there are contextual suggestions
+  let branchChips = '';
+  if (category === 'identityStart' && ctx.heroType) {
+    const suggestions = branchFilter(ctx.heroType, 'heroType_identityStart');
+    if (suggestions.length) {
+      branchChips = suggestions.map(s => '<span class="mat-chip selected" data-field="' + fieldId + '" data-val="' + escAttr(s) + '" onclick="insertMat(this)">🎯 ' + s + '</span>').join('');
+    }
+  }
+  if (category === 'actionMode' && ctx.desireOpen) {
+    const suggestions = branchFilter(ctx.desireOpen, 'desireType_actionMode');
+    if (suggestions.length) {
+      branchChips = suggestions.map(s => '<span class="mat-chip selected" data-field="' + fieldId + '" data-val="' + escAttr(s) + '" onclick="insertMat(this)">🎯 ' + s + '</span>').join('');
+    }
+  }
+  if (category === 'obstacleType' && ctx.theme) {
+    const suggestions = branchFilter(ctx.theme, 'themePair_obstacleType');
+    if (suggestions.length) {
+      branchChips = suggestions.map(s => '<span class="mat-chip selected" data-field="' + fieldId + '" data-val="' + escAttr(s) + '" onclick="insertMat(this)">🎯 ' + s + '</span>').join('');
+    }
+  }
+
+  return '<div class="mat-bar"><span class="mat-label">' + (label || '素材') + '：</span>' + (branchChips || chips) + '</div>';
+}
+
+function escAttr(s) { return s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function escHtml(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+
+function insertMat(chip) {
+  const fieldId = chip.getAttribute('data-field');
+  const val = chip.getAttribute('data-val');
+  const input = document.getElementById(fieldId);
+  if (input) {
+    const current = input.value;
+    input.value = current ? current + '；' + val : val;
+    chip.classList.add('used');
+    saveAll(); // 立刻存盘，再重建面板
+    toast('已填入：' + val);
+    setTimeout(refreshAffectedBars, 100);
+  }
+}
+
+// Rebuild panels to show updated branching-tree suggestions
+function refreshAffectedBars() {
+  buildPanels();
+  loadAllData();
+  switchTab(currentTab);
   updateOneSentence();
+  updateContrastIndicators();
   updateDynamics();
+}
 
-  // Track active input for material library filling
-  document.addEventListener('focusin', (e) => {
-    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
-      activeInputId = e.target.id;
-    }
+// ===== BUILD PANELS =====
+function buildPanels() {
+  const container = document.getElementById('panelsContainer');
+  container.innerHTML = [
+    buildPanel0(), buildPanel1(), buildPanel2(), buildPanel3(),
+    buildPanel4(), buildPanel5(), buildPanel6()
+  ].join('');
+}
+
+// ===== PANEL 0: 三支柱 =====
+function buildPanel0() {
+  return '<div class="panel active" id="panel-0">' +
+    '<div class="section"><h2>三支柱 & 一句话故事</h2>' +
+    '<div class="sec-desc">故事的第一推动力。往下走之前先完成这个。</div>' +
+    '<div class="row3">' +
+      '<div class="field"><label>👤 主角 —— 谁的故事？</label><textarea id="pillar-hero" oninput="onFieldInput()" placeholder="例如：一个失去味觉的厨师"></textarea>' + matBar('pillar-hero', 'heroType', '主角类型') + '</div>' +
+      '<div class="field"><label>⚡ 主事件 —— 围绕什么核心问题？</label><textarea id="pillar-event" oninput="onFieldInput()" placeholder="例如：能否在米其林评审前恢复味觉？"></textarea>' + matBar('pillar-event', 'coreQuestion', '核心问题') + '</div>' +
+      '<div class="field"><label>💡 主题 —— 表达什么价值观？</label><textarea id="pillar-theme" oninput="onFieldInput()" placeholder="例如：真正的创造不依赖感官，而源于内心"></textarea>' + matBar('pillar-theme', 'themePair', '主题对立') + '</div>' +
+    '</div>' +
+    '<h3>一句话故事</h3><div class="one-sentence" id="oneSentence"><span class="placeholder" id="oneSentenceText">填入三支柱后，一句话故事将自动生成……</span></div>' +
+    '<div style="font-size:0.7rem;color:var(--muted);text-align:center;">格式：<b>[主角]</b>因为[欲望/处境]，[动作]，面对[核心问题]，遇到[主要障碍]，结果[结果]，表现了[主题]。</div>' +
+    '</div></div>';
+}
+
+// ===== PANEL 1: 七声部 =====
+function buildPanel1() {
+  const voices = [
+    { id:'identity', cls:'id', label:'身份' },
+    { id:'desire', cls:'de', label:'欲望' },
+    { id:'action', cls:'ac', label:'动作' },
+    { id:'problem', cls:'pr', label:'核心问题' },
+    { id:'obstacle', cls:'ob', label:'主要障碍' },
+    { id:'result', cls:'re', label:'结果' },
+    { id:'theme', cls:'th', label:'主题/价值' }
+  ];
+
+  let rows = '';
+  const ctx = getStoryContext();
+
+  voices.forEach((v, i) => {
+    let openCat = '', climaxCat = '';
+    if (v.id === 'identity') { openCat = 'identityStart'; climaxCat = 'identityClimax'; }
+    else if (v.id === 'desire') { openCat = 'desireType'; climaxCat = 'desireType'; }
+    else if (v.id === 'action') { openCat = 'actionMode'; climaxCat = 'actionMode'; }
+    else if (v.id === 'problem') { openCat = 'coreQuestion'; climaxCat = 'resultType'; }
+    else if (v.id === 'obstacle') { openCat = 'obstacleType'; climaxCat = 'obstacleType'; }
+    else if (v.id === 'result') { openCat = 'resultType'; climaxCat = 'resultType'; }
+    else if (v.id === 'theme') { openCat = 'valueState'; climaxCat = 'valueState'; }
+
+    rows += '<tr>' +
+      '<td class="vl ' + v.cls + '">' + v.label + '</td>' +
+      '<td><textarea id="v-open-' + v.id + '" oninput="onFieldInput()" placeholder="开篇时的' + v.label + '状态…" style="min-height:36px;"></textarea>' + matBar('v-open-' + v.id, openCat, '') + '</td>' +
+      '<td style="text-align:center;color:var(--muted);width:30px;">→</td>' +
+      '<td><textarea id="v-climax-' + v.id + '" oninput="onFieldInput()" placeholder="高潮时的' + v.label + '状态…" style="min-height:36px;"></textarea>' + matBar('v-climax-' + v.id, climaxCat, '') + '</td>' +
+      '<td class="ci" id="contrast-' + v.id + '">—</td>' +
+      '</tr>';
   });
+
+  return '<div class="panel" id="panel-1">' +
+    '<div class="section"><h2>七声部工作表</h2>' +
+    '<div class="sec-desc">开篇状态与高潮状态必须形成<b>反差</b>。差距越大，故事空间越大。</div>' +
+    '<table class="voice-table"><thead><tr><th style="width:55px;">声部</th><th>开篇事件状态</th><th style="width:30px;"></th><th>高潮事件状态</th><th style="width:55px;">反差</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '<div style="font-size:0.7rem;color:var(--muted);margin-top:8px;">🎯 = 带标记的素材是根据前面选项智能推荐的（分叉树逻辑）</div>' +
+    '</div></div>';
 }
 
-// ===== MATERIAL LIBRARY =====
-function buildLibrary() {
-  const container = document.getElementById('libraryContainer');
-  let html = '';
-  for (const [category, items] of Object.entries(materialLibrary)) {
-    html += `<div class="lib-category open">
-      <h3 onclick="toggleCategory(this)">${category} <span style="font-size:0.7rem;color:var(--muted);">(${items.length})</span></h3>
-      <div class="lib-items">`;
-    items.forEach((item, idx) => {
-      html += `<span class="lib-chip" data-cat="${category}" data-idx="${idx}" onclick="useMaterial(this)" title="点击填入当前输入框">${item}</span>`;
-    });
-    html += `</div></div>`;
-  }
-  container.innerHTML = html;
+// ===== PANEL 2: 三幕布局 =====
+function buildPanel2() {
+  return '<div class="panel" id="panel-2">' +
+    '<div class="section"><h2>三幕四部分 · 结构布局</h2>' +
+    '<div class="act-diagram">' +
+      '<div class="act-block a1"><div class="an">第一幕</div><div class="at">建置 · 起</div>开篇→激励事件</div>' +
+      '<div class="act-block a2a"><div class="an">第二幕上</div><div class="at">进展 · 承</div>进展→转折事件</div>' +
+      '<div class="act-block a2b"><div class="an">第二幕下</div><div class="at">转折 · 转</div>再转→危机事件</div>' +
+      '<div class="act-block a3"><div class="an">第三幕</div><div class="at">解决 · 合</div>导入→高潮→结局</div>' +
+    '</div>' +
+
+    '<h3>三个关键事件</h3><div class="sec-desc">必须具备决定性意义——一旦发生，故事不可逆转。</div>' +
+    '<div class="field"><label>🔴 激励事件</label><textarea id="act-incentive" oninput="onFieldInput()" placeholder="核心问题首次正式爆发…"></textarea>' + matBar('act-incentive', 'incentivePattern', '激励模式') + '</div>' +
+    '<div class="field"><label>🟡 转折事件</label><textarea id="act-turn" oninput="onFieldInput()" placeholder="方向或障碍强度的重大改变…"></textarea>' + matBar('act-turn', 'turnPattern', '转折模式') + '</div>' +
+    '<div class="field"><label>🔵 危机事件</label><textarea id="act-crisis" oninput="onFieldInput()" placeholder="逼入绝境，别无选择…"></textarea>' + matBar('act-crisis', 'crisisPattern', '危机模式') + '</div>' +
+
+    '<h3>幕的织体检验</h3>' +
+    '<div class="field"><label>第一幕的一句话故事</label><textarea id="act1-story" oninput="onFieldInput()" placeholder="例如：一个失去味觉的厨师为了保住职位，开始暗中调查味觉丧失的原因……"></textarea></div>' +
+    '<div class="field"><label>第二幕上的一句话故事</label><textarea id="act2a-story" oninput="onFieldInput()"></textarea></div>' +
+    '<div class="field"><label>第二幕下的一句话故事</label><textarea id="act2b-story" oninput="onFieldInput()"></textarea></div>' +
+    '<div class="field"><label>第三幕的一句话故事</label><textarea id="act3-story" oninput="onFieldInput()"></textarea></div>' +
+    '</div></div>';
 }
 
-function toggleCategory(el) {
-  el.parentElement.classList.toggle('open');
-}
+// ===== PANEL 3: 路标时间线 =====
+function buildPanel3() {
+  let html = '<div class="panel" id="panel-3"><div class="section"><h2>十个路标事件 · 时间线</h2><div class="sec-desc">120分钟标准电影参照。红点为关键事件。</div><div class="timeline">';
 
-function filterLibrary() {
-  const query = document.getElementById('libSearch').value.toLowerCase();
-  document.querySelectorAll('.lib-chip').forEach(chip => {
-    const text = chip.textContent.toLowerCase();
-    chip.style.display = text.includes(query) ? '' : 'none';
+  const beatHints = {
+    1: '用一个强烈的画面/动作开篇', 2: '收束到主角的具体处境',
+    3: '核心问题爆发——主角无法回头', 4: '第一次尝试，获得进展但发现更大困难',
+    5: '局势根本性变化', 6: '被迫调整策略',
+    7: '走到最低点', 8: '情绪和逻辑的最后蓄力',
+    9: '终极对决', 10: '交待+延伸或转折'
+  };
+
+  roadMarkEvents.forEach(ev => {
+    const cls = ev.key ? 'kp' : '';
+    const badge = ev.key ? ' <span class="key-badge">关键</span>' : '';
+    let cat = 'beatType';
+    if (ev.id === 3) cat = 'incentivePattern';
+    else if (ev.id === 5) cat = 'turnPattern';
+    else if (ev.id === 7) cat = 'crisisPattern';
+    else if (ev.id === 10) cat = 'endingType';
+
+    html += '<div class="tl-ev ' + cls + '"><div class="tl-tm">' + ev.time + '</div><div class="tl-dot"></div>' +
+      '<div class="tl-card"><div class="tl-nm">' + ev.id + '. ' + ev.name + badge + '</div>' +
+      '<div class="tl-ds">' + ev.desc + '</div>' +
+      '<div class="tl-tags">' + (ev.key ? '<span class="tl-tag" style="background:#fadbd8;">关键事件</span>' : '') + '<span class="tl-tag">' + beatHints[ev.id] + '</span></div>' +
+      '<textarea id="tl-' + ev.id + '" oninput="onFieldInput()" placeholder="填入此事件的场景构想…"></textarea>' +
+      matBar('tl-' + ev.id, cat, '素材') +
+      '</div></div>';
   });
-  // Expand all categories when searching
-  if (query) {
-    document.querySelectorAll('.lib-category').forEach(cat => cat.classList.add('open'));
-  }
+
+  html += '</div></div></div>';
+  return html;
 }
 
-function useMaterial(chip) {
-  const text = chip.textContent;
-  if (activeInputId) {
-    const input = document.getElementById(activeInputId);
-    if (input) {
-      const current = input.value;
-      input.value = current ? current + '；' + text : text;
-      input.dispatchEvent(new Event('input'));
-      chip.classList.add('used');
-      toast('已填入：' + text);
-    }
+// ===== PANEL 4: 序列织体 =====
+function buildPanel4() {
+  let html = '<div class="panel" id="panel-4"><div class="section"><h2>十个序列织体</h2><div class="seq-grid">';
+  sequenceData.forEach(seq => {
+    html += '<div class="seq-card"><h4>' + seq.id + '. ' + seq.name + '</h4>' +
+      '<div class="sr">' + seq.range + ' | 核心：' + seq.core + '</div>' +
+      '<textarea id="seq-' + seq.id + '" oninput="onFieldInput()" placeholder="此序列的具体内容…"></textarea>' +
+      matBar('seq-' + seq.id, 'beatType', '节拍') +
+      '</div>';
+  });
+  html += '</div></div></div>';
+  return html;
+}
+
+// ===== PANEL 5: 人物图谱 =====
+function buildPanel5() {
+  let html = '<div class="panel" id="panel-5"><div class="section"><h2>人物图谱</h2>' +
+    '<div class="char-grid" id="charGrid">';
+
+  if (characters.length === 0) {
+    html += '<p style="color:var(--muted);font-size:0.8rem;text-align:center;padding:16px;">尚未添加人物，点击下方按钮添加。</p>';
   } else {
-    // Copy to clipboard as fallback
-    navigator.clipboard.writeText(text).then(() => {
-      toast('已复制到剪贴板：' + text);
+    characters.forEach((char, idx) => {
+      html += '<div class="char-card"><h4>人物 ' + (idx + 1) + '</h4>' +
+        charField('姓名', 'char-name-' + char.id, char.name, char.id, 'name') +
+        charField('角色', 'char-role-' + char.id, char.role, char.id, 'role') +
+        '<div style="font-size:0.7rem;color:var(--muted);margin:6px 0 2px;">人物声部</div>' +
+        charField('身份起', 'char-is-' + char.id, char.identityStart, char.id, 'identityStart') +
+        charField('身份终', 'char-ie-' + char.id, char.identityEnd, char.id, 'identityEnd') +
+        charField('欲望起', 'char-ds-' + char.id, char.desireStart, char.id, 'desireStart') +
+        charField('欲望终', 'char-de-' + char.id, char.desireEnd, char.id, 'desireEnd') +
+        charField('动作', 'char-am-' + char.id, char.actionMode, char.id, 'actionMode') +
+        '<div style="font-size:0.7rem;color:var(--muted);margin:6px 0 2px;">特性</div>' +
+        charField('性格', 'char-per-' + char.id, char.personality, char.id, 'personality') +
+        charField('能力', 'char-abi-' + char.id, char.ability, char.id, 'ability') +
+        charField('背景', 'char-bg-' + char.id, char.background, char.id, 'background') +
+        '<button type="button" class="btn btn-outline btn-sm" style="margin-top:6px;color:var(--accent2);border-color:var(--accent2);" onclick="removeCharacter(' + char.id + ')">删除</button>' +
+        '</div>';
     });
   }
+  html += '</div>' +
+    '<button type="button" class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="addCharacter()">+ 添加人物</button>' +
+    '</div></div>';
+  return html;
 }
 
-function addCustomMaterial() {
-  const cat = prompt('添加到哪个分类？\n（输入分类名，或输入新分类名以创建）');
-  if (!cat) return;
-  const text = prompt('素材内容：');
-  if (!text) return;
-
-  if (!materialLibrary[cat]) {
-    materialLibrary[cat] = [];
-    // Rebuild library to show new category
-  }
-  materialLibrary[cat].push(text);
-  buildLibrary();
-  saveAll();
-  toast('已添加自定义素材：' + text);
+function charField(label, id, value, charId, field) {
+  return '<div class="char-field"><label>' + label + '</label><input id="' + id + '" value="' + escHtml(value || '') + '" oninput="updateChar(' + charId + ',\'' + field + '\',this.value)" placeholder="' + label + '…"></div>';
 }
 
-// ===== THREE PILLARS & ONE SENTENCE =====
+// ===== PANEL 6: 动力检查 =====
+function buildPanel6() {
+  return '<div class="panel" id="panel-6">' +
+    '<div class="section"><h2>动力检查</h2>' +
+    '<div class="sec-desc"><b>身份难 / 欲望强 / 动作反 / 障碍大 —— 至少满足两条。</b></div>' +
+    '<div class="check-grid">' +
+      '<div class="check-item"><div class="ck-icon">🎭</div><div class="ck-info"><div class="ck-name">身份难</div><div class="ck-desc">菜鸟、弱者、矛盾体？</div></div><select id="check-identity" onchange="onFieldInput();updateDynamics();"><option value="">—</option><option value="strong">强</option><option value="medium">中</option><option value="weak">弱</option></select></div>' +
+      '<div class="check-item"><div class="ck-icon">🔥</div><div class="ck-info"><div class="ck-name">欲望强</div><div class="ck-desc">非此不可？</div></div><select id="check-desire" onchange="onFieldInput();updateDynamics();"><option value="">—</option><option value="strong">强</option><option value="medium">中</option><option value="weak">弱</option></select></div>' +
+      '<div class="check-item"><div class="ck-icon">🔄</div><div class="ck-info"><div class="ck-name">动作反</div><div class="ck-desc">动作反而制造障碍？</div></div><select id="check-action" onchange="onFieldInput();updateDynamics();"><option value="">—</option><option value="strong">强</option><option value="medium">中</option><option value="weak">弱</option></select></div>' +
+      '<div class="check-item"><div class="ck-icon">🧱</div><div class="ck-info"><div class="ck-name">障碍大</div><div class="ck-desc">几乎无法逾越？</div></div><select id="check-obstacle" onchange="onFieldInput();updateDynamics();"><option value="">—</option><option value="strong">强</option><option value="medium">中</option><option value="weak">弱</option></select></div>' +
+    '</div>' +
+    '<div id="dynamicsResult">👆 请设置以上四项，查看动力评估结果。</div>' +
+
+    '<h3>声部诊断清单</h3><div class="diag-list">' +
+    '<p><b>人物声部：</b></p>' +
+    diagCheck(1, '主角身份起点与终点是否形成反差？') +
+    diagCheck(2, '欲望是否足够强烈、非此不可？') +
+    diagCheck(3, '动作是否在逻辑上由欲望驱动？动作反向设计了吗？') +
+    '<p><b>事件声部：</b></p>' +
+    diagCheck(4, '核心问题是否清晰、可用"能否……"表述？') +
+    diagCheck(5, '主要障碍是否足够大、真正阻止了欲望实现？') +
+    diagCheck(6, '每个结果是否为下一步提供了新动力？') +
+    '<p><b>主题声部：</b></p>' +
+    diagCheck(7, '正负价值是否明确对立？') +
+    diagCheck(8, '开篇是否从负价值出发？高潮是否集中体现正价值？') +
+    diagCheck(9, '每个次事件都服务于中心思想？') +
+    '<p><b>织体整体：</b></p>' +
+    diagCheck(10, '七声部起点与终点是否形成足够反差？') +
+    diagCheck(11, '三个关键事件是否具备决定性意义？') +
+    diagCheck(12, '故事逻辑线是否通顺？') +
+    diagCheck(13, '每约15分钟有一次情绪峰值？') +
+    '</div></div></div>';
+}
+
+function diagCheck(i, label) {
+  return '<label><input type="checkbox" id="diag-c' + i + '" onchange="onFieldInput()"> ' + label + '</label>';
+}
+
+// ===== ONE SENTENCE =====
 function updateOneSentence() {
-  const hero = document.getElementById('pillar-hero').value.trim();
-  const event = document.getElementById('pillar-event').value.trim();
-  const theme = document.getElementById('pillar-theme').value.trim();
+  const hero = document.getElementById('pillar-hero')?.value?.trim() || '';
+  const event = document.getElementById('pillar-event')?.value?.trim() || '';
+  const theme = document.getElementById('pillar-theme')?.value?.trim() || '';
   const el = document.getElementById('oneSentenceText');
+  if (!el) return;
 
   if (hero || event || theme) {
     el.className = '';
-    el.textContent = (hero || '［主角］') + '因为［欲望/处境］，［动作］，面对' +
-      (event || '［核心问题］') + '，遇到［主要障碍］，结果［结果］，表现了' +
-      (theme || '［主题］') + '。';
+    el.textContent = (hero || '[主角]') + '因为[欲望/处境]，[动作]，面对' +
+      (event || '[核心问题]') + '，遇到[主要障碍]，结果[结果]，表现了' +
+      (theme || '[主题]') + '。';
   } else {
     el.className = 'placeholder';
     el.textContent = '填入三支柱后，一句话故事将自动生成……';
   }
 }
 
-// ===== SEVEN VOICES =====
-function updateContrastIndicators() {
-  const voices = ['identity', 'desire', 'action', 'problem', 'obstacle', 'result', 'theme'];
-  voices.forEach(v => {
-    const openVal = document.getElementById(`v-open-${v}`).value.trim();
-    const climaxVal = document.getElementById(`v-climax-${v}`).value.trim();
-    const indicator = document.getElementById(`contrast-${v}`);
-    if (!openVal || !climaxVal) {
-      indicator.textContent = '—';
-      indicator.style.color = '#c0b090';
-    } else if (openVal === climaxVal) {
-      indicator.textContent = '⚠ 无反差';
-      indicator.style.color = '#e74c3c';
-    } else {
-      // Simple heuristic: length difference as proxy for contrast
-      const diff = Math.abs(openVal.length - climaxVal.length);
-      if (diff > 10) {
-        indicator.textContent = '● 强';
-        indicator.style.color = '#2ecc71';
-      } else if (diff > 3) {
-        indicator.textContent = '● 中';
-        indicator.style.color = '#e67e22';
-      } else {
-        indicator.textContent = '● 待加强';
-        indicator.style.color = '#f39c12';
-      }
-    }
-  });
-}
-
-// ===== TIMELINE =====
-function buildTimeline() {
-  const container = document.getElementById('timeline');
-  let html = '';
-  roadMarkEvents.forEach((ev, idx) => {
-    const cls = ev.key ? 'kp' : '';
-    const keyBadge = ev.key ? '<span class="key-event-badge">关键事件</span>' : '';
-    html += `
-      <div class="tl-event ${cls}">
-        <div class="tl-time">${ev.time}</div>
-        <div class="tl-dot"></div>
-        <div class="tl-card">
-          <div class="tl-name">${ev.id}. ${ev.name} ${keyBadge}</div>
-          <div class="tl-desc">${ev.desc}</div>
-          <div class="tl-tags">${ev.tags.map(t => `<span class="tl-tag">${t}</span>`).join('')}</div>
-          <textarea id="tl-${ev.id}" placeholder="填入此事件的场景构想…" oninput="autoSave()"></textarea>
-          <div class="tl-hint">💡 提示：${getTimelineHint(ev.id)}</div>
-        </div>
-      </div>`;
-  });
-  container.innerHTML = html;
-}
-
-function getTimelineHint(id) {
-  const hints = {
-    1: "用一个强烈的画面或动作开篇，让观众立刻想知道"发生了什么"",
-    2: "把开篇的世界逐渐收束到主角的具体处境上",
-    3: "核心问题第一次真正爆发——主角被推出舒适区，无法回头",
-    4: "主角第一次尝试解决问题，获得一些进展但发现更大的困难",
-    5: "局势发生根本性变化——可能是盟友变敌人、规则改变、真相曝光",
-    6: "转折后主角被迫调整策略，新的尝试引发新的连锁反应",
-    7: "主角走到最低点——看起来已经没有任何出路",
-    8: "情绪和逻辑的最后蓄力——主角找到最后一搏的力量或理由",
-    9: "核心问题的终极对决——所有线索汇聚，情绪全面释放",
-    10: "不要写"从此幸福地生活在一起"。交待+延伸或转折"
+// ===== DYNAMICS =====
+function updateDynamics() {
+  const scores = {
+    identity: document.getElementById('check-identity')?.value || '',
+    desire: document.getElementById('check-desire')?.value || '',
+    action: document.getElementById('check-action')?.value || '',
+    obstacle: document.getElementById('check-obstacle')?.value || ''
   };
-  return hints[id] || "";
+  const values = { strong: 3, medium: 2, weak: 1 };
+  let strongCount = 0, count = 0;
+  Object.values(scores).forEach(v => { if (v) { if (v === 'strong') strongCount++; count++; } });
+
+  const rd = document.getElementById('dynamicsResult');
+  if (!rd) return;
+  if (count === 0) { rd.innerHTML = '👆 请设置以上四项，查看动力评估结果。'; rd.style.background = 'var(--chip-bg)'; return; }
+
+  if (strongCount >= 3) {
+    rd.innerHTML = '✅ <b>动力极强</b> —— 满足' + strongCount + '项。张力充沛，注意控制节奏避免疲劳。';
+    rd.style.background = '#d5f5e3';
+  } else if (strongCount >= 2) {
+    rd.innerHTML = '✅ <b>动力充足</b> —— 满足' + strongCount + '项。故事有良好推动力。';
+    rd.style.background = '#d5f5e3';
+  } else if (strongCount === 1) {
+    rd.innerHTML = '⚠️ <b>动力不足</b> —— 仅1项。建议增强至少一个维度。';
+    rd.style.background = '#fff3cd';
+  } else {
+    rd.innerHTML = '🔴 <b>动力严重不足</b> —— 故事可能平淡。加大开篇与高潮的反差。';
+    rd.style.background = '#f8d7da';
+  }
 }
 
-// ===== SEQUENCES =====
-function buildSequences() {
-  const grid = document.getElementById('seqGrid');
-  let html = '';
-  sequenceData.forEach(seq => {
-    html += `
-      <div class="seq-card">
-        <h4>${seq.id}. ${seq.name} <span style="font-size:0.7rem;color:var(--muted);">核心：${seq.core}</span></h4>
-        <div class="seq-range">⏱ ${seq.range}</div>
-        <textarea id="seq-${seq.id}" placeholder="此序列的具体内容、场景安排…" oninput="autoSave()"></textarea>
-      </div>`;
+// ===== CONTRAST INDICATORS =====
+function updateContrastIndicators() {
+  ['identity', 'desire', 'action', 'problem', 'obstacle', 'result', 'theme'].forEach(v => {
+    const openVal = document.getElementById('v-open-' + v)?.value?.trim() || '';
+    const climaxVal = document.getElementById('v-climax-' + v)?.value?.trim() || '';
+    const ind = document.getElementById('contrast-' + v);
+    if (!ind) return;
+    if (!openVal || !climaxVal) { ind.textContent = '—'; ind.style.color = '#c0b090'; }
+    else if (openVal === climaxVal) { ind.textContent = '⚠ 无反'; ind.style.color = '#e74c3c'; }
+    else { ind.textContent = '✓'; ind.style.color = '#2ecc71'; }
   });
-  grid.innerHTML = html;
 }
 
 // ===== CHARACTERS =====
-function buildCharacters() {
-  const grid = document.getElementById('charGrid');
-  if (characters.length === 0) {
-    grid.innerHTML = '<p style="color:var(--muted);font-size:0.85rem;text-align:center;padding:20px;">尚未添加人物，点击下方按钮添加。</p>';
-    return;
-  }
-  let html = '';
-  characters.forEach((char, idx) => {
-    html += `
-      <div class="char-card">
-        <h4>👤 人物 ${idx + 1}</h4>
-        <div class="char-field"><label>姓名</label><input id="char-name-${char.id}" value="${escHtml(char.name)}" oninput="updateChar(${char.id},'name',this.value)" placeholder="人物姓名"></div>
-        <div class="char-field"><label>角色</label><input id="char-role-${char.id}" value="${escHtml(char.role)}" oninput="updateChar(${char.id},'role',this.value)" placeholder="主角/对手/盟友/导师…"></div>
-        <div class="char-field"><label>身份起点</label><input id="char-is-${char.id}" value="${escHtml(char.identityStart)}" oninput="updateChar(${char.id},'identityStart',this.value)" placeholder="故事开始时的身份状态"></div>
-        <div class="char-field"><label>身份终点</label><input id="char-ie-${char.id}" value="${escHtml(char.identityEnd)}" oninput="updateChar(${char.id},'identityEnd',this.value)" placeholder="故事结束时的身份状态"></div>
-        <div class="char-field"><label>欲望起点</label><input id="char-ds-${char.id}" value="${escHtml(char.desireStart)}" oninput="updateChar(${char.id},'desireStart',this.value)" placeholder="初始欲望"></div>
-        <div class="char-field"><label>欲望终点</label><input id="char-de-${char.id}" value="${escHtml(char.desireEnd)}" oninput="updateChar(${char.id},'desireEnd',this.value)" placeholder="最终欲望"></div>
-        <div class="char-field"><label>动作模式</label><input id="char-am-${char.id}" value="${escHtml(char.actionMode)}" oninput="updateChar(${char.id},'actionMode',this.value)" placeholder="行事方式"></div>
-        <div class="char-field"><label>性格</label><input id="char-per-${char.id}" value="${escHtml(char.personality)}" oninput="updateChar(${char.id},'personality',this.value)" placeholder="性格特征"></div>
-        <div class="char-field"><label>能力</label><input id="char-abi-${char.id}" value="${escHtml(char.ability)}" oninput="updateChar(${char.id},'ability',this.value)" placeholder="核心能力/技能"></div>
-        <div class="char-field"><label>背景</label><input id="char-bg-${char.id}" value="${escHtml(char.background)}" oninput="updateChar(${char.id},'background',this.value)" placeholder="简历/背景故事"></div>
-        <button class="btn btn-outline btn-sm" style="margin-top:6px;color:var(--accent2);border-color:var(--accent2);" onclick="removeCharacter(${char.id})">删除此人物</button>
-      </div>`;
-  });
-  grid.innerHTML = html;
-}
-
-function escHtml(str) {
-  if (!str) return '';
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
-
 function addCharacter() {
-  const newChar = { ...characterTemplate, id: Date.now() };
-  characters.push(newChar);
-  buildCharacters();
-  saveAll();
+  characters.push({ id: Date.now(), name: '', role: '', identityStart: '', identityEnd: '', desireStart: '', desireEnd: '', actionMode: '', personality: '', ability: '', background: '' });
+  buildPanels();
+  loadAllData();
+  switchTab(currentTab);
   toast('已添加新人物');
 }
 
 function updateChar(id, field, value) {
   const char = characters.find(c => c.id === id);
-  if (char) {
-    char[field] = value;
-    autoSave();
-  }
+  if (char) { char[field] = value; autoSave(); }
 }
 
 function removeCharacter(id) {
   characters = characters.filter(c => c.id !== id);
-  buildCharacters();
-  saveAll();
+  buildPanels();
+  loadAllData();
+  switchTab(currentTab);
   toast('已删除人物');
 }
 
-// ===== DYNAMIC CHECK =====
-function updateDynamics() {
-  const scores = {
-    identity: document.getElementById('check-identity').value,
-    desire: document.getElementById('check-desire').value,
-    action: document.getElementById('check-action').value,
-    obstacle: document.getElementById('check-obstacle').value
-  };
-
-  const values = { strong: 3, medium: 2, weak: 1 };
-  let strongCount = 0;
-  let totalScore = 0;
-  let count = 0;
-
-  Object.entries(scores).forEach(([key, val]) => {
-    if (val) {
-      if (val === 'strong') strongCount++;
-      totalScore += values[val] || 0;
-      count++;
-    }
-  });
-
-  const resultDiv = document.getElementById('dynamicsResult');
-  if (count === 0) {
-    resultDiv.innerHTML = '👆 请设置以上四项，查看动力评估结果。';
-    resultDiv.style.background = 'var(--tag-bg)';
-    return;
-  }
-
-  const avg = totalScore / count;
-
-  if (strongCount >= 3) {
-    resultDiv.innerHTML = '✅ <b>动力极强</b> —— 身份难/欲望强/动作反/障碍大 满足' + strongCount + '项。故事张力充沛，注意控制节奏，避免观众疲劳。';
-    resultDiv.style.background = '#d5f5e3';
-  } else if (strongCount >= 2) {
-    resultDiv.innerHTML = '✅ <b>动力充足</b> —— 满足' + strongCount + '项强指标（至少需要2项）。故事具有良好的推动力。';
-    resultDiv.style.background = '#d5f5e3';
-  } else if (strongCount === 1) {
-    resultDiv.innerHTML = '⚠️ <b>动力不足</b> —— 仅满足1项强指标。建议增强至少一个维度：能不能让身份更难？欲望更不可替代？动作反向效果更强？障碍更不可逾越？';
-    resultDiv.style.background = '#fff3cd';
-  } else {
-    resultDiv.innerHTML = '🔴 <b>动力严重不足</b> —— 没有强指标。故事可能平淡。回到七声部工作表，重新设计开篇与高潮的反差，加大鸿沟。';
-    resultDiv.style.background = '#f8d7da';
-  }
-}
-
-// ===== TAB SWITCHING =====
-const PANEL_IDS = ['panel-0', 'panel-1', 'panel-2', 'panel-3', 'panel-4', 'panel-5', 'panel-6'];
-
-function switchTab(idx) {
-  // Deactivate all tabs
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  // Activate target tab
-  const targetTab = document.querySelector(`.tab[data-idx="${idx}"]`);
-  if (targetTab) targetTab.classList.add('active');
-
-  // Hide all panels
-  PANEL_IDS.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.classList.remove('active');
-  });
-  // Show target panel
-  const targetPanel = document.getElementById(PANEL_IDS[idx]);
-  if (targetPanel) targetPanel.classList.add('active');
-}
-
 // ===== PERSISTENCE =====
-const STORAGE_KEY = 'story-weaver-data';
+const SK = 'story-weaver-v2';
+
+function onFieldInput() {
+  clearTimeout(window._saveTimer);
+  window._saveTimer = setTimeout(() => { saveAll(); updateOneSentence(); updateContrastIndicators(); }, 400);
+}
 
 function collectData() {
-  const data = {
-    // Three pillars
-    pillarHero: document.getElementById('pillar-hero').value,
-    pillarEvent: document.getElementById('pillar-event').value,
-    pillarTheme: document.getElementById('pillar-theme').value,
+  const d = { voices: {}, acts: {}, timeline: {}, sequences: {}, dynamics: {}, diagnosis: {} };
 
-    // Seven voices
-    voices: {},
-    // Act layout
-    acts: {},
-    // Timeline events
-    timeline: {},
-    // Sequences
-    sequences: {},
-    // Characters (serialized)
-    characters: characters,
-    // Dynamic check
-    dynamics: {},
-    // Diagnosis checkboxes
-    diagnosis: {}
-  };
+  d.pillarHero = document.getElementById('pillar-hero')?.value || '';
+  d.pillarEvent = document.getElementById('pillar-event')?.value || '';
+  d.pillarTheme = document.getElementById('pillar-theme')?.value || '';
 
-  // Voices
-  ['identity', 'desire', 'action', 'problem', 'obstacle', 'result', 'theme'].forEach(v => {
-    data.voices[`open-${v}`] = document.getElementById(`v-open-${v}`).value;
-    data.voices[`climax-${v}`] = document.getElementById(`v-climax-${v}`).value;
+  ['identity','desire','action','problem','obstacle','result','theme'].forEach(v => {
+    d.voices['open-' + v] = document.getElementById('v-open-' + v)?.value || '';
+    d.voices['climax-' + v] = document.getElementById('v-climax-' + v)?.value || '';
   });
 
-  // Acts
-  ['incentive', 'turn', 'crisis'].forEach(a => {
-    data.acts[a] = document.getElementById(`act-${a}`).value;
+  ['incentive','turn','crisis'].forEach(a => {
+    d.acts[a] = document.getElementById('act-' + a)?.value || '';
   });
-  ['act1', 'act2a', 'act2b', 'act3'].forEach(a => {
-    const el = document.getElementById(`${a}-story`);
-    if (el) data.acts[`${a}Story`] = el.value;
+  ['act1','act2a','act2b','act3'].forEach(a => {
+    const el = document.getElementById(a + '-story');
+    if (el) d.acts[a + 'Story'] = el.value;
   });
 
-  // Timeline
   roadMarkEvents.forEach(ev => {
-    const el = document.getElementById(`tl-${ev.id}`);
-    if (el) data.timeline[ev.id] = el.value;
+    const el = document.getElementById('tl-' + ev.id);
+    if (el) d.timeline[ev.id] = el.value;
   });
 
-  // Sequences
   sequenceData.forEach(seq => {
-    const el = document.getElementById(`seq-${seq.id}`);
-    if (el) data.sequences[seq.id] = el.value;
+    const el = document.getElementById('seq-' + seq.id);
+    if (el) d.sequences[seq.id] = el.value;
   });
 
-  // Dynamics
-  ['identity', 'desire', 'action', 'obstacle'].forEach(d => {
-    const el = document.getElementById(`check-${d}`);
-    if (el) data.dynamics[d] = el.value;
+  d.characters = characters;
+
+  ['identity','desire','action','obstacle'].forEach(k => {
+    const el = document.getElementById('check-' + k);
+    if (el) d.dynamics[k] = el.value;
   });
 
-  // Diagnosis
   for (let i = 1; i <= 13; i++) {
-    const el = document.getElementById(`diag-c${i}`);
-    if (el) data.diagnosis[`c${i}`] = el.checked;
+    const el = document.getElementById('diag-c' + i);
+    if (el) d.diagnosis['c' + i] = el.checked;
   }
 
-  return data;
+  return d;
 }
 
 function saveAll() {
-  const data = collectData();
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  localStorage.setItem(SK, JSON.stringify(collectData()));
 }
 
-function autoSave() {
-  // Debounced save
-  clearTimeout(window._autoSaveTimer);
-  window._autoSaveTimer = setTimeout(() => {
-    saveAll();
-    updateOneSentence();
-    updateContrastIndicators();
-  }, 500);
-}
+function autoSave() { saveAll(); }
 
-function loadAll() {
-  const raw = localStorage.getItem(STORAGE_KEY);
+function loadAllData() {
+  const raw = localStorage.getItem(SK);
   if (!raw) return;
-
   try {
-    const data = JSON.parse(raw);
+    const d = JSON.parse(raw);
+    const setVal = (id, val) => { if (val !== undefined && val !== null) { const el = document.getElementById(id); if (el) el.value = val; } };
 
-    // Three pillars
-    if (data.pillarHero) document.getElementById('pillar-hero').value = data.pillarHero;
-    if (data.pillarEvent) document.getElementById('pillar-event').value = data.pillarEvent;
-    if (data.pillarTheme) document.getElementById('pillar-theme').value = data.pillarTheme;
+    setVal('pillar-hero', d.pillarHero);
+    setVal('pillar-event', d.pillarEvent);
+    setVal('pillar-theme', d.pillarTheme);
 
-    // Voices
-    if (data.voices) {
-      Object.entries(data.voices).forEach(([key, val]) => {
-        const el = document.getElementById(`v-${key}`);
-        if (el) el.value = val;
-      });
+    if (d.voices) Object.entries(d.voices).forEach(([k, v]) => setVal('v-' + k, v));
+    if (d.acts) Object.entries(d.acts).forEach(([k, v]) => {
+      if (['incentive','turn','crisis'].includes(k)) setVal('act-' + k, v);
+      else setVal(k, v); // act1Story -> act1-story ... no, key is act1Story and id is act1-story
+    });
+    // Fix act story keys
+    if (d.acts) {
+      setVal('act1-story', d.acts.act1Story);
+      setVal('act2a-story', d.acts.act2aStory);
+      setVal('act2b-story', d.acts.act2bStory);
+      setVal('act3-story', d.acts.act3Story);
     }
+    if (d.timeline) Object.entries(d.timeline).forEach(([k, v]) => setVal('tl-' + k, v));
+    if (d.sequences) Object.entries(d.sequences).forEach(([k, v]) => setVal('seq-' + k, v));
 
-    // Acts
-    if (data.acts) {
-      Object.entries(data.acts).forEach(([key, val]) => {
-        const el = document.getElementById(`act-${key}`);
-        if (el) el.value = val;
-      });
-      // Act stories
-      ['act1', 'act2a', 'act2b', 'act3'].forEach(a => {
-        const el = document.getElementById(`${a}-story`);
-        if (el && data.acts[`${a}Story`]) el.value = data.acts[`${a}Story`];
-      });
-    }
+    if (d.characters && Array.isArray(d.characters)) characters = d.characters;
 
-    // Timeline
-    if (data.timeline) {
-      Object.entries(data.timeline).forEach(([key, val]) => {
-        const el = document.getElementById(`tl-${key}`);
-        if (el) el.value = val;
-      });
-    }
-
-    // Sequences
-    if (data.sequences) {
-      Object.entries(data.sequences).forEach(([key, val]) => {
-        const el = document.getElementById(`seq-${key}`);
-        if (el) el.value = val;
-      });
-    }
-
-    // Characters
-    if (data.characters && Array.isArray(data.characters)) {
-      characters = data.characters;
-      buildCharacters();
-    }
-
-    // Dynamics
-    if (data.dynamics) {
-      Object.entries(data.dynamics).forEach(([key, val]) => {
-        const el = document.getElementById(`check-${key}`);
-        if (el) el.value = val;
-      });
-    }
-
-    // Diagnosis
-    if (data.diagnosis) {
-      Object.entries(data.diagnosis).forEach(([key, val]) => {
-        const el = document.getElementById(`diag-${key}`);
-        if (el) el.checked = val;
-      });
-    }
+    if (d.dynamics) Object.entries(d.dynamics).forEach(([k, v]) => { const el = document.getElementById('check-' + k); if (el) el.value = v; });
+    if (d.diagnosis) Object.entries(d.diagnosis).forEach(([k, v]) => { const el = document.getElementById('diag-' + k); if (el) el.checked = v; });
 
     updateOneSentence();
     updateContrastIndicators();
     updateDynamics();
-  } catch (e) {
-    console.error('加载数据失败:', e);
-  }
+  } catch (e) { console.error('加载失败:', e); }
 }
 
 function resetAll() {
   if (!confirm('确定要清空所有已填入的内容吗？此操作不可恢复。')) return;
-
-  // Clear all inputs and textareas
-  document.querySelectorAll('input[type="text"], textarea').forEach(el => {
-    if (el.id && !el.id.startsWith('lib') && !el.id.startsWith('check-') && !el.id.startsWith('diag-')) {
-      el.value = '';
-    }
-  });
-  document.querySelectorAll('select').forEach(el => { if (el.id.startsWith('check-')) el.value = ''; });
+  document.querySelectorAll('textarea, input[type="text"]').forEach(el => { if (el.id) el.value = ''; });
+  document.querySelectorAll('select').forEach(el => { el.value = ''; });
   document.querySelectorAll('input[type="checkbox"]').forEach(el => { el.checked = false; });
-
   characters = [];
-  buildCharacters();
-  localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(SK);
+  buildPanels();
+  switchTab(0);
   updateOneSentence();
-  updateContrastIndicators();
   updateDynamics();
   toast('已清空全部内容');
 }
 
 function exportAll() {
-  const data = collectData();
-  let text = '══════════════════════════════════\n';
-  text += '  故事织体 · 导出文件\n';
-  text += '  导出时间：' + new Date().toLocaleString() + '\n';
-  text += '══════════════════════════════════\n\n';
+  const d = collectData();
+  let t = '════════════════════\n  故事织体 · 导出\n  时间：' + new Date().toLocaleString() + '\n════════════════════\n\n';
+  t += '【三支柱】\n主角：' + (d.pillarHero || '未填') + '\n主事件：' + (d.pillarEvent || '未填') + '\n主题：' + (d.pillarTheme || '未填') + '\n\n';
+  t += '【七声部】\n';
+  const vn = { identity:'身份',desire:'欲望',action:'动作',problem:'核心问题',obstacle:'主要障碍',result:'结果',theme:'主题' };
+  Object.entries(vn).forEach(([k,n]) => { t += n + '：开篇[' + (d.voices['open-'+k]||'') + '] → 高潮[' + (d.voices['climax-'+k]||'') + ']\n'; });
+  t += '\n【三幕】\n激励：' + (d.acts.incentive||'') + '\n转折：' + (d.acts.turn||'') + '\n危机：' + (d.acts.crisis||'') + '\n';
+  t += '\n【路标事件】\n';
+  roadMarkEvents.forEach(ev => { t += ev.id + '. ' + ev.name + '（' + ev.time + '）：' + (d.timeline[ev.id]||'') + '\n'; });
+  t += '\n【序列织体】\n';
+  sequenceData.forEach(seq => { t += seq.id + '. ' + seq.name + '：' + (d.sequences[seq.id]||'') + '\n'; });
+  t += '\n【人物】\n';
+  characters.forEach((c,i) => { t += '\n人物'+(i+1)+'：'+(c.name||'未命名')+'（'+(c.role||'?')+'）\n  身份：'+(c.identityStart||'?')+' → '+(c.identityEnd||'?')+'\n  欲望：'+(c.desireStart||'?')+' → '+(c.desireEnd||'?')+'\n  动作：'+(c.actionMode||'?')+' | 性格：'+(c.personality||'?')+'\n  能力：'+(c.ability||'?')+' | 背景：'+(c.background||'?')+'\n'; });
+  t += '\n【动力检查】\n身份难：'+d.dynamics.identity+' | 欲望强：'+d.dynamics.desire+' | 动作反：'+d.dynamics.action+' | 障碍大：'+d.dynamics.obstacle+'\n';
 
-  text += '【三支柱】\n';
-  text += '主角：' + (data.pillarHero || '（未填写）') + '\n';
-  text += '主事件：' + (data.pillarEvent || '（未填写）') + '\n';
-  text += '主题：' + (data.pillarTheme || '（未填写）') + '\n\n';
-
-  text += '【七声部工作表】\n';
-  const voiceNames = { identity: '身份', desire: '欲望', action: '动作', problem: '核心问题', obstacle: '主要障碍', result: '结果', theme: '主题/价值' };
-  Object.entries(voiceNames).forEach(([key, name]) => {
-    text += `${name}：开篇[${data.voices?.[`open-${key}`] || ''}] → 高潮[${data.voices?.[`climax-${key}`] || ''}]\n`;
-  });
-
-  text += '\n【三幕布局】\n';
-  text += '激励事件：' + (data.acts?.incentive || '（未填写）') + '\n';
-  text += '转折事件：' + (data.acts?.turn || '（未填写）') + '\n';
-  text += '危机事件：' + (data.acts?.crisis || '（未填写）') + '\n';
-
-  text += '\n【十个路标事件】\n';
-  roadMarkEvents.forEach(ev => {
-    text += `${ev.id}. ${ev.name}（${ev.time}）：${data.timeline?.[ev.id] || '（未填写）'}\n`;
-  });
-
-  text += '\n【序列织体】\n';
-  sequenceData.forEach(seq => {
-    text += `${seq.id}. ${seq.name}（${seq.range}）：${data.sequences?.[seq.id] || '（未填写）'}\n`;
-  });
-
-  text += '\n【人物图谱】\n';
-  characters.forEach((char, idx) => {
-    text += `\n人物${idx + 1}：${char.name || '未命名'}（${char.role || '未指定角色'}）\n`;
-    text += `  身份：${char.identityStart || '?'} → ${char.identityEnd || '?'}\n`;
-    text += `  欲望：${char.desireStart || '?'} → ${char.desireEnd || '?'}\n`;
-    text += `  动作：${char.actionMode || '?'} | 性格：${char.personality || '?'}\n`;
-    text += `  能力：${char.ability || '?'} | 背景：${char.background || '?'}\n`;
-  });
-
-  text += '\n【动力检查】\n';
-  const dynNames = { identity: '身份难', desire: '欲望强', action: '动作反', obstacle: '障碍大' };
-  Object.entries(dynNames).forEach(([key, name]) => {
-    text += `${name}：${data.dynamics?.[key] || '未评估'}\n`;
-  });
-
-  text += '\n【诊断清单】\n';
-  const diagLabels = [
-    '主角身份起点与终点是否形成反差？',
-    '欲望是否足够强烈？', '动作是否由欲望驱动且反向设计？',
-    '核心问题是否可用"能否……"表述？', '主要障碍是否足够大？',
-    '每个结果是否提供新动力？', '正负价值是否明确对立？',
-    '开篇是否从负价值出发？', '每个次事件都服务于中心思想？',
-    '七声部起点终点形成足够反差？', '三个关键事件具备决定性意义？',
-    '故事逻辑线通顺？', '每约15分钟有情绪峰值？'
-  ];
-  diagLabels.forEach((label, i) => {
-    text += `${data.diagnosis?.[`c${i + 1}`] ? '☑' : '☐'} ${label}\n`;
-  });
-
-  // Download
-  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const blob = new Blob([t], { type: 'text/plain;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url;
-  a.download = '故事织体_' + new Date().toISOString().slice(0, 10) + '.txt';
-  a.click();
-  URL.revokeObjectURL(url);
+  a.href = url; a.download = '故事织体_' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click(); URL.revokeObjectURL(url);
   toast('导出完成！');
 }
 
-// ===== UTILS =====
 function toast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2000);
+  el.textContent = msg; el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1800);
 }
 
-// ===== KEYBOARD SHORTCUTS =====
-document.addEventListener('keydown', (e) => {
+// ===== KEYBOARD =====
+document.addEventListener('keydown', function(e) {
   if (e.metaKey || e.ctrlKey) {
     if (e.key === 's') { e.preventDefault(); saveAll(); toast('已保存'); }
     if (e.key >= '1' && e.key <= '7') { e.preventDefault(); switchTab(parseInt(e.key) - 1); }
@@ -1293,15 +1228,18 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ===== STARTUP =====
-document.addEventListener('DOMContentLoaded', function() {
+(function() {
   try {
-    init();
-    console.log('故事织体 · 剧本素材选择填入框架 已就绪');
-    console.log('快捷键：Ctrl+1~7 切换标签页 | Ctrl+S 保存');
+    buildAll();
+    loadAllData();
+    updateOneSentence();
+    updateDynamics();
+    console.log('故事织体 v2 已就绪');
   } catch (e) {
-    console.error('初始化失败:', e.message, e.stack);
+    console.error('初始化失败:', e);
+    alert('初始化失败: ' + e.message);
   }
-});
+})();
 </script>
 </body>
 </html>
