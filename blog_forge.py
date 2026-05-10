@@ -182,7 +182,8 @@ def _render_callout_body(content_text):
             else:
                 out += '<br>'   # blank line as spacing
             i += 1
-    return out.rstrip('<br>')
+    # 用 re.sub 按字符串去掉末尾多余 <br>（不能用 rstrip，它按字符集裁剪会删掉 > 等字符）
+    return re.sub(r'(<br>)+$', '', out)
 
 
 # ── Main Markdown parser ──────────────────────────────────────────────────────
