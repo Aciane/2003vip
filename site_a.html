@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="concept">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -175,8 +175,9 @@
         }
 
     </style>
+<link rel="stylesheet" href="assets/site-theme.css">
 </head>
-<body>
+<body class="site-page"><nav class="site-path" aria-label="站点导航"><a href="index.html">唐择镇 / 感知漫游</a><span>交互实验</span><a href="index.html#archive">文章目录 ↗</a></nav>
 
     <header>
         <h1>Site A: 具身主体</h1>
@@ -238,7 +239,7 @@
 
                 <p id="feedback-text" style="position: absolute; bottom: 10px; color: var(--highlight);"></p>
             </div>
-            <p style="font-size: 0.9rem; color: #aaa;">
+            <p style="font-size: 0.9rem; color: var(--site-muted);">
                 *解析：施耐德可以拍死叮咬他的蚊子（具体空间中的反应），因为这是身体对世界“召唤”的直接回答。但他无法在闭眼时指向自己的鼻子（抽象空间中的投射），因为他失去了“运动意向性”的投射能力 <span class="citation">[11, 13]</span>。
             </p>
         </section>
@@ -284,7 +285,7 @@
         function slapMosquito() {
             const feedback = document.getElementById('feedback-text');
             // 无论是正常人还是施耐德，都能完成具体运动
-            feedback.style.color = "#4caf50"; // Green
+            feedback.style.color = "#426b56"; // Green
             feedback.innerText = "成功！这是“具体运动”。身体直接回应了环境的刺激（蚊子叮咬），无需理智中介。";
             
             // 简单的动画效果
@@ -298,11 +299,11 @@
             
             if (isSchneider) {
                 // 施耐德无法完成抽象运动
-                feedback.style.color = var(--highlight);
+                feedback.style.color = '#9a503e';
                 feedback.innerText = "失败。作为施耐德，你无法执行“指向鼻子”这种抽象指令，除非你能看着手移动。你失去了'我能'的虚拟投射。";
             } else {
                 // 正常人可以
-                feedback.style.color = "#4caf50";
+                feedback.style.color = "#426b56";
                 feedback.innerText = "成功。这是“抽象运动”。你的身体图式允许你在没有实际刺激的情况下，将身体投射到虚拟空间中。";
             }
         }

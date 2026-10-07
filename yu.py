@@ -166,6 +166,13 @@ def generate_galaxy_html(filename="galaxy_spiral.html"):
 </html>
     """
     
+    theme_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'site-theme.css')
+    with open(theme_path, encoding='utf-8') as theme_file:
+        theme_css = theme_file.read()
+    html_content = html_content.replace('<html lang="en">', '<html lang="zh-CN" data-theme="immersive">')
+    html_content = html_content.replace('</head>', '<meta name="viewport" content="width=device-width, initial-scale=1"><style>' + theme_css + '</style></head>')
+    html_content = html_content.replace('<body>', '<body class="site-page"><nav class="site-path" aria-label="站点导航"><a href="index.html">唐择镇 / 感知漫游</a><span>交互实验</span><a href="index.html#archive">文章目录 ↗</a></nav>')
+
     with open(filename, "w", encoding="utf-8") as f:
         f.write(html_content)
     

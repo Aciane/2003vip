@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+<html lang="zh-CN" data-theme="immersive">
+<head><meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>电影空间实验室</title>
     <style>
@@ -14,8 +14,9 @@
         #status { margin-top: 10px; color: #fff; opacity: 0.5; font-style: italic; }
         #canvas-container { width: 100vw; height: 100vh; }
     </style>
+<link rel="stylesheet" href="assets/site-theme.css">
 </head>
-<body>
+<body class="site-page"><nav class="site-path" aria-label="站点导航"><a href="index.html">唐择镇 / 感知漫游</a><span>交互实验</span><a href="index.html#archive">文章目录 ↗</a></nav>
 
     <div id="overlay">
         <div>电影的拓扑学机制</div>
@@ -23,7 +24,7 @@
     </div>
     <div id="canvas-container"></div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="assets/vendor/three-r128.min.js"></script>
 
     <script>
         

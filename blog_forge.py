@@ -439,6 +439,16 @@ def _render_blocks(blocks):
     return out
 
 
+def _site_document(document):
+    """Embed the shared site theme so exported articles remain standalone."""
+    theme_path = os.path.join(REPO_DIR, 'assets', 'site-theme.css')
+    with open(theme_path, encoding='utf-8') as theme_file:
+        theme_css = theme_file.read()
+    document = re.sub(r'<html\b', '<html data-theme="essay"', document, count=1)
+    document = re.sub(r'<body\b', '<body class="site-page"', document, count=1)
+    return document.replace('</head>', '<style>' + theme_css + '</style></head>', 1)
+
+
 def build_html(meta, blocks):
     e = htmllib.escape
 
@@ -476,7 +486,7 @@ def build_html(meta, blocks):
     pu     = e(meta['prev_url'] or '#')
     nu     = e(meta['next_url'] or '#')
 
-    return f"""<!DOCTYPE html>
+    return _site_document(f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -569,7 +579,7 @@ del{{color:#999;}}
 </div>
 <script>{inner_js}</script>
 </body>
-</html>"""
+</html>""")
 
 
 # ── Poem HTML builder ────────────────────────────────────────────────────────
@@ -599,7 +609,7 @@ def build_poem_html(meta, sections):
             f'\n        </section>'
         )
 
-    return f"""<!DOCTYPE html>
+    return _site_document(f"""<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
@@ -635,7 +645,7 @@ const obs=new IntersectionObserver(
 document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
 </script>
 </body>
-</html>"""
+</html>""")
 
 
 # ── GUI ──────────────────────────────────────────────────────────────────────

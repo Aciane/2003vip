@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="tool">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -321,8 +321,9 @@
             transform: translateX(-50%) translateY(0);
         }
     </style>
+<link rel="stylesheet" href="assets/site-theme.css">
 </head>
-<body>
+<body class="site-page">
 
 <!-- TOP BAR -->
 <div class="topbar">
@@ -617,11 +618,11 @@ function buildHTML() {
         "}"
     ].join('\n');
 
-    return '<!DOCTYPE html>\n' +
+    const documentHTML = '<!DOCTYPE html>\n' +
 '<html lang="zh-CN">\n' +
 '<head>\n' +
 '    <meta charset="UTF-8">\n' +
-'    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">\n' +
+'    <meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
 '    <title>' + esc(title || '未命名文章') + '</title>\n' +
 '    <style>\n' +
 '        :root {\n' +
@@ -710,6 +711,13 @@ function buildHTML() {
 '    <script>' + innerJS + '<\/script>\n' +
 '</body>\n' +
 '</html>';
+    const theme = [...document.styleSheets].find(sheet => sheet.href && sheet.href.split('?')[0].endsWith('/assets/site-theme.css'));
+    const css = theme ? [...theme.cssRules].map(rule => rule.cssText).join('\n') : '';
+    return documentHTML
+        .replace('<html ', '<html data-theme="essay" ')
+        .replace('<body>', '<body class="site-page">')
+        .replace('</head>', '<style>' + css + '</style></head>');
+
 }
 
 // ═══════════════════════════════════════════════
