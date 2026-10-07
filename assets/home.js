@@ -44,7 +44,7 @@ function renderPocket(){
  const saved=pocket.includes(routes[selected].href);
  document.querySelector('#save-recommendation').setAttribute('aria-pressed',String(saved));
  document.querySelector('#save-recommendation').textContent=saved?'✓ 已放入阅读口袋':'＋ 稍后阅读';
- document.querySelector('#journey-feedback').textContent=pocket.length||insight?'你已经留下了自己的线索。接下来，沿着它继续阅读，或在目录里发现新的方向。':'文章目录随时开放。沿着刚才的方向继续，或重新选一个问题。';
+ document.querySelector('#journey-feedback').textContent=pocket.length||insight?'已存入阅读口袋。也可以沿着这个方向，继续探索。':'还想读更多？沿着这个方向，继续探索。';
 }
 function chooseRoute(key){
  selected=key;const route=routes[key];
@@ -60,7 +60,8 @@ const discover=document.querySelector('#discover');
 discover.addEventListener('click',()=>{
  opened=!opened;discover.setAttribute('aria-expanded',String(opened));
  document.querySelector('#discovery').hidden=!opened;
- discover.querySelector('.card-action').innerHTML=opened?'发现了另一种视角 <b>✓</b>':'点开，换个角度 <b>↗</b>';
+ discover.querySelector('.card-action').innerHTML=opened?'点击回到全景 <b>↙</b>':'点击画面，换一个观看角度 <b>↗</b>';
+ document.querySelector('.frame-label').textContent=opened?'CLOSE-UP / 近景':'WIDE / 全景';
  document.querySelector('.first-encounter').classList.toggle('opened',opened);
 });
 document.querySelector('#keep-insight').addEventListener('click',()=>{
