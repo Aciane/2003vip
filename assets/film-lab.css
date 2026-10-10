@@ -2,3 +2,50 @@ body.film-lab{margin:0}.lab-main{max-width:1120px;margin:auto;padding:58px 0}.ey
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 .lab-button:disabled{opacity:.5;cursor:default}.film-lab .lab-controls label:focus-within{outline:2px solid #ac793a;outline-offset:4px}.projected-person .face-arrow{height:25px}.film-lab .plan-panel input:focus-visible{outline:2px solid #ac793a;outline-offset:4px}@media print{.lab-index,.transport,.strip,.lab-controls input,.lab-button{display:none}.lab-main{margin:0;padding:0}.lab-section{break-inside:avoid}.lab-footer{display:none}}
 .film-lab a{color:var(--site-green);text-underline-offset:3px}.film-lab .lab-index a{text-decoration:none}.film-lab .lab-footer a{text-decoration:none}
+/* Lab layout: precise panels rather than decorative cards. */
+body.film-lab { background: #f5f5f7; }
+.film-lab .lab-main { padding-top: 76px; }
+.film-lab .lab-intro h1 { font-size: clamp(36px, 5vw, 64px); font-weight: 600; letter-spacing: -.04em; line-height: 1.15; margin: 20px 0 24px; }
+.film-lab .lab-intro > p:not(.eyebrow) { font-size: 19px; line-height: 1.65; max-width: 720px; color: #6e6e73; }
+.film-lab .scope { background: transparent; border: 0; border-top: 1px solid #d9d9de; padding: 24px 0 0; margin-top: 36px; max-width: 820px; font-size: 12px; color: #6e6e73; }
+.film-lab .scope > strong { color: #1d1d1f; font-weight: 600; }
+.film-lab .lab-index { gap: 12px; margin-top: 30px; }
+.film-lab .lab-index a { padding: 9px 14px; border: 1px solid #d9d9de; border-radius: 7px; font-size: 11px; color: #424245; }
+.film-lab .lab-index a:hover { background: #ffffff; border-color: #a1a1a6; }
+.film-lab .lab-section { padding-top: 56px; margin-top: 56px; }
+.film-lab .section-title { gap: 18px; }
+.film-lab .lab-number { background: transparent; color: #86868b; width: auto; height: auto; font: 13px var(--site-font); font-variant-numeric: tabular-nums; border-right: 1px solid #d2d2d7; padding-right: 18px; }
+.film-lab .section-title h2 { font-size: 30px; font-weight: 600; letter-spacing: -.025em; }
+.film-lab .section-desc { font-size: 13px; max-width: 880px; margin-bottom: 30px; }
+.film-lab :is(.monitor,.off-monitor,.lab-controls,.plan-panel) { border: 1px solid #dedee3; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px #00000003; }
+.film-lab .monitor-bar { background: #ffffff; border-bottom: 1px solid #e5e5e7; padding: 16px 20px; font-family: var(--site-font); font-size: 11px; color: #6e6e73; }
+.film-lab .lab-controls { padding: 26px; }
+.film-lab .lab-controls :is(label,legend) { font-size: 12px; }
+.film-lab input[type=range] { accent-color: #60686c; }
+.film-lab input[type=radio], .film-lab input[type=checkbox] { accent-color: #60686c; }
+.film-lab .lab-button { border-radius: 7px; background: #303638; border-color: #303638; font-size: 11px; font-weight: 500; padding: 10px 15px; }
+.film-lab .lab-button.secondary { background: #ffffff; border-color: #d2d2d7; color: #424245; }
+.film-lab .transport { padding: 18px 20px; gap: 10px; }
+.film-lab .strip { padding: 0 20px 20px; }
+.film-lab .strip button { border-radius: 7px; background: #fafafa; color: #6e6e73; }
+.film-lab .strip button[aria-pressed=true] { background: #eef0f0; border-color: #8e9798; color: #1d1d1f; }
+.film-lab .explanation { background: #f5f5f7; border-left: 0; border-radius: 8px; padding: 18px; font-size: 12px; color: #6e6e73; }
+.film-lab .explanation strong { color: #1d1d1f; font-weight: 600; }
+.film-lab .concept-note { background: transparent; border: 0; border-bottom: 1px solid #d9d9de; border-radius: 0; padding: 18px 0; }
+.film-lab .concept-note summary { color: #424245; font-size: 12px; font-weight: 500; }
+.film-lab .graph-node { border-radius: 5px; border-color: #d2d2d7; }
+.film-lab .projected-frame { border-radius: 10px; border: 0; }
+.film-lab .panel-label { font-family: var(--site-font); letter-spacing: 0; font-size: 11px; }
+.film-lab .bibliography { color: #6e6e73; }
+.film-lab .bibliography strong { color: #424245; font-weight: 500; }
+.film-lab .concept-grid h3 { font-weight: 600; font-size: 16px; }
+.film-lab .references h2 { font-size: 30px; font-weight: 600; }
+.film-lab a { color: #424245; }
+@media(max-width:600px) {
+  .film-lab .lab-main { padding-top: 42px; }
+  .film-lab .lab-intro h1 { font-size: 36px; }
+  .film-lab .lab-intro > p:not(.eyebrow) { font-size: 16px; }
+  .film-lab .lab-section { padding-top: 36px; margin-top: 36px; }
+  .film-lab .section-title h2 { font-size: 24px; }
+  .film-lab .lab-controls { padding: 20px; }
+}
