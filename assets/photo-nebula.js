@@ -101,7 +101,7 @@
   } finally {if(image && image.close)image.close();$('photo').value='';}
  }
  function draw() {
-  ctx.setTransform(ratio,0,0,ratio,0,0);ctx.globalCompositeOperation='source-over';ctx.fillStyle='#060a0f';ctx.fillRect(0,0,width,height);
+  ctx.setTransform(ratio,0,0,ratio,0,0);ctx.globalCompositeOperation='source-over';ctx.fillStyle='#060a0f';ctx.fillRect(0,0,canvas.width/ratio,canvas.height/ratio);
   if(!source)return;
   const rgb=palettes[color].join(','), power=settings.light/60,diff=settings.diffusion/100;
   ctx.fillStyle=`rgba(${rgb},.16)`;
